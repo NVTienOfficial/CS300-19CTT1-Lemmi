@@ -1,1 +1,1 @@
-this folder contains html templates
+this folder contains html-ejs templates.
