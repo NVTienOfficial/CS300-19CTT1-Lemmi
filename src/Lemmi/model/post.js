@@ -1,11 +1,13 @@
-const { DataTypes } = require("sequelize");
+const { DataTypes, Deferrable } = require("sequelize");
 
 const sequelize = require("../config/database");
+
+const User = require("./user");
 
 const Post = sequelize.define('post',
     {
         post_id: {
-            type: DataTypes.CHAR(10),
+            type: DataTypes.CHAR(15),
             primaryKey: true,
         },
         title: {
@@ -21,22 +23,36 @@ const Post = sequelize.define('post',
             allowNull: false,
         },
         upvote: {
-            type: DataTypes.INTEGER.UNSIGNED,
+            type: DataTypes.INTEGER,
             allowNull: false,
             defaultValue: 0,
+            validate: {
+                min: 0,
+            },
         },
         downvote: {
-            type: DataTypes.INTEGER.UNSIGNED,
+            type: DataTypes.INTEGER,
             allowNull: false,
             defaultValue: 0,
+            validate: {
+                min: 0,
+            },
         },
         nReport: {
-            type: DataTypes.INTEGER.UNSIGNED,
+            type: DataTypes.INTEGER,
             allowNull: false,
             defaultValue: 0,
+            validate: {
+                min: 0,
+            },
         },
-        owner_id: {
-            type: DataTypes.CHAR(11),
+        user_id: {
+            type: DataTypes.CHAR(10),
+            references: {
+                model: User,
+                key: 'user_id',
+                deferrable: Deferrable.INITIALLY_DEFERRED,
+            },
         },
         post_date: {
             type: DataTypes.DATE,
