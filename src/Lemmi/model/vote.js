@@ -5,44 +5,32 @@ const sequelize = require("../config/database");
 const User = require("./user");
 const Post = require("./post")
 
-const Comment = sequelize.define('comment',
+const Vote = sequelize.define('vote',
     {
-        comment_id: {
-            type: DataTypes.CHAR(20),
-            primaryKey: true,
-        },
         user_id: {
             type: DataTypes.CHAR(10),
+            primaryKey: true,
             references: {
                 model: User,
                 key: 'user_id',
                 deferrable: Deferrable.INITIALLY_DEFERRED,
-            }
+            },
         },
         post_id: {
             type: DataTypes.CHAR(15),
+            primaryKey: true,
             references: {
                 model: Post,
                 key: 'post_id',
                 deferrable: Deferrable.INITIALLY_DEFERRED,
-            }
+            },
         },
-        target_comment: {
-            type: DataTypes.CHAR(20),
-            references: {
-                model: Comment,
-                key: 'comment_id',
-                deferrable: Deferrable.INITIALLY_DEFERRED,
-            }
-        },
-        content: {
-            type: DataTypes.STRING,
+        type: {
+            type: DataTypes.SMALLINT,
             allowNull: false,
-        },
-        comment_date: {
-            type: DataTypes.DATE,
-            allowNull: false,
-            defaultValue: DataTypes.NOW,
+            validate: {
+                isIn: [[-1, 0, 1]],
+            },
         },
     },
     {
@@ -51,4 +39,4 @@ const Comment = sequelize.define('comment',
     }
 );
 
-module.exports = Comment;
+module.exports = Vote;
