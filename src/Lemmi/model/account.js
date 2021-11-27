@@ -9,11 +9,11 @@ const Account = sequelize.define('account',
         user_id: {
             type: DataTypes.CHAR(10),
             primaryKey: true,
-            references: {
-                model: User,
-                key: 'user_id',
-                deferrable: Deferrable.INITIALLY_DEFERRED,
-            }
+            // references: {
+            //     model: User,
+            //     key: 'user_id',
+            //     deferrable: Deferrable.INITIALLY_DEFERRED,
+            // }
         },
         username: {
             type: DataTypes.STRING,
