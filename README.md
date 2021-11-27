@@ -8,11 +8,18 @@ Project folder structure:
     |-- docs
     |-- pa
     |-- src
-        |-- node_modeles
-        |-- src
-            |-- server
-                |-- app.js
-            |-- webapp
+        |-- Lemmi
+            |-- app.js
+            |-- route
+            |-- middleware
+            |-- controllers
+            |-- services
+            |-- repos
+            |-- models
+            |-- config
+            |-- public
+            |-- views
         |-- package-lock.json
         |-- package.json
+    |-- .gitignore
     |-- README.md
