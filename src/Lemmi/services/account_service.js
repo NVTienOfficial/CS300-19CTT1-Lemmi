@@ -1,7 +1,7 @@
-const AccountRepo = require("../repo/account_repo");
-const Error = require("../model/error");
+const AccountRepo = require("../repos/account_repo");
+const Error = require("../models/error");
 
-const accountRepo = new AccountRepo();
+const rAccount = new AccountRepo();
 
 class AccountService {
     async SignUp(account) {
@@ -9,7 +9,7 @@ class AccountService {
         if (!username || !password)
             throw new Error("Bad request", 400);
         try {
-            const account = await accountRepo.CreateAnAccount(
+            const account = await rAccount.CreateAnAccount(
                 user_id,
                 username,
                 password,

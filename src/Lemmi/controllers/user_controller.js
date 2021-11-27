@@ -1,16 +1,14 @@
 const router = require("express").Router();
 
-const AccountService = require("../service/account_service");
+const UserService = require("../services/user_service");
 
-const accountService = new AccountService();
+const sUser = new UserService();
 
 router.post("/create", async (req, res) => {
-    console.log("Account controller");
     try {
-        user = await accountService.SignUp(req.body);
+        user = await sUser.CreateAnUser(req.body);
         return res.status(200).json({
             status: "OK",
-            data: user,
         });
     }
     catch (err) {
