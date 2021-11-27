@@ -19,7 +19,7 @@ Project folder structure:
             |-- config
             |-- public
             |-- views
-        |-- .gitignore
         |-- package-lock.json
         |-- package.json
+    |-- .gitignore
     |-- README.md
