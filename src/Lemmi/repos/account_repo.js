@@ -1,4 +1,4 @@
-const Account = require("../model/account");
+const Account = require("../models/account");
 
 class AccountRepo {
     async CreateAnAccount(user_id, username, password, category) {
