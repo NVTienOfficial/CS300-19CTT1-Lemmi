@@ -27,7 +27,7 @@ const Comment = sequelize.define('comment',
                 deferrable: Deferrable.INITIALLY_DEFERRED,
             }
         },
-        target_comment: {
+        target_id: {
             type: DataTypes.CHAR(20),
         },
         content: {

@@ -1,5 +1,5 @@
 const CommentRepo = require("../repos/comment_repo");
-const Error = require("../models/error");
+const Error = require("../config/error");
 
 const rComment = new CommentRepo();
 
