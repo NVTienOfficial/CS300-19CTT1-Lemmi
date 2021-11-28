@@ -1,5 +1,5 @@
 const PostRepo = require("../repos/post_repo");
-const Error = require("../models/error");
+const Error = require("../config/error");
 
 const rPost = new PostRepo();
 

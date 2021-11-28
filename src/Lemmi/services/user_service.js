@@ -1,5 +1,5 @@
 const UserRepo = require("../repos/user_repo");
-const Error = require("../models/error");
+const Error = require("../config/error");
 
 const rUser = new UserRepo();
 
