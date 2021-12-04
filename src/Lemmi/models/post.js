@@ -38,7 +38,7 @@ const Post = sequelize.define('post',
                 min: 0,
             },
         },
-        nReport: {
+        report: {
             type: DataTypes.INTEGER,
             allowNull: false,
             defaultValue: 0,
