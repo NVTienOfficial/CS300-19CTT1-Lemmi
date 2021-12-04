@@ -3,8 +3,11 @@ const Error = require("../config/error");
 
 class DistrictRepo {
     async createDistrict(name) {
-        let id = await this.generateNewID();
+        if (!name || name === "")
+        throw new Error(400, "Bad request");
+
         try {
+            let id = await this.generateNewID();
             const newDistrict = await District.create({
                 district_id: id,
                 name: name,

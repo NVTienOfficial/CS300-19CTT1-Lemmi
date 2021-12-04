@@ -1,6 +1,7 @@
 const { DataTypes, Deferrable } = require("sequelize");
 
 const sequelize = require("../config/database");
+const Account = require("./account");
 
 const District = require("./district");
 
@@ -9,6 +10,11 @@ const User = sequelize.define('user',
         user_id: {
             type: DataTypes.CHAR(10),
             primaryKey: true,
+            references: {
+                model: Account,
+                key: 'account_id',
+                deferrable: Deferrable.INITIALLY_DEFERRED,
+            }
         },
         firstName: {
             type: DataTypes.STRING,
@@ -18,7 +24,6 @@ const User = sequelize.define('user',
         },
         name: {
             type: DataTypes.STRING,
-            allowNull: false,
         },
         description: {
             type: DataTypes.STRING,
@@ -28,6 +33,7 @@ const User = sequelize.define('user',
         },
         gender: {
             type: DataTypes.CHAR(1),
+            defaultValue: 'n',
         },
         phone: {
             type: DataTypes.STRING(12),
@@ -38,7 +44,7 @@ const User = sequelize.define('user',
         email: {
             type: DataTypes.STRING,
         },
-        district: {
+        district_id: {
             type: DataTypes.STRING,
             references: {
                 model: District,
