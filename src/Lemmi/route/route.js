@@ -8,6 +8,7 @@ const commentController = require("../controllers/comment_controller");
 const voteController = require("../controllers/vote_controller");
 const districtController = require("../controllers/district_controller");
 const tagController = require("../controllers/tag_controller");
+const imageController = require("../controllers/image_controller");
 
 router.use("/user", userController);
 router.use("/account", accountController);
@@ -16,5 +17,6 @@ router.use("/comment", commentController);
 router.use("/vote", voteController);
 router.use("/district", districtController);
 router.use("/tag", tagController);
+router.use("/img", imageController);
 
 module.exports = router;
