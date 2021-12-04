@@ -2,8 +2,7 @@ const Tag = require("../models/tag");
 const Error = require("../config/error");
 
 class TagRepo {
-    async createOne(name) {
-        let id = await this.generateNewID();
+    async createOne(id, name) {
         try {
             const newTag = await Tag.create({
                 tag_id: id,
@@ -81,12 +80,42 @@ class TagRepo {
         }
     }
 
-    async generateNewID() {
-        let id = await Tag.count();
-        id = id.toString(16);
-        while (id.length < 10)
-            id = '0' + id;
-        return id;
+    async count() {
+        try {
+            let n = await Tag.count();
+            return n;
+        }
+        catch (err) {
+            throw new Error(500, err.message);
+        }
+    }
+
+    async findByID(id) {
+        try {
+            let tag = await Tag.findOne({
+                where: {
+                    tag_id: id
+                }
+            })
+            return tag;
+        }
+        catch (err) {
+            throw new Error(500, err.message);
+        }
+    }
+
+    async isExistID(id) {
+        try {
+            let tag = await Tag.findOne({
+                where: {
+                    tag_id: id
+                }
+            })
+            return !(!tag);
+        }
+        catch (err) {
+            throw new Error(500, err.message);
+        }
     }
 }
 

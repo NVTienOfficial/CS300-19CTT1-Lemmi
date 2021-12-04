@@ -2,12 +2,11 @@ const District = require("../models/district");
 const Error = require("../config/error");
 
 class DistrictRepo {
-    async createDistrict(name) {
+    async createOne(id, name) {
         if (!name || name === "")
         throw new Error(400, "Bad request");
 
-        try {
-            let id = await this.generateNewID();
+        try {;
             const newDistrict = await District.create({
                 district_id: id,
                 name: name,
@@ -73,7 +72,7 @@ class DistrictRepo {
         }
     }
 
-    async updateDistrict(id, newName) {
+    async updateByID(id, newName) {
         try {
             await District.update({name: newName}, {
                 where: {
@@ -86,12 +85,42 @@ class DistrictRepo {
         }
     }
 
-    async generateNewID() {
-        let id = await District.count();
-        id = id.toString(16);
-        while (id.length < 10)
-            id = '0' + id;
-        return id;
+    async count() {
+        try {
+            let n = await District.count();
+            return n;
+        }
+        catch (err) {
+            throw new Error(500, err.message);
+        }
+    }
+
+    async findByID(id) {
+        try {
+            let district = await District.findOne({
+                where: {
+                    district_id: id
+                }
+            })
+            return district;
+        }
+        catch (err) {
+            throw new Error(500, err.message);
+        }
+    }
+
+    async isExistID(id) {
+        try {
+            let district = await District.findOne({
+                where: {
+                    district_id: id
+                }
+            })
+            return !(!district);
+        }
+        catch (err) {
+            throw new Error(500, err.message);
+        }
     }
 }
 

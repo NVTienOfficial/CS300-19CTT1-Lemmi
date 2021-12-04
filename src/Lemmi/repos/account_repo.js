@@ -35,6 +35,22 @@ class AccountRepo {
         }
     }
 
+    async getAllUsername() {
+        try {
+            const usernames = await Account.findAll({
+                attributes: ['username']
+            });
+            let name = [];
+            for (let i = 0; i < usernames.length; i++) {
+                name.push(usernames[i]['username'])
+            }
+            return name;
+        }
+        catch (err) {
+            throw new Error(500, err.message);
+        }
+    }
+
     async deleteByID(id) {
         try {
             await Account.destroy({
@@ -58,6 +74,44 @@ class AccountRepo {
         }
         catch (err) {
             throw new Error(404, err.message);
+        }
+    }
+
+    async count() {
+        try {
+            let n = await Account.count();
+            return n;
+        }
+        catch (err) {
+            throw new Error(500, err.message);
+        }
+    }
+
+    async findByID(id) {
+        try {
+            let account = Account.findOne({
+                where: {
+                    account_id: id
+                }
+            })
+            return account;
+        }
+        catch (err) {
+            throw new Error(500, err.message);
+        }
+    }
+
+    async isExistID(id) {
+        try {
+            let account = Account.findOne({
+                where: {
+                    account_id: id
+                }
+            })
+            return !(!account)
+        }
+        catch (err) {
+            throw new Error(500, err.message);
         }
     }
 }
