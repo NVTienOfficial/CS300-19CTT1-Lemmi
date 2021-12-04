@@ -97,18 +97,14 @@ class AccountService {
     }
 
     async generateNewID() {
-        let id = await Account.count();
+        let id = await rAccount.count();
         let acc_id = await this.toStringID(id);
         const max_id = Math.pow(16,10) - 1;
 
         while (true) {
-            let exist_acc = await Account.findOne({
-                where: {
-                    account_id: acc_id,
-                }
-            })
+            let exist = await rAccount.isExistID(acc_id);
 
-            if (exist_acc) {
+            if (exist) {
                 id = ( (id % max_id ) + 8) % max_id;
                 acc_id = await this.toStringID(id);
             }

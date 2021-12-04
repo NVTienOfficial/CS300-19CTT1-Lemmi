@@ -71,6 +71,32 @@ class TagService {
             throw new Error(err.statusCode, err.message);
         }
     }
+
+    async generateNewID() {
+        let id = await rTag.count();
+        let tag_id = await this.toStringID(id);
+        const max_id = Math.pow(16,10) - 1;
+
+        while (true) {
+            let exist = await rTag.isExistID(tag_id);
+
+            if (exist) {
+                id = ( (id % max_id ) + 8) % max_id;
+                tag_id = await this.toStringID(id);
+            }
+            else
+                break;
+        }
+        
+        return tag_id;
+    }
+
+    async toStringID(id) {
+        let str = id.toString(16);
+        while (str.length < 10)
+            str = '0' + str;
+        return str;
+    }
 }
 
 module.exports = TagService;

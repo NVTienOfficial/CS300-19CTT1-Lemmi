@@ -11,7 +11,8 @@ class DistrictService {
             throw new Error(400, "Bad request");
         
         try {
-            const createdDistrict = await rDistrict.createDistrict(name);
+            let id = await this.generateNewID();
+            const createdDistrict = await rDistrict.createOne(id, name);
             return createdDistrict;
         }
         catch (err) {
@@ -52,7 +53,7 @@ class DistrictService {
             throw new Error(400, "Bad request");
 
         try {
-            await rDistrict.updateDistrict(district_id, name);
+            await rDistrict.updateByID(district_id, name);
         }
         catch (err) {
             if (err == null)
@@ -70,6 +71,32 @@ class DistrictService {
                 throw new Error(500, err);
             throw new Error(err.statusCode, err.message);
         }
+    }
+
+    async generateNewID() {
+        let id = await rDistrict.count();
+        let dis_id = await this.toStringID(id);
+        const max_id = Math.pow(16,10) - 1;
+
+        while (true) {
+            let exist = await rDistrict.isExistID(dis_id);
+
+            if (exist) {
+                id = ( (id % max_id ) + 8) % max_id;
+                dis_id = await this.toStringID(id);
+            }
+            else
+                break;
+        }
+        
+        return dis_id;
+    }
+
+    async toStringID(id) {
+        let str = id.toString(16);
+        while (str.length < 10)
+            str = '0' + str;
+        return str;
     }
 }
 
