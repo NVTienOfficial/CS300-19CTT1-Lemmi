@@ -99,7 +99,7 @@ class AccountService {
     async generateNewID() {
         let id = await rAccount.count();
         let acc_id = await this.toStringID(id);
-        const max_id = Math.pow(16,10) - 1;
+        const max_id = Math.pow(16,5) - 1;
 
         while (true) {
             let exist = await rAccount.isExistID(acc_id);
@@ -117,7 +117,7 @@ class AccountService {
 
     async toStringID(id) {
         let str = id.toString(16);
-        while (str.length < 10)
+        while (str.length < 5)
             str = '0' + str;
         return str;
     }
