@@ -8,7 +8,7 @@ const Post = require("./post");
 const PostImage = sequelize.define('post_image',
     {
         image_id: {
-            type: DataTypes.CHAR(20),
+            type: DataTypes.CHAR(8),
             primaryKey: true,
             references: {
                 model: Image,
@@ -17,7 +17,7 @@ const PostImage = sequelize.define('post_image',
             }
         },
         post_id: {
-            type: DataTypes.CHAR(15),
+            type: DataTypes.CHAR(8),
             primaryKey: true,
             references: {
                 model: Post,

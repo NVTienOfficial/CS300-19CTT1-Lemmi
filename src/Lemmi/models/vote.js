@@ -8,7 +8,7 @@ const Post = require("./post")
 const Vote = sequelize.define('vote',
     {
         user_id: {
-            type: DataTypes.CHAR(10),
+            type: DataTypes.CHAR(5),
             primaryKey: true,
             references: {
                 model: User,
@@ -17,7 +17,7 @@ const Vote = sequelize.define('vote',
             },
         },
         post_id: {
-            type: DataTypes.CHAR(15),
+            type: DataTypes.CHAR(8),
             primaryKey: true,
             references: {
                 model: Post,

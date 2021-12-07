@@ -5,7 +5,7 @@ const sequelize = require("../config/database");
 const Tag = sequelize.define('tag',
     {
         tag_id: {
-            type: DataTypes.CHAR(10),
+            type: DataTypes.CHAR(3),
             primaryKey: true,
         },
         name: {

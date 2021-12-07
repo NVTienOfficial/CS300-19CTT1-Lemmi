@@ -7,7 +7,7 @@ const User = require("./user");
 const Image = sequelize.define('image',
     {
         image_id: {
-            type: DataTypes.CHAR(20),
+            type: DataTypes.CHAR(8),
             primaryKey: true,
         },
         src: {
@@ -15,7 +15,7 @@ const Image = sequelize.define('image',
             allowNull: false,
         },
         user_id: {
-            type: DataTypes.CHAR(10),
+            type: DataTypes.CHAR(5),
             references: {
                 model: User,
                 key: 'user_id',

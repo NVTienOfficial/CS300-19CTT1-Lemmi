@@ -7,7 +7,7 @@ const User = require("./user");
 const Post = sequelize.define('post',
     {
         post_id: {
-            type: DataTypes.CHAR(15),
+            type: DataTypes.CHAR(8),
             primaryKey: true,
         },
         title: {
@@ -22,22 +22,6 @@ const Post = sequelize.define('post',
             type: DataTypes.DECIMAL(1, 1),
             allowNull: false,
         },
-        upvote: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            defaultValue: 0,
-            validate: {
-                min: 0,
-            },
-        },
-        downvote: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            defaultValue: 0,
-            validate: {
-                min: 0,
-            },
-        },
         report: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -47,7 +31,7 @@ const Post = sequelize.define('post',
             },
         },
         user_id: {
-            type: DataTypes.CHAR(10),
+            type: DataTypes.CHAR(5),
             references: {
                 model: User,
                 key: 'user_id',
@@ -58,9 +42,6 @@ const Post = sequelize.define('post',
             type: DataTypes.DATE,
             defaultValue: DataTypes.NOW,
         },
-        sum_vote: {
-            type: DataTypes.INTEGER,
-        }
     },
     {
         timestamps: false,

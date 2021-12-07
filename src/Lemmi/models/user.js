@@ -8,7 +8,7 @@ const District = require("./district");
 const User = sequelize.define('user',
     {
         user_id: {
-            type: DataTypes.CHAR(10),
+            type: DataTypes.CHAR(5),
             primaryKey: true,
             references: {
                 model: Account,

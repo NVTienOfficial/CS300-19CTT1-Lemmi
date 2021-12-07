@@ -8,7 +8,7 @@ const Post = require("./post");
 const PostTag = sequelize.define('post_tag',
     {
         tag_id: {
-            type: DataTypes.CHAR(10),
+            type: DataTypes.CHAR(3),
             primaryKey: true,
             references: {
                 model: Tag,
@@ -17,7 +17,7 @@ const PostTag = sequelize.define('post_tag',
             }
         },
         post_id: {
-            type: DataTypes.CHAR(15),
+            type: DataTypes.CHAR(8),
             primaryKey: true,
             references: {
                 model: Post,
