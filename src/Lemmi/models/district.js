@@ -5,7 +5,7 @@ const sequelize = require("../config/database");
 const District = sequelize.define('district',
     {
         district_id: {
-            type: DataTypes.CHAR(10),
+            type: DataTypes.CHAR(3),
             primaryKey: true,
         },
         name: {

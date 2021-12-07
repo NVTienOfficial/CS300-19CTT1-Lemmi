@@ -8,11 +8,11 @@ const Post = require("./post")
 const Comment = sequelize.define('comment',
     {
         comment_id: {
-            type: DataTypes.CHAR(20),
+            type: DataTypes.CHAR(10),
             primaryKey: true,
         },
         user_id: {
-            type: DataTypes.CHAR(10),
+            type: DataTypes.CHAR(5),
             references: {
                 model: User,
                 key: 'user_id',
@@ -20,7 +20,7 @@ const Comment = sequelize.define('comment',
             }
         },
         post_id: {
-            type: DataTypes.CHAR(15),
+            type: DataTypes.CHAR(8),
             references: {
                 model: Post,
                 key: 'post_id',
@@ -28,7 +28,7 @@ const Comment = sequelize.define('comment',
             }
         },
         target_id: {
-            type: DataTypes.CHAR(20),
+            type: DataTypes.CHAR(10),
         },
         content: {
             type: DataTypes.STRING,
@@ -36,8 +36,11 @@ const Comment = sequelize.define('comment',
         },
         comment_date: {
             type: DataTypes.DATE,
-            allowNull: false,
             defaultValue: DataTypes.NOW,
+        },
+        report: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
         },
     },
     {

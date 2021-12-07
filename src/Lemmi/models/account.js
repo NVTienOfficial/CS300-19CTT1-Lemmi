@@ -7,7 +7,7 @@ const User = require("./user");
 const Account = sequelize.define('account',
     {
         account_id: {
-            type: DataTypes.CHAR(10),
+            type: DataTypes.CHAR(5),
             primaryKey: true,
         },
         username: {
@@ -22,7 +22,6 @@ const Account = sequelize.define('account',
         type: {
             type: DataTypes.STRING(10),
             defaultValue: "user",
-            allowNull: false,
             validate: {
                 isIn: [['admin', 'user', 'owner']],
             },
