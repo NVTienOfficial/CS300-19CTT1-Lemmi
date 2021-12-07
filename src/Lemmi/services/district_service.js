@@ -76,7 +76,7 @@ class DistrictService {
     async generateNewID() {
         let id = await rDistrict.count();
         let dis_id = await this.toStringID(id);
-        const max_id = Math.pow(16,10) - 1;
+        const max_id = Math.pow(16,3) - 1;
 
         while (true) {
             let exist = await rDistrict.isExistID(dis_id);
@@ -94,7 +94,7 @@ class DistrictService {
 
     async toStringID(id) {
         let str = id.toString(16);
-        while (str.length < 10)
+        while (str.length < 3)
             str = '0' + str;
         return str;
     }

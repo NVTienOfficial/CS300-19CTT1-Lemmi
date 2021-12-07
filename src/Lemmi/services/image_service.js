@@ -61,7 +61,7 @@ class ImageService {
     async generateNewID() {
         let id = await rImage.count();
         let img_id = await this.toStringID(id);
-        const max_id = Math.pow(16,20) - 1;
+        const max_id = Math.pow(16,8) - 1;
 
         while (true) {
             let exist = await rImage.isExistID(img_id);
@@ -80,7 +80,7 @@ class ImageService {
 
     async toStringID(id) {
         let str = id.toString(16);
-        while (str.length < 20)
+        while (str.length < 8)
             str = '0' + str;
         return str;
     }
