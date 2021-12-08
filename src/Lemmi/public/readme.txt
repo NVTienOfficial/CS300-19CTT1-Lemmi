@@ -1,1 +1,1 @@
-this folder contains css files
+this folder contains javascript, css files
