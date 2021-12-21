@@ -80,7 +80,6 @@ class PostService {
         if (id.length == 0)
             return [];
         
-        console.log(id);
         try {
             let posts = [];
             for (let i = 0; i < id.length; i++) {
@@ -88,6 +87,21 @@ class PostService {
                 posts.push(post);
             }
             return posts;
+        }
+        catch (err) {
+            if (err == null)
+                throw new Error(500, err);
+            throw new Error(err.statusCode, err.message);
+        }
+    }
+
+    async getPostByID(id) {
+        if (id.length == 0)
+            throw new Error(400, "Bad request");
+        
+        try {
+            const post = await rPost.findByID(id);
+            return post;
         }
         catch (err) {
             if (err == null)

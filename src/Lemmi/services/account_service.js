@@ -13,6 +13,10 @@ class AccountService {
         if (!username || !password || !type)
             throw new Error(400, "Bad request");
             
+        let existUsername = await rAccount.isExistUsername(username);
+        if (existUsername)
+            throw new Error(401, "Username existed");
+
         try {
             let id = await this.generateNewID();
             account["account_id"] = id;
