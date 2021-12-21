@@ -4,7 +4,18 @@ const Error = require("../config/error");
 const rComment = new CommentRepo();
 
 class CommentService {
+    async makeComment(comment) {
 
+        try {
+            const newComment = await rComment
+            return newComment;
+        }
+        catch (err) {
+            if (err == null)
+                throw new Error(500, err);
+            throw new Error(err.statusCode, err.message);
+        }
+    }
 
     async generateNewID() {
         let id = await rComment.count();

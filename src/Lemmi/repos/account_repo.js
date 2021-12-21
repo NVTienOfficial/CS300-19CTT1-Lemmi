@@ -125,6 +125,20 @@ class AccountRepo {
         }
     }
 
+    async isExistUsername(username) {
+        try {
+            let account = await Account.count({
+                where: {
+                    username: username
+                }
+            });
+            return (account > 0);
+        }
+        catch (err) {
+            throw new Error(500, err.message);
+        }
+    }
+
     async isExistID(id) {
         try {
             let account = await Account.count({

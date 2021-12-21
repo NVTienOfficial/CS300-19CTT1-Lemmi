@@ -116,6 +116,21 @@ class VoteRepo {
             throw new Error(500, err.message);
         }
     }
+
+    async isExistVote(user_id, post_id) {
+        try {
+            let vote = await Vote.count({
+                where: {
+                    user_id: user_id,
+                    post_id: post_id,
+                }
+            });
+            return (vote > 0);
+        }
+        catch (err) {
+            throw new Error(500, err.message);
+        }
+    }
 }
 
 module.exports = VoteRepo;
