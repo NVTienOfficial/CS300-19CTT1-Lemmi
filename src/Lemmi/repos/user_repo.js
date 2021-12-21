@@ -1,8 +1,38 @@
 const User = require("../models/user");
 
 class UserRepo {
-    async CreateAnUser() {
-        
+    async createOne(user) {
+        try {
+            console.log(user);
+            const newUser = await User.create(user);
+            return newUser;
+        }
+        catch (err) {
+            throw new Error(500, err.message);
+        }
+    }
+
+    async deleteByID(id) {
+        try {
+            await User.destroy({
+                where: {
+                    user_id: id,
+                }
+            });
+        }
+        catch (err) {
+            throw new Error(405, err.message);
+        }
+    }
+
+    async getAll() {
+        try {
+            const users = await User.findAll();
+            return users;
+        }
+        catch (err) {
+            throw new Error(404, err.message);
+        }
     }
 
     async count() {
@@ -17,7 +47,7 @@ class UserRepo {
 
     async findByID(id) {
         try {
-            let user = User.findOne({
+            let user = await User.findOne({
                 where: {
                     user_id: id
                 }
@@ -29,14 +59,31 @@ class UserRepo {
         }
     }
 
+    async findIDByEmail(email) {
+        console.log(email);
+        try {
+            let account = await User.findOne({
+                where: {
+                    email: email
+                }
+            })
+            if (!account)
+                return null;
+            return account["user_id"];
+        }
+        catch (err) {
+            throw new Error(500, err.message);
+        }
+    }
+
     async isExistID(id) {
         try {
-            let user = User.findOne({
+            let user = await User.count({
                 where: {
                     user_id: id
                 }
-            })
-            return !(!user)
+            });
+            return (user > 0);
         }
         catch (err) {
             throw new Error(500, err.message);

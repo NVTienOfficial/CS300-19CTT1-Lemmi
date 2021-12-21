@@ -4,9 +4,9 @@ const Error = require("../config/error");
 class DistrictRepo {
     async createOne(id, name) {
         if (!name || name === "")
-        throw new Error(400, "Bad request");
+            throw new Error(400, "Bad request");
 
-        try {;
+        try {
             const newDistrict = await District.create({
                 district_id: id,
                 name: name,
@@ -65,7 +65,6 @@ class DistrictRepo {
                     district_id: id 
                 }
             });
-            return true;
         }
         catch (err) {
             throw new Error(405, err.message);

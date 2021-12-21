@@ -1,21 +1,23 @@
 const AccountRepo = require("../repos/account_repo");
+const UserRepo = require("../repos/user_repo");
 const Error = require("../config/error");
 const generateToken = require("../middleware/token");
-const Account = require("../models/account");
 
 const rAccount = new AccountRepo();
+const rUser = new UserRepo();
 
 class AccountService {
     async signUp(account) {
         const { username, password, type } = account;
 
-        if (!username || !password || !type || username === "" || password === "")
+        if (!username || !password || !type)
             throw new Error(400, "Bad request");
             
         try {
             let id = await this.generateNewID();
-            const account = await rAccount.CreateAccount(id, username, password, type);
-            return account;
+            account["account_id"] = id;
+            const newAccount = await rAccount.CreateAccount(account);
+            return newAccount;
         }
         catch (err) {
             if (err == null)
@@ -27,11 +29,11 @@ class AccountService {
     async login(account) {
         const { username, password } = account;
 
-        if (!username || !password || username === "" || password === "")
+        if (!username || !password)
             return new Error(400, "Bad request");
 
         try {
-            const result = await rAccount.findAccountByUsername(username);
+            const result = await rAccount.findByUsername(username);
 
             if (result === null)
                 throw new Error(404, "Not found");
@@ -56,7 +58,7 @@ class AccountService {
     async getAllAccounts(account) {
         const { account_id, type } = account;
 
-        if (!account_id || !type || account_id === "" || type === "")
+        if (!account_id || !type)
             return new Error(400, "Bad request");
 
         if (type != "admin") {
@@ -88,6 +90,44 @@ class AccountService {
     async deleteAccountByUsername(username) {
         try {
             await rAccount.deleteByUsername(username);
+        }
+        catch (err) {
+            if (err == null)
+                throw new Error(500, err);
+            throw new Error(err.statusCode, err.message);
+        }
+    }
+
+    async updatePassword(account) {
+        const { account_id, password } = account;
+
+        if (!account_id || !password)
+            throw new Error(400, "Bad request");
+
+        try {
+            await rAccount.updatePassword(account_id, password);
+        }
+        catch (err) {
+            if (err == null)
+                throw new Error(500, err);
+            throw new Error(err.statusCode, err.message);
+        }
+    }
+
+    async findPassword(data) {
+        const { username, email } = data;
+
+        if (!username || !email)
+            throw new Error(400, "Bad request");
+
+        try {
+            const id = await rUser.findIDByEmail(email);
+            if (!id)
+                throw new Error(400, "Not exist email");
+            const account = await rAccount.findByIDUsername(id, username);
+            if (!account)
+                throw new Error(400, "Not exist account");
+            return account["password"];
         }
         catch (err) {
             if (err == null)

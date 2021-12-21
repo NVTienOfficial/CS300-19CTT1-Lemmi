@@ -1,20 +1,30 @@
 const Account = require("../models/account");
 
 class AccountRepo {
-    async CreateAccount(account_id, username, password, type) {
-        const newAccount = await Account.create({
-            account_id: account_id,
-            username: username,
-            password: password,
-            type: type,
-        });
+    async CreateAccount(account) {
+        const newAccount = await Account.create(account);
         return newAccount;
     }
 
-    async findAccountByUsername(username) {
+    async findByUsername(username) {
         try {
             const account = await Account.findOne({
                 where: {
+                    username: username
+                }
+            })
+            return account;
+        }
+        catch (err) {
+            throw new Error(500, err.message);
+        }
+    }
+
+    async findByIDUsername(id, username) {
+        try {
+            const account = await Account.findOne({
+                where: {
+                    account_id: id,
                     username: username
                 }
             })
@@ -77,6 +87,20 @@ class AccountRepo {
         }
     }
 
+    async updatePassword(id, pwd) {
+        try {
+            await Account.update(
+                {password: pwd},
+                {
+                    where: {account_id: id}
+                }
+            );
+        }
+        catch (err) {
+            throw new Error(404, err.message);
+        }
+    }
+
     async count() {
         try {
             let n = await Account.count();
@@ -103,12 +127,12 @@ class AccountRepo {
 
     async isExistID(id) {
         try {
-            let account = Account.findOne({
+            let account = await Account.count({
                 where: {
                     account_id: id
                 }
-            })
-            return !(!account)
+            });
+            return (account > 0);
         }
         catch (err) {
             throw new Error(500, err.message);
