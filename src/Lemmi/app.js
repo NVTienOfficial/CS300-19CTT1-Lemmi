@@ -16,12 +16,3 @@ app.listen(process.env.PORT || 8080, async () => {
         console.log(err);
     }
 });
-
-app.get("/", (req, res) => {
-    try {
-        res.status(200).send("Lemmi site");
-    }
-    catch (err) {
-        res.status(200).send(err);
-    }
-});

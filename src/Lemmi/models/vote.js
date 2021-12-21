@@ -26,11 +26,8 @@ const Vote = sequelize.define('vote',
             },
         },
         type: {
-            type: DataTypes.SMALLINT,
+            type: DataTypes.BOOLEAN,
             allowNull: false,
-            validate: {
-                isIn: [[-1, 0, 1]],
-            },
         },
     },
     {
