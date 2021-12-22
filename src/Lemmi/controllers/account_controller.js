@@ -19,7 +19,7 @@ router.post("/create", async (req, res) => {
     }
 });
 
-router.get("", auth, async (req, res) => {
+router.get("", async (req, res) => {
     try {
         let accounts = await sAccount.getAllAccounts(req.account);
         return res.status(200).json({
