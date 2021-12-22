@@ -1,0 +1,36 @@
+@import "_style-reuse";
+
+.ui.fluid.container {
+    padding: 15px;
+}
+
+#form-container {
+    @include responsive(MD) {
+        margin-top: 15px;
+        width: 100%;
+    }
+
+    background: white;
+    border-radius: 20px;
+    padding: 15px 30px;
+    width: 50%;
+
+    .ui.form {
+        border: 1px solid black;
+        padding: 20px;
+        box-shadow: 12px 9px 1px rgba(255, 134, 23, 0.75);
+        a:hover {
+            color: $orange;
+            cursor: pointer;
+        }
+    }
+
+    #l-form-auth-services a {
+        display: inline-block;
+    }
+
+    #l-form-auth-services {
+        display: flex;
+        justify-content: space-between;
+    }
+}

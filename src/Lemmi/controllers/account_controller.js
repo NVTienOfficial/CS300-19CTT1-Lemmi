@@ -7,6 +7,8 @@ const sAccount = new AccountService();
 
 router.post("/create", async (req, res) => {
     try {
+        console.log("Register body: ", req.body);
+
         let account = await sAccount.signUp(req.body);
         return res.status(200).json({
             status: "OK",
@@ -18,6 +20,13 @@ router.post("/create", async (req, res) => {
         return res.status(err.statusCode).json(err);
     }
 });
+
+//Dat
+router.get("/create/:type", (req, res) => {
+    res.render('register-' + req.params.type);
+});
+
+
 
 router.get("", async (req, res) => {
     try {
@@ -71,8 +80,20 @@ router.get("/pwd", async (req, res) => {
     catch (err) {
         return res.status(err.statusCode).json(err);
     }
+    
 });
 
+//Dat
+router.get('/changepassword', (req, res) => {
+    res.render('changepassword');
+});
+
+router.get('/forgot', (req, res) => {
+    res.render('forgot');
+});
+
+
+//Put -> Post
 router.put("/pwd", async (req, res) => {
     try {
         await sAccount.updatePassword(req.body);

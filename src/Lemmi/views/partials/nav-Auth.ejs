@@ -1,0 +1,71 @@
+<header id="header">
+    <nav class="navbar-nav d-flex-row">
+        <div class="nav-brand">
+            <a href="/" class="ui medium header"><img class="nav-icon" src="/icon.png" alt="Logo">Lemmi</a>
+        </div>
+
+        <a href="#" class="toggle-button">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </a>
+
+        <div class="nav-item-container">
+            <ul>
+                <li>
+                    <div class="input-container" style="margin-right: 2.5rem;">
+                        <form class="ui action input" action="/" method="GET">
+                            <input type="text" name="searchterm" placeholder="Search...">
+                            <button type="submit" class="ui button">Search</button>
+                        </form>
+                    </div>
+                </li>
+                <li><a href="#footer" class="ui medium header">About us</a></li>
+                <li>
+                    <a class="ui medium header" id="user-link">
+                        <% if (username) { %>
+                            <%= username %>
+                                <% } else {%>
+                                    ExampleAccount
+                                    <% } %>
+                                        <span><i class="fas fa-caret-down -icon"></span></i>
+                    </a>
+                </li>
+                <li>
+                    <div id="log-menu-res">
+                        <div class="ui vertical pointing menu">
+                            <a href="#" class="item">
+                                Profile
+                            </a>
+                            <a href="/account/changepassword" class="item">
+                                Change password
+                            </a>
+                            <a href="#" class="item">
+                                Log out
+                            </a>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+
+
+        </div>
+    </nav>
+
+    <div id="log-menu-nor">
+        <div class="ui vertical pointing menu">
+            <a href="#" class="item">
+                Profile
+            </a>
+            <a href="/account/changepassword" class="item">
+                Change password
+            </a>
+            <a href="#" class="item">
+                Log out
+            </a>
+        </div>
+    </div>
+
+
+
+</header>

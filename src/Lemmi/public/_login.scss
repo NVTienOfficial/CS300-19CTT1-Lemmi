@@ -1,0 +1,90 @@
+@import "_style-reuse";
+
+$height: 100%;
+// form
+$l-form-width: 50%;
+$l-form-height: 85%;
+// $l-form-width-res: 75%;
+$l-form-background: #ffffff;
+$l-form-margin: 50px;
+$l-form-padding: 50px;
+// form group
+
+$l-form-input-backgroundcolor: #edf2f7;
+$l-form-group-box: 12px 9px 1px rgba(255, 134, 23, 0.75);
+$l-form-boder-radius: 20px 0px 0px 20px;
+
+//responsive size
+
+#l-form-control {
+    width: $l-form-width;
+    height: $l-form-height;
+    top: calc(#{$height} / 2 - #{$l-form-height} / 2);
+    right: $l-form-margin;
+    background-color: $l-form-background;
+    border-radius: $l-form-boder-radius;
+    padding: $l-form-padding;
+    position: absolute;
+    @include responsive(MD) {
+        padding: 25px;
+    }
+    @include responsive(XS) {
+        border-radius: 20px;
+        margin: 0;
+        top: 12%;
+        right: 0;
+    }
+}
+
+#l-form-group {
+    height: 80%;
+    background-color: $l-form-background;
+    justify-content: center;
+    padding: 15px;
+    box-shadow: $l-form-group-box;
+    @include responsive(SM) {
+        box-shadow: none;
+    }
+}
+
+#l-form-intro {
+    font-size: 2.5em;
+    @include responsive(SM) {
+        font-size: 1.75em;
+        margin-left: 10px;
+    }
+}
+#l-form-group form {
+    padding: 5vh 5vw 10vh 5vw;
+}
+
+#l-form-group .field input {
+    background-color: $l-form-input-backgroundcolor !important;
+    color: black !important;
+}
+
+#l-form-auth-services a {
+    display: inline-block;
+}
+
+#l-form-auth-services {
+    display: flex;
+    justify-content: space-between;
+}
+
+#l-submit {
+    background-color: $orange !important;
+}
+
+#forgot {
+    text-align: center;
+}
+
+#forgot a {
+    color: black;
+}
+
+#l-nav {
+    margin-top: 5px;
+    margin-left: 20px;
+}

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('partials/metadata') %>
+        <link rel="stylesheet" href="/login.css">
+
+
+        <title>Forgot password</title>
+</head>
+
+<body>
+    <div class="ui stackable two column grid">
+        <div class="column">
+            <div class="ui one column grid">
+                <div class="row" id="l-nav">
+                    <a href="/" class="ui tiny image">
+                        <img src="/icon.png">
+                    </a>
+
+                </div>
+            </div>
+        </div>
+        <div class="column" id="l-form-control">
+            <div class="ui one column grid">
+                <div class="row">
+                    <h1 class="color-orange" id="l-form-intro"><i>Lemmi</i></h1>
+                </div>
+                <div class="row border-bordered d-flex-col" id="l-form-group">
+                    <form class="ui form" action="">
+                        <div class="field">
+                            <h1 class="ui header color-orange text-centered">Forgot password?</h1>
+                        </div>
+                        <div class="field">
+                            <h4 class="ui header color-orange text-centered">No worry! We will send you a
+                                new
+                                password via email that you
+                                provided.</h4>
+                        </div>
+                        <div class="field">
+                            <input type="email" name="email" placeholder="Email">
+                        </div>
+                        <div class="field">
+                            <button class="fluid ui button" type="submit" id="l-submit">Send</button>
+                        </div>
+
+                        <div class="field" id="l-form-register">
+                            <a href="/account/create/user">
+                                <div class="fluid ui black basic button">Register for an
+                                    account</div>
+                            </a>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+</body>
+
+</html>
