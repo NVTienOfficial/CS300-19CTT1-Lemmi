@@ -1,0 +1,111 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
+.d-flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.d-flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.color-orange {
+  color: #ff8617 !important;
+}
+
+.border-bordered {
+  border: 1px solid black;
+}
+
+.text-centered {
+  text-align: center;
+}
+
+body {
+  background: linear-gradient(223.58deg, #ff8617 31.18%, #b3cdcd 101.35%) !important;
+  font-family: "Montserrat", sans-serif;
+}
+
+#l-form-control {
+  width: 50%;
+  height: 85%;
+  top: calc(100% / 2 - 85% / 2);
+  right: 50px;
+  background-color: #ffffff;
+  border-radius: 20px 0px 0px 20px;
+  padding: 50px;
+  position: absolute;
+}
+@media only screen and (max-width: 1024px) {
+  #l-form-control {
+    padding: 25px;
+  }
+}
+@media only screen and (max-width: 512px) {
+  #l-form-control {
+    border-radius: 20px;
+    margin: 0;
+    top: 12%;
+    right: 0;
+  }
+}
+
+#l-form-group {
+  height: 80%;
+  background-color: #ffffff;
+  justify-content: center;
+  padding: 15px;
+  box-shadow: 12px 9px 1px rgba(255, 134, 23, 0.75);
+}
+@media only screen and (max-width: 768px) {
+  #l-form-group {
+    box-shadow: none;
+  }
+}
+
+#l-form-intro {
+  font-size: 2.5em;
+}
+@media only screen and (max-width: 768px) {
+  #l-form-intro {
+    font-size: 1.75em;
+    margin-left: 10px;
+  }
+}
+
+#l-form-group form {
+  padding: 5vh 5vw 10vh 5vw;
+}
+
+#l-form-group .field input {
+  background-color: #edf2f7 !important;
+  color: black !important;
+}
+
+#l-form-auth-services a {
+  display: inline-block;
+}
+
+#l-form-auth-services {
+  display: flex;
+  justify-content: space-between;
+}
+
+#l-submit {
+  background-color: #ff8617 !important;
+}
+
+#forgot {
+  text-align: center;
+}
+
+#forgot a {
+  color: black;
+}
+
+#l-nav {
+  margin-top: 5px;
+  margin-left: 20px;
+}
+
+/*# sourceMappingURL=login.css.map */

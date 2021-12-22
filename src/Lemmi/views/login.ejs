@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('partials/metadata') %>
+        <link rel="stylesheet" href="/login.css">
+        <title>Login</title>
+</head>
+
+<body>
+    <div class="ui stackable two column grid">
+        <div class="column">
+            <div class="ui one column grid">
+                <div class="row" id="l-nav">
+                    <a href="/" class="ui tiny image">
+                        <img src="/icon.png">
+                    </a>
+
+                </div>
+            </div>
+        </div>
+        <div class="column" id="l-form-control">
+            <div class="ui one column grid">
+                <div class="row">
+                    <h1 class="color-orange" id="l-form-intro"><i>Lemmi</i></h1>
+                </div>
+                <div class="row border-bordered d-flex-col" id="l-form-group">
+                    <form class="ui form" action="/login" method="POST">
+                        <div class="field">
+                            <h1 class="ui header color-orange text-centered">Login</h1>
+                        </div>
+                        <div class="field">
+                            <h4 class="ui header color-orange text-centered">Sign in to your account</h4>
+                        </div>
+                        <div class="field">
+                            <input type="text" name="username" placeholder="Username">
+                        </div>
+                        <div class="field">
+                            <input type="password" name="password" placeholder="Password">
+                        </div>
+                        <div class="field" id="l-form-auth-services">
+                            <a href="/" id="logByGoogle">
+                                <button class="ui google plus button">
+                                    <i class="fab fa-google-plus-square"></i>
+                                    Sign in with Google
+                                </button>
+                            </a>
+                            <a href="/" id="logByFacebook">
+                                <button class="ui facebook button">
+                                    <i class="fab fa-facebook-square"></i>
+                                    Sign in with Facebook
+                                </button>
+                            </a>
+
+                        </div>
+
+                        <div class="field">
+                            <button class="fluid ui button" type="submit" id="l-submit">Login</button>
+                        </div>
+
+                        <div class="field">
+                            <div id="forgot">
+                                <a href="/account/forgot">
+                                    Forgot password ?
+                                </a>
+                            </div>
+                        </div>
+                        <!-- <div class="field" id="l-form-register">
+
+                        </div> -->
+                        <a href="/account/create/user">
+                            <div class="fluid ui black basic button">Register</div>
+                        </a>
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

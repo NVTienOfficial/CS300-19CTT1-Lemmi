@@ -1,0 +1,64 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
+.d-flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.d-flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.color-orange {
+  color: #ff8617 !important;
+}
+
+.border-bordered {
+  border: 1px solid black;
+}
+
+.text-centered {
+  text-align: center;
+}
+
+body {
+  background: linear-gradient(223.58deg, #ff8617 31.18%, #b3cdcd 101.35%) !important;
+  font-family: "Montserrat", sans-serif;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.ui.fluid.container {
+  padding: 15px;
+}
+
+#form-container {
+  background: white;
+  border-radius: 20px;
+  padding: 15px 30px;
+  width: 50%;
+}
+@media only screen and (max-width: 1024px) {
+  #form-container {
+    margin-top: 15px;
+    width: 100%;
+  }
+}
+#form-container .ui.form {
+  border: 1px solid black;
+  padding: 20px;
+  box-shadow: 12px 9px 1px rgba(255, 134, 23, 0.75);
+}
+#form-container .ui.form a:hover {
+  color: #ff8617;
+  cursor: pointer;
+}
+#form-container #l-form-auth-services a {
+  display: inline-block;
+}
+#form-container #l-form-auth-services {
+  display: flex;
+  justify-content: space-between;
+}
+
+/*# sourceMappingURL=register.css.map */
