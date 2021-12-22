@@ -16,7 +16,6 @@ const Comment = sequelize.define('comment',
             references: {
                 model: User,
                 key: 'user_id',
-                deferrable: Deferrable.INITIALLY_DEFERRED,
             }
         },
         post_id: {
@@ -24,11 +23,7 @@ const Comment = sequelize.define('comment',
             references: {
                 model: Post,
                 key: 'post_id',
-                deferrable: Deferrable.INITIALLY_DEFERRED,
             }
-        },
-        target_id: {
-            type: DataTypes.CHAR(10),
         },
         content: {
             type: DataTypes.STRING,
@@ -48,7 +43,5 @@ const Comment = sequelize.define('comment',
         freezeTableName: true,
     }
 );
-
-Comment.belongsTo(Comment, { foreignkey: "comment_id" });
 
 module.exports = Comment;

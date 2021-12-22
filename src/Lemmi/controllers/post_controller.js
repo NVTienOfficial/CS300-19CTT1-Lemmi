@@ -2,9 +2,11 @@ const router = require("express").Router();
 
 const PostService = require("../services/post_service");
 const VoteService = require("../services/vote_service");
+const CommentService = require("../services/comment_service");
 
 const sPost = new PostService();
 const sVote = new VoteService();
+const sComment = new CommentService();
 
 router.post("/create", async (req, res) => {
     try {
@@ -38,10 +40,11 @@ router.get("/detail", async (req, res) => {
     try {
         const post = await sPost.getPostByID(req.query.id);
         const vote = await sVote.getPostVote(req.query.id);
+        const comment = await sComment.getPostComments(req.query.id);
         return res.status(201).json({
             status: "OK",
             message: "Success",
-            data: [post, vote],
+            data: [post, vote, comment],
         });
     }
     catch (err) {

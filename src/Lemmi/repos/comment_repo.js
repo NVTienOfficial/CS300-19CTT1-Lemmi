@@ -1,4 +1,5 @@
 const Comment = require("../models/comment");
+const Error = require("../config/error");
 
 class CommentRepo {
     async createOne(comment) {
@@ -11,7 +12,7 @@ class CommentRepo {
         }
     }
 
-    async getAllComments() {
+    async getAll() {
         try {
             const comments = await Comment.findAll();
             return comments;
@@ -74,13 +75,17 @@ class CommentRepo {
         }
     }
 
-    async deleteByComment(id) {
+    async updateContentByID(id, content) {
         try {
-            await Comment.destroy({
-                where: {
-                    target_id: id
+            const newComment = await Comment.update(
+                {content: content},
+                {
+                    where: {
+                        comment_id: id,
+                    }
                 }
-            })
+            )
+            return newComment;
         }
         catch (err) {
             throw new Error(500, err.message);
@@ -113,12 +118,12 @@ class CommentRepo {
 
     async isExistID(id) {
         try {
-            let comment = Comment.findOne({
+            let comment = Comment.count({
                 where: {
                     comment_id: id
                 }
             })
-            return !(!comment)
+            return (comment > 0);
         }
         catch (err) {
             throw new Error(500, err.message);

@@ -15,7 +15,7 @@ class PostRepo {
     async getAll() {
         try {
             const posts = await Post.findAll();
-            return posts
+            return posts;
         }
         catch (err) {
             throw new Error(500, err.message);
