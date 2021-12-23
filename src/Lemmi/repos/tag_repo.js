@@ -1,4 +1,5 @@
 const Tag = require("../models/tag");
+const PostTag = require("../models/post_tag");
 const Error = require("../config/error");
 
 class TagRepo {
@@ -48,6 +49,29 @@ class TagRepo {
                     name: name
                 }
             });
+        }
+        catch (err) {
+            throw new Error(404, err.message);
+        }
+    }
+
+    async getTagByPost(id) {
+        try {
+            const result = await Tag.findAll({
+                include: [{
+                    model: PostTag,
+                    require: true,
+                    where: {
+                        post_id: id
+                    }
+                }],
+            });
+            let tags = []
+            for (let i = 0; i < result.length; i++) {
+                let tag = result[i]['name'];
+                tags.push(tag);
+            }
+            return tags;
         }
         catch (err) {
             throw new Error(404, err.message);

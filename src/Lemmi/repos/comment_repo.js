@@ -1,5 +1,6 @@
 const Comment = require("../models/comment");
 const Error = require("../config/error");
+const sequelize = require("../config/database");
 
 class CommentRepo {
     async createOne(comment) {
@@ -86,6 +87,20 @@ class CommentRepo {
                 }
             )
             return newComment;
+        }
+        catch (err) {
+            throw new Error(500, err.message);
+        }
+    }
+
+    async countByPost(post_id) {
+        try {
+            let n = await Comment.count({
+                where: {
+                    post_id: post_id
+                }
+            });
+            return n;
         }
         catch (err) {
             throw new Error(500, err.message);

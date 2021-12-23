@@ -35,6 +35,36 @@ class UserRepo {
         }
     }
 
+    async getNameByID(id) {
+        try {
+            const name = await User.findOne({
+                attributes: ['name'],
+                where: {
+                    user_id: id
+                }
+            });
+            return name['name'];
+        }
+        catch (err) {
+            throw new Error(404, err.message);
+        }
+    }
+
+    async getDistrictIDByID(id) {
+        try {
+            const district = await User.findOne({
+                attributes: ['district_id'],
+                where: {
+                    user_id: id
+                }
+            });
+            return district['district_id'];
+        }
+        catch (err) {
+            throw new Error(404, err.message);
+        }
+    }
+
     async count() {
         try {
             let n = await User.count();

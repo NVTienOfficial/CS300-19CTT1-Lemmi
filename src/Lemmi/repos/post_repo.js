@@ -1,4 +1,4 @@
-const { ne } = require("sequelize/dist/lib/operators");
+const sequelize = require("../config/database");
 const Post = require("../models/post");
 
 class PostRepo {
@@ -70,7 +70,124 @@ class PostRepo {
         catch (err) {
             throw new Error(405, err.message);
         }
-    } 
+    }
+
+    async getNewestPosts(n) {
+        try {
+            let posts = await Post.findAll({
+                attributes: {
+                    include: [
+                        [sequelize.literal(`(
+                            SELECT COUNT(*)
+                            FROM vote
+                            WHERE vote.post_id = post.post_id AND vote.type = true
+                        )`), 'upvote'],
+                        [sequelize.literal(`(
+                            SELECT COUNT(*)
+                            FROM vote
+                            WHERE vote.post_id = post.post_id AND vote.type = false
+                        )`), 'downvote'],
+                        [sequelize.literal(`(
+                            SELECT COUNT(*)
+                            FROM comment
+                            WHERE comment.post_id = post.post_id
+                        )`), 'n_comment'],
+                        [sequelize.literal(`(
+                            SELECT name
+                            FROM "user"
+                            WHERE "user".user_id = post.user_id
+                        )`), 'name'],
+                    ]
+                },
+                order: [
+                    ['post_date', 'DESC']
+                ],
+                limit: n,
+            });
+            return posts;
+        }
+        catch (err) {
+            throw new Error(405, err.message);
+        }
+    }
+
+    async getMostCommentPosts(n) {
+        try {
+            let posts = await Post.findAll({
+                attributes: {
+                    include: [
+                        [sequelize.literal(`(
+                            SELECT COUNT(*)
+                            FROM vote
+                            WHERE vote.post_id = post.post_id AND vote.type = true
+                        )`), 'upvote'],
+                        [sequelize.literal(`(
+                            SELECT COUNT(*)
+                            FROM vote
+                            WHERE vote.post_id = post.post_id AND vote.type = false
+                        )`), 'downvote'],
+                        [sequelize.literal(`(
+                            SELECT COUNT(*)
+                            FROM comment
+                            WHERE comment.post_id = post.post_id
+                        )`), 'n_comment'],
+                        [sequelize.literal(`(
+                            SELECT name
+                            FROM "user"
+                            WHERE "user".user_id = post.user_id
+                        )`), 'name'],
+                    ]
+                },
+                order: [
+                    [sequelize.literal('n_comment'), 'DESC']
+                ]
+            });
+            return posts;
+        }
+        catch (err) {
+            throw new Error(405, err.message);
+        }
+    }
+
+    async getMostVotePosts(n) {
+        try {
+            let posts = await Post.findAll({
+                attributes: {
+                    include: [
+                        [sequelize.literal(`(
+                            SELECT COUNT(*)
+                            FROM vote
+                            WHERE vote.post_id = post.post_id AND vote.type = true
+                        )`), 'upvote'],
+                        [sequelize.literal(`(
+                            SELECT COUNT(*)
+                            FROM vote
+                            WHERE vote.post_id = post.post_id AND vote.type = false
+                        )`), 'downvote'],
+                        [sequelize.literal(`(
+                            SELECT COUNT(*)
+                            FROM comment
+                            WHERE comment.post_id = post.post_id
+                        )`), 'n_comment'],
+                        [sequelize.literal(`(
+                            SELECT name
+                            FROM "user"
+                            WHERE "user".user_id = post.user_id
+                        )`), 'name'],
+                    ]
+                },
+                order: [
+                    [sequelize.literal('upvote'), 'DESC'],
+                    [sequelize.literal('downvote'), 'ASC'],
+                ],
+                limit: n,
+            });
+            return posts;
+        }
+        catch (err) {
+            throw new Error(405, err.message);
+        }
+    }
 
     async count() {
         try {

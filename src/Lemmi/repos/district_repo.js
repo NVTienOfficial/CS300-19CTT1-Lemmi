@@ -44,6 +44,21 @@ class DistrictRepo {
         }
     }
 
+    async getNameByID(id) {
+        try {
+            const district = await District.findOne({
+                attributes: ['name'],
+                where: {
+                    district_id: id
+                }
+            });
+            return district['name'];
+        }
+        catch (err) {
+            throw new Error(404, err.message);
+        }
+    }
+
     async deleteByName(name) {
         try {
             await District.destroy({

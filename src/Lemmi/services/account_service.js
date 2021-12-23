@@ -43,10 +43,11 @@ class AccountService {
                 throw new Error(404, "Not found");
 
             if (result.password === password) {
-                return generateToken({
+                const token = generateToken({
                     account_id: result.account_id,
                     type: result.type
                 })
+                return {id: result.account_id, token: token};
             }
             else {
                 throw new Error(400, "Invalid credential");
@@ -103,13 +104,13 @@ class AccountService {
     }
 
     async updatePassword(account) {
-        const { account_id, password } = account;
+        const { username, password } = account;
 
-        if (!account_id || !password)
+        if (!username || !password)
             throw new Error(400, "Bad request");
 
         try {
-            await rAccount.updatePassword(account_id, password);
+            await rAccount.updatePasswordByUsername(username, password);
         }
         catch (err) {
             if (err == null)

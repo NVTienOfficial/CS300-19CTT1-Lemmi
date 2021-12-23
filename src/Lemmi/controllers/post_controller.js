@@ -36,11 +36,11 @@ router.get("", async (req, res) => {
     }
 });
 
-router.get("/detail", async (req, res) => {
+router.get("/detail/:id", async (req, res) => {
     try {
-        const post = await sPost.getPostByID(req.query.id);
-        const vote = await sVote.getPostVote(req.query.id);
-        const comment = await sComment.getPostComments(req.query.id);
+        const post = await sPost.getPostByID(req.params.id);
+        const vote = await sVote.getPostVote(req.params.id);
+        const comment = await sComment.getPostComments(req.params.id);
         return res.status(201).json({
             status: "OK",
             message: "Success",

@@ -87,12 +87,14 @@ class AccountRepo {
         }
     }
 
-    async updatePassword(id, pwd) {
+    async updatePasswordByUsername(username, pwd) {
         try {
             await Account.update(
                 {password: pwd},
                 {
-                    where: {account_id: id}
+                    where: {
+                        username: username
+                    }
                 }
             );
         }
