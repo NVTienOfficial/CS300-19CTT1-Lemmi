@@ -1,6 +1,7 @@
 const Tag = require("../models/tag");
 const PostTag = require("../models/post_tag");
 const Error = require("../config/error");
+const sequelize = require("../config/database");
 
 class TagRepo {
     async createOne(id, name) {
@@ -34,6 +35,24 @@ class TagRepo {
             let name = [];
             for (let i = 0; i < tags.length; i++) {
                 name.push(tags[i]['name'])
+            }
+            return name;
+        }
+        catch (err) {
+            throw new Error(404, err.message);
+        }
+    }
+
+    async getAllType() {
+        try {
+            const tags = await Tag.findAll({
+                attributes: [
+                    [sequelize.fn('DISTINCT', sequelize.col('type')), 'type']
+                ]
+            });
+            let name = [];
+            for (let i = 0; i < tags.length; i++) {
+                name.push(tags[i]['type'])
             }
             return name;
         }

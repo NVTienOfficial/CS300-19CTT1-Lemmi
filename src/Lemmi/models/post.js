@@ -1,6 +1,7 @@
 const { DataTypes, Deferrable } = require("sequelize");
 
 const sequelize = require("../config/database");
+const District = require("./district");
 
 const User = require("./user");
 
@@ -38,6 +39,9 @@ const Post = sequelize.define('post',
                 deferrable: Deferrable.INITIALLY_DEFERRED,
             },
         },
+        district_id: {
+            type: DataTypes.CHAR(3),
+        },
         post_date: {
             type: DataTypes.DATE,
             defaultValue: DataTypes.NOW,
@@ -48,5 +52,8 @@ const Post = sequelize.define('post',
         freezeTableName: true,
     }
 );
+
+Post.belongsTo(District, {foreignKey: 'district_id'});
+District.hasMany(Post, {foreignKey: 'district_id'});
 
 module.exports = Post;

@@ -32,7 +32,9 @@ const PostTag = sequelize.define('post_tag',
     }
 );
 
+Post.hasMany(PostTag, {foreignKey: 'post_id'});
 Tag.hasMany(PostTag, {foreignKey: 'tag_id'});
 PostTag.belongsTo(Tag, {foreignKey: 'tag_id'});
+PostTag.belongsTo(Post, {foreignKey: 'post_id'});
 
 module.exports = PostTag;

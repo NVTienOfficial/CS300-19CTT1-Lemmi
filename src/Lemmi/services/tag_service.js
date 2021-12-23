@@ -45,6 +45,18 @@ class TagService {
         }
     }
 
+    async getAllTagCategory() {
+        try {
+            const types = await rTag.getAllType();
+            return types;
+        }
+        catch (err) {
+            if (err == null)
+                throw new Error(500, err);
+            throw new Error(err.statusCode, err.message);
+        }
+    }
+
     async updateTagByID(tag) {
         const { tag_id, name } = tag;
 

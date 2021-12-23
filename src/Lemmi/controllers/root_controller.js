@@ -3,9 +3,13 @@ const auth = require("../middleware/auth");
 
 const AccountService = require("../services/account_service");
 const PostService = require("../services/post_service");
+const TagService = require("../services/tag_service");
+const DistrictService = require("../services/district_service");
 
 const sAccount = new AccountService();
 const sPost = new PostService();
+const sTag = new TagService();
+const sDistrict = new DistrictService();
 
 router.post("/login", async (req, res) => {
     try {
@@ -57,12 +61,18 @@ router.get("/", async (req, res) => {
         const newest_post = await sPost.getNewestPosts(40);
         const comment_post = await sPost.getMostCommentPosts(40);
         const vote_post = await sPost.getMostVotePost(40);
+        const tag = await sTag.getAllTagNames();
+        const category = await sTag.getAllTagCategory();
+        const district = await sDistrict.getAllDistrictName();
 
         // Take this object to parse layout       ** NOTICE **
         const posts = {
             newest: newest_post,
             comment: comment_post,
             vote: vote_post,
+            tag: tag,
+            category: category,
+            district: district
         }
     }
     catch (err) {
@@ -74,49 +84,17 @@ router.get("/", async (req, res) => {
     res.render('home', { user, username });
 });
 
-router.get("", async (req, res) => {
+router.get("/filter", async (req, res) => {
     try {
-        const post_id = await sPost.getPopularPosts(40);
-        const posts = await sPost.getPostsByID(post_id);
-        return res.status(200).json({
-            status: "OK",
-            message: "success",
-            data: posts,
+        // return array contain object which include post data
+        const posts = await sPost.filter(req.query.tag, req.query.category, req.query.district);
+        res.status(200).json({
+            data: posts
         })
     }
     catch (err) {
         return res.status(err.statusCode).json(err);
     }
 });
-
-// router.post("", async (req, res) => {
-//     try {
-//         const post_id = await sPost.getPopularPosts(40);
-//         const posts = await sPost.getPostsByID(post_id);
-//         return res.status(200).json({
-//             status: "OK",
-//             message: "success",
-//             data: posts,
-//         })
-//     }
-//     catch (err) {
-//         return res.status(err.statusCode).json(err);
-//     }
-// });
-
-// router.head("", async (req, res) => {
-//     try {
-//         const post_id = await sPost.getPopularPosts(40);
-//         const posts = await sPost.getPostsByID(post_id);
-//         return res.status(200).json({
-//             status: "OK",
-//             message: "success",
-//             data: posts,
-//         })
-//     }
-//     catch (err) {
-//         return res.status(err.statusCode).json(err);
-//     }
-// });
 
 module.exports = router;

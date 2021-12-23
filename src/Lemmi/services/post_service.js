@@ -55,6 +55,48 @@ class PostService {
         }
     }
 
+    async filter(tag, category, district) {
+        if (!tag && !category && !district)
+            throw new Error(400, "Bad request");
+
+        try {
+            if (!category && !district) {
+                const posts = await rPost.getPostByTag(tag);
+                return posts;
+            }
+            else if (!tag && !district) {
+                const posts = await rPost.getPostByCategory(category);
+                return posts;
+            }
+            else if (!tag && !category) {
+                const posts = await rPost.getPostByDistrict(district);
+                return posts; 
+            }
+            else if (!tag) {
+                const posts = await rPost.getPostByCategoryDistrict(category, district);
+                return posts; 
+            }
+            else if (!category) {
+                const posts = await rPost.getPostByTagDistrict(tag, district);
+                return posts; 
+            }
+            else if (!district) {
+                const posts = await rPost.getPostByTagCategory(tag, category);
+                return posts;
+            }
+            else {
+                console.log("here");
+                const posts = await rPost.getPostByTagCategoryDistrict(tag, category, district);
+                return posts;
+            }
+        }
+        catch (err) {
+            if (err == null)
+                throw new Error(500, err);
+            throw new Error(err.statusCode, err.message);
+        }
+    }
+
     async getNewestPosts(n) {
         try {
             let posts = await rPost.getNewestPosts(n);
