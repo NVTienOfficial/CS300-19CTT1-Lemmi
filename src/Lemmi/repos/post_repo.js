@@ -1,5 +1,8 @@
 const sequelize = require("../config/database");
+const District = require("../models/district");
 const Post = require("../models/post");
+const Tag = require("../models/tag");
+const PostTag = require("../models/post_tag");
 
 class PostRepo {
     async createOne(post) {
@@ -186,6 +189,187 @@ class PostRepo {
         }
         catch (err) {
             throw new Error(405, err.message);
+        }
+    }
+
+    async getPostByTag(tag) {
+        try {
+            let posts = await Post.findAll({
+                include: [{
+                    model: PostTag,
+                    require: true,
+                    include: [{
+                        model: Tag,
+                        require: true,
+                        where: {
+                            name: tag
+                        }
+                    }]
+                }]
+            });
+            return posts;
+        }
+        catch (err) {
+            throw new Error(500, err.message);
+        }
+    }
+
+    async getPostByCategory(category) {
+        try {
+            let posts = await Post.findAll({
+                include: [{
+                    model: PostTag,
+                    require: true,
+                    include: [{
+                        model: Tag,
+                        require: true,
+                        where: {
+                            type: category
+                        }
+                    }]
+                }]
+            });
+            return posts;
+        }
+        catch (err) {
+            throw new Error(500, err.message);
+        }
+    }
+
+    async getPostByDistrict(district) {
+        try {
+            let posts = await Post.findAll({
+                include: [{
+                    model: District,
+                    require: true,
+                    where: {
+                        name: district
+                    }
+                }]
+            });
+            return posts;
+        }
+        catch (err) {
+            throw new Error(500, err.message);
+        }
+    }
+
+    async getPostByCategoryDistrict(category, district) {
+        try {
+            let posts = await Post.findAll({
+                include: [
+                    {
+                        model: PostTag,
+                        require: true,
+                        include: [{
+                            model: Tag,
+                            require: true,
+                            where: {
+                                type: category
+                            }
+                        }]
+                    },
+                    {
+                        model: District,
+                        require: true,
+                        where: {
+                            name: district
+                        }
+                    }
+                ]
+            });
+            return posts;
+        }
+        catch (err) {
+            throw new Error(500, err.message);
+        }
+    }
+
+    async getPostByTagCategory(tag, category) {
+        try {
+            let posts = await Post.findAll({
+                include: [
+                    {
+                        model: PostTag,
+                        require: true,
+                        include: [{
+                            model: Tag,
+                            require: true,
+                            where: {
+                                name: tag,
+                                type: category
+                            }
+                        }]
+                    },
+                ]
+            });
+            return posts;
+        }
+        catch (err) {
+            throw new Error(500, err.message);
+        }
+    }
+
+    async getPostByTagDistrict(tag, district) {
+        try {
+            let posts = await Post.findAll({
+                include: [
+                    {
+                        model: PostTag,
+                        require: true,
+                        include: [{
+                            model: Tag,
+                            require: true,
+                            where: {
+                                name: tag
+                            }
+                        }]
+                    },
+                    {
+                        model: District,
+                        require: true,
+                        where: {
+                            name: district
+                        }
+                    }
+                ]
+            });
+            return posts;
+        }
+        catch (err) {
+            throw new Error(500, err.message);
+        }
+    }
+
+    async getPostByTagCategoryDistrict(tag, category, district) {
+        try {
+            let posts = await Post.findAll({
+                include: [
+                    {
+                        model: PostTag,
+                        require: true,
+                        include: [{
+                            model: Tag,
+                            require: true,
+                            where: {
+                                name: tag,
+                                type: category
+                            }
+                        }]
+                    },
+                    {
+                        model: District,
+                        require: true,
+                        where: {
+                            name: district
+                        }
+                    }
+                ]
+            });
+            return posts;
+        }
+        catch (err) {
+            throw new Error(500, err.message);
         }
     }
 
