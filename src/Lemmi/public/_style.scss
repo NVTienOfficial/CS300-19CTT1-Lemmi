@@ -105,7 +105,7 @@ header {
 }
 
 #banner {
-    height: 450px;
+    height: 480px;
     width: 100vw;
     margin-bottom: 30px;
 }
@@ -117,6 +117,14 @@ main {
         }
     }
     z-index: 100;
+
+    .card .content {
+        margin-top: 12px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
     .header {
         color: $main-text-color !important;
     }

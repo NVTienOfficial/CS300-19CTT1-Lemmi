@@ -3,328 +3,251 @@
 
 <head>
     <%- include('partials/metadata') %>
-        <link rel="stylesheet" href="/style.css">
-        <title>Home</title>
+    <link rel="stylesheet" href="/style.css">
+    <title>Home</title>
 </head>
 
 <body>
+    <% if (userid && username) { %>
+    <%- include('partials/nav-Auth') %>
+    <% } else { %>
+    <%- include('partials/nav-unAuth') %>
+    <% } %>
+    <img src="/banner.jpg" alt="Banner" id="banner">
 
-    <% if (user){ %>
-        <%- include('partials/nav-Auth') %>
-            <% } else {%>
-                <%- include('partials/nav-unAuth') %>
-                    <% } %>
+    <main>
 
-                        <img src="/banner.jpg" alt="Banner" id="banner">
+        <div class="form-container">
+            <div class="ui coupled modal">
+                <div class="ui second modal">
+                    <div class="header">
+                        Confirmation
+                    </div>
+                    <div class="content">
+                        <h2 class="ui header">Are you sure to post this review?</h2>
+                    </div>
+                    <div class="actions">
+                        <div class="ui inverted red button" id="return-form">Return</div>
+                        <div class="ui inverted green button" id="confirm-submit-form">Yes, I am
+                            sure</div>
+                    </div>
+                </div>
+                <div class="ui first modal">
+                    <div class="header">
+                        Create a review post
+                    </div>
+                    <div class="content">
 
-                        <main>
+                        <form class="ui form" action="/" method="POST">
+                            <div class="required field">
+                                <label>Title</label>
+                                <input type="text" name="title" placeholder="Title" id="title" required>
+                            </div>
 
-                            <div class="form-container">
-                                <div class="ui coupled modal">
-                                    <div class="ui second modal">
-                                        <div class="header">
-                                            Confirmation
-                                        </div>
-                                        <div class="content">
-                                            <h2 class="ui header">Are you sure to post this review?</h2>
-                                        </div>
-                                        <div class="actions">
-                                            <div class="ui inverted red button" id="return-form">Return</div>
-                                            <div class="ui inverted green button" id="confirm-submit-form">Yes, I am
-                                                sure</div>
-                                        </div>
+                            <div class="required field">
+                                <label>District</label>
+                                <select class="ui dropdown" name="district" id="select-district" required>
+                                    <option value="">Select district</option>
+                                    <option value="q1">Quận 1</option>
+                                    <option value="q2">Quận 2</option>
+                                    <option value="q3">Quận 3</option>
+                                </select>
+                            </div>
+                            <div class="field">
+                                <label>Tags</label>
+                                <select name="tags" class="ui search dropdown" multiple="" id="multi-select-tags">
+                                    <option value="">Tags</option>
+                                    <option value="t1">Tag 1</option>
+                                    <option value="t2">Tag 2</option>
+                                    <option value="t3">Tag 3</option>
+                                </select>
+                            </div>
+
+                            <div class="field">
+                                <label>Categories</label>
+                                <select name="categories" class="ui search dropdown" multiple=""
+                                    id="multi-select-category">
+                                    <option value="">Categories</option>
+                                    <option value="c1">Cat 1</option>
+                                    <option value="c2">Cat 2</option>
+                                    <option value="c3">Cat 3</option>
+                                </select>
+                            </div>
+
+                            <div class="required field">
+                                <label>Description</label>
+                                <textarea spellcheck="false" id="description"></textarea>
+                            </div>
+
+
+                        </form>
+
+                    </div>
+
+                    <div class="actions">
+                        <div class="ui inverted red button" id="close-form">Close</div>
+                        <div class="ui inverted green button" id="submit-form">Post</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="ui container">
+
+            <div class="ui stackable four column grid">
+
+                <div class="centered row">
+                    <a>
+                        <div class="ui animated blue big button" id="create-post" tabindex="0">
+                            <div class="visible content">Create a review post</div>
+                            <div class="hidden content">
+                                Share your experience
+                            </div>
+                        </div>
+                    </a>
+
+                </div>
+
+                <div class="row" id="filter-row">
+
+                    <h2 class="ui header">Filter<i class="fas fa-filter -icon"></i>
+                        <div>
+                            <div class="ui compact menu">
+                                <div class="ui search selection dropdown">
+                                    <div class="default text">Tags</div>
+                                    <i class="dropdown icon"></i>
+                                    <div class="menu">
+                                        <!-- <div class="item ">Tag 1</div>
+                                                            <div class="item">Tag 2</div> -->
+                                        <% for (const t of tag) { %>
+                                        <div class="item"><a href="/filter/tag/<%= t %>">
+                                                <%= t %>
+                                            </a></div>
+                                        <% } %>
                                     </div>
-                                    <div class="ui first modal">
-                                        <div class="header">
-                                            Create a review post
-                                        </div>
-                                        <div class="content">
+                                </div>
+                            </div>
 
-                                            <form class="ui form" action="/" method="POST">
-                                                <div class="required field">
-                                                    <label>Title</label>
-                                                    <input type="text" name="title" placeholder="Title" id="title"
-                                                        required>
-                                                </div>
-
-                                                <div class="required field">
-                                                    <label>District</label>
-                                                    <select class="ui dropdown" name="district" id="select-district"
-                                                        required>
-                                                        <option value="">Select district</option>
-                                                        <option value="q1">Quận 1</option>
-                                                        <option value="q2">Quận 2</option>
-                                                        <option value="q3">Quận 3</option>
-                                                    </select>
-                                                </div>
-                                                <div class="field">
-                                                    <label>Tags</label>
-                                                    <select name="tags" class="ui search dropdown" multiple=""
-                                                        id="multi-select-tags">
-                                                        <option value="">Tags</option>
-                                                        <option value="t1">Tag 1</option>
-                                                        <option value="t2">Tag 2</option>
-                                                        <option value="t3">Tag 3</option>
-                                                    </select>
-                                                </div>
-
-                                                <div class="field">
-                                                    <label>Categories</label>
-                                                    <select name="categories" class="ui search dropdown" multiple=""
-                                                        id="multi-select-category">
-                                                        <option value="">Categories</option>
-                                                        <option value="c1">Cat 1</option>
-                                                        <option value="c2">Cat 2</option>
-                                                        <option value="c3">Cat 3</option>
-                                                    </select>
-                                                </div>
-
-                                                <div class="required field">
-                                                    <label>Description</label>
-                                                    <textarea spellcheck="false" id="description"></textarea>
-                                                </div>
-
-
-                                            </form>
-
-                                        </div>
-
-                                        <div class="actions">
-                                            <div class="ui inverted red button" id="close-form">Close</div>
-                                            <div class="ui inverted green button" id="submit-form">Post</div>
-                                        </div>
+                            <div class="ui compact menu">
+                                <div class="ui search selection dropdown">
+                                    <div class="default text">District</div>
+                                    <i class="dropdown icon"></i>
+                                    <div class="menu">
+                                        <!-- <div class="item ">Tag 1</div>
+                                                                                            <div class="item">Tag 2</div> -->
+                                        <% for (const d of district) { %>
+                                        <div class="item"><a href="/filter/tag/<%= d %>">
+                                                <%= d %>
+                                            </a></div>
+                                        <% } %>
                                     </div>
                                 </div>
 
                             </div>
 
-                            <div class="ui container">
-                                <div class="ui stackable four column grid">
+                            <a href="/filter/clear" class="ui button">Clear <i class="fas fa-eraser -icon"></i></a>
+                    </h2>
 
-                                    <div class="row">
-                                        <a>
-                                            <div class="ui animated blue big button" id="create-post" tabindex="0">
-                                                <div class="visible content">Create a review post</div>
-                                                <div class="hidden content">
-                                                    Share your experience
-                                                </div>
-                                            </div>
-                                        </a>
+                    <div class="ui text menu" id="sort-menu">
+                        <div class="ui header item">Sort by</div>
+                        <a href="#newest" class="item">
+                            Newest
+                        </a>
+                        <a href="#most" class="item">
+                            Most Comments
+                        </a>
+                        <a href="#highest" class="item">
+                            Highest rated
+                        </a>
+                    </div>
 
-                                    </div>
+                </div>
 
-                                    <div class="row" id="filter-row">
+                <!-- loop -->
+                <% for (let i = 1; i < 4; ++i){ %>
+                <% let sectionName = 'Highest rated' %>
+                <% let post_to_create = vote.splice(0, 8) %>
+                <% let sectionIcon = 'fas fa-hamburger' %>
+                <% let sectionId = 'highest' %>
+                <% if (i === 2) { %>
+                <% sectionName = 'Most comment' %>
+                <% post_to_create = comment.splice(0, 8) %>
+                <% sectionIcon = 'fas fa-hotdog' %>
+                <% sectionId = 'most' %>
+                <% } else if (i === 3) { %>
+                <% sectionName = 'Newest' %>
+                <% post_to_create = newest.splice(0, 8) %>
+                <% sectionIcon = 'fas fa-egg' %>
+                <% sectionId = 'newest' %>
+                <% } %>
 
-                                        <h2 class="ui header">Filter<i class="fas fa-filter -icon"></i>
-                                            <div>
-                                                <div class="ui compact menu">
-                                                    <div class="ui simple dropdown item filter-menu">
-                                                        Tags
-                                                        <i class="dropdown icon"></i>
-                                                        <div class="menu">
-                                                            <div class="item ">Tag 1</div>
-                                                            <div class="item">Tag 2</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="ui compact menu filter-menu">
-                                                    <div class="ui simple dropdown item">
-                                                        Category
-                                                        <i class="dropdown icon"></i>
-                                                        <div class="menu">
-                                                            <div class="item ">Category 1</div>
-                                                            <div class="item ">Category 2</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="ui compact menu filter-menu">
-                                                    <div class="ui simple dropdown item">
-                                                        District
-                                                        <i class="dropdown icon"></i>
-                                                        <div class="menu">
-                                                            <div class="item">Quận 1</div>
-                                                            <div class="item">Quận 2</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </h2>
-
-
-                                        <div class="ui text menu" id="sort-menu">
-                                            <div class="ui header item">Sort by</div>
-                                            <a class="item">
-                                                Newest
-                                            </a>
-                                            <a class="item">
-                                                Most Comments
-                                            </a>
-                                            <a class="item">
-                                                Highest rated
-                                            </a>
-                                        </div>
-
-                                    </div>
-
-                                    <div class="row">
-                                        <h2 class="ui header">Delicious places<i class="fas fa-pizza-slice -icon"></i>
-                                        </h2>
-                                    </div>
-
-                                    <div class="column">
-                                        <a href="#">
-                                            <div class="card border-bordered">
-                                                <div class="ui medium image">
-                                                    <img src="/food.jpg">
-                                                </div>
-                                                <div class="content">
-                                                    <div class="header">
-                                                        <h2 class="ui header text-centered">Info 1</h2>
-                                                    </div>
-                                                    <div class="meta">
-                                                        <h3 class="ui header text-centered">Info 3</h3>
-                                                        <h4 class="ui header text-centered">Info 2</h4>
-                                                    </div>
-                                                    <div class="description">
-                                                        <h4 class="ui header text-centered">
-                                                            <i class="fas fa-star color-orange"></i>
-                                                            <i class="fas fa-star color-orange"></i>
-                                                            <i class="fas fa-star color-orange"></i>
-                                                            <i class="fas fa-star color-orange"></i>
-                                                        </h4>
-                                                    </div>
-                                                    <div class="-vote">
-                                                        <h5 class="ui header text-centered">
-                                                            <i
-                                                                class="fas fa-long-arrow-alt-up color-orange"></i><span>69</span>
-                                                            <i
-                                                                class="fas fa-long-arrow-alt-down color-orange"></i><span>96</span>
-                                                            <i class="fas fa-comment color-orange"></i><span>12</span>
-                                                        </h5>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
-
-                                    <div class="column">
-                                        <a href="#">
-                                            <div class="card border-bordered">
-                                                <div class="ui medium image">
-                                                    <img src="/food.jpg">
-                                                </div>
-                                                <div class="content">
-                                                    <div class="header">
-                                                        <h2 class="ui header text-centered">Info 1</h2>
-                                                    </div>
-                                                    <div class="meta">
-                                                        <h3 class="ui header text-centered">Info 3</h3>
-                                                        <h4 class="ui header text-centered">Info 2</h4>
-                                                    </div>
-                                                    <div class="description">
-                                                        <h4 class="ui header text-centered">
-                                                            <i class="fas fa-star color-orange"></i>
-                                                            <i class="fas fa-star color-orange"></i>
-                                                            <i class="fas fa-star color-orange"></i>
-                                                            <i class="fas fa-star color-orange"></i>
-                                                        </h4>
-                                                    </div>
-                                                    <div class="-vote">
-                                                        <h5 class="ui header text-centered">
-                                                            <i
-                                                                class="fas fa-long-arrow-alt-up color-orange"></i><span>69</span>
-                                                            <i
-                                                                class="fas fa-long-arrow-alt-down color-orange"></i><span>96</span>
-                                                            <i class="fas fa-comment color-orange"></i><span>12</span>
-                                                        </h5>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
-
-                                    <div class="column">
-                                        <a href="#">
-                                            <div class="card border-bordered">
-                                                <div class="ui medium image">
-                                                    <img src="/food.jpg">
-                                                </div>
-                                                <div class="content">
-                                                    <div class="header">
-                                                        <h2 class="ui header text-centered">Info 1</h2>
-                                                    </div>
-                                                    <div class="meta">
-                                                        <h3 class="ui header text-centered">Info 3</h3>
-                                                        <h4 class="ui header text-centered">Info 2</h4>
-                                                    </div>
-                                                    <div class="description">
-                                                        <h4 class="ui header text-centered">
-                                                            <i class="fas fa-star color-orange"></i>
-                                                            <i class="fas fa-star color-orange"></i>
-                                                            <i class="fas fa-star color-orange"></i>
-                                                            <i class="fas fa-star color-orange"></i>
-                                                        </h4>
-                                                    </div>
-                                                    <div class="-vote">
-                                                        <h5 class="ui header text-centered">
-                                                            <i
-                                                                class="fas fa-long-arrow-alt-up color-orange"></i><span>69</span>
-                                                            <i
-                                                                class="fas fa-long-arrow-alt-down color-orange"></i><span>96</span>
-                                                            <i class="fas fa-comment color-orange"></i><span>12</span>
-                                                        </h5>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
-
-                                    <div class="column">
-                                        <a href="#">
-                                            <div class="card border-bordered">
-                                                <div class="ui medium image">
-                                                    <img src="/food.jpg">
-                                                </div>
-                                                <div class="content">
-                                                    <div class="header">
-                                                        <h2 class="ui header text-centered">Info 1</h2>
-                                                    </div>
-                                                    <div class="meta">
-                                                        <h3 class="ui header text-centered">Info 3</h3>
-                                                        <h4 class="ui header text-centered">Info 2</h4>
-                                                    </div>
-                                                    <div class="description">
-                                                        <h4 class="ui header text-centered">
-                                                            <i class="fas fa-star color-orange"></i>
-                                                            <i class="fas fa-star color-orange"></i>
-                                                            <i class="fas fa-star color-orange"></i>
-                                                            <i class="fas fa-star color-orange"></i>
-                                                        </h4>
-                                                    </div>
-                                                    <div class="-vote">
-                                                        <h5 class="ui header text-centered">
-                                                            <i
-                                                                class="fas fa-long-arrow-alt-up color-orange"></i><span>69</span>
-                                                            <i
-                                                                class="fas fa-long-arrow-alt-down color-orange"></i><span>96</span>
-                                                            <i class="fas fa-comment color-orange"></i><span>12</span>
-                                                        </h5>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
-
-                                </div>
-
-
+                <div class="row">
+                    <h2 id="<%= sectionId %>" class="ui header"><%= sectionName %><i
+                            class="<%= sectionIcon %> -icon"></i>
+                    </h2>
+                </div>
+                <% for(const el of post_to_create) { %>
+                <div class="column">
+                    <a href="/post/<%= el.dataValues.post_id %> ">
+                        <div class="card border-bordered">
+                            <div class="ui medium image">
+                                <img src="/food.jpg">
                             </div>
+                            <div class="content">
+                                <div class="header">
+                                    <h3 class="ui header text-centered">
 
-                        </main>
+                                        <%= el.dataValues.title %>
+                                    </h3>
+                                </div>
+                                <div class="meta">
+                                    <h4 class="ui header text-centered">
+                                        District here
+                                    </h4>
+                                </div>
+                                <div class="description">
+                                    <h4 class="ui header text-centered">
+                                        <% for (let i=0; i < el.dataValues.star; ++i){ %>
+                                        <i class="fas fa-star color-orange"></i>
+                                        <% } %>
+                                    </h4>
+                                </div>
+                                <div class="-vote">
+                                    <h5 class="ui header text-centered">
+                                        <i class="fas fa-long-arrow-alt-up color-orange"></i><span>
+                                            <%= el.dataValues.upvote %>
+                                        </span>
+                                        <i class="fas fa-long-arrow-alt-down color-orange"></i><span>
+                                            <%= el.dataValues.downvote %>
+                                        </span>
+                                        <i class="fas fa-comment color-orange"></i><span>
+                                            <%= el.dataValues.n_comment %>
+                                        </span>
+                                    </h5>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <% } %>
+
+                <% } %>
+
+                <!-- end loop here -->
 
 
-                        <script src="/nav-script.js"></script>
-                        <script src="/body-script.js"></script>
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <script src="/nav-script.js"></script>
+    <script src="/body-script.js"></script>
+
+    <%- include('partials/footer') %>
 
 </body>
 

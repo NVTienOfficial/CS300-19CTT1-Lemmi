@@ -18,7 +18,7 @@ router.post("/login", async (req, res) => {
         req.session.token = result.token;
         req.session.username = username;
         req.session.id = result.id;
-        return res.redirect(`/`);
+        return res.redirect(req.session.redirectTo || '/');
     }
     catch (err) {
         return res.status(err.statusCode).json(err);
@@ -28,6 +28,13 @@ router.post("/login", async (req, res) => {
 //Dat
 router.get("/login", (req, res) => {
     res.render('login');
+});
+
+router.get("/logout", (req, res) => {
+    req.session.id = undefined;
+    req.session.username = undefined;
+    req.session.token = undefined;
+    return res.redirect(req.session.redirectTo || '/');
 });
 
 router.get("/", async (req, res) => {
@@ -64,6 +71,7 @@ router.get("/", async (req, res) => {
         const tag = await sTag.getAllTagNames();
         const category = await sTag.getAllTagCategory();
         const district = await sDistrict.getAllDistrictName();
+        req.session.redirectTo = `/`;
 
         // Take this object to parse layout       ** NOTICE **
         const posts = {
@@ -74,15 +82,18 @@ router.get("/", async (req, res) => {
             category: category,
             district: district
         }
+
+        const userid = req.session.id || undefined;
+        const username = req.session.username || undefined;
+        res.render('home', { userid, username, ...posts});
+
     }
     catch (err) {
         return res.status(err.statusCode).json(err);
     }
-    const token = req.session.token || undefined;
-    const username = req.session.username || undefined;
-    console.log("body:", req.session);
-    res.render('home', { user, username });
+
 });
+
 
 router.get("/filter", async (req, res) => {
     try {
@@ -96,5 +107,18 @@ router.get("/filter", async (req, res) => {
         return res.status(err.statusCode).json(err);
     }
 });
+
+
+router.get("/filter/:type/:name", (req, res) => {
+    res.send(req.params.type)
+});
+
+
+
+router.get("/filter/district/:d", (req, res) => {
+    res.send(req.params.d)
+});
+
+
 
 module.exports = router;
