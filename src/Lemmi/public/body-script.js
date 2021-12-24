@@ -5,6 +5,10 @@ const returnFormButton = document.getElementById('return-form');
 const confirmedSubmit = document.getElementById('confirm-submit-form')
 
 
+$('.ui.dropdown')
+  .dropdown()
+;
+
 closeFormButton.addEventListener('click', () => {
     $('.ui.modal').modal('hide');
 })

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('partials/metadata') %>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/postdetail.css">
+    <title>Post</title>
+</head>
+
+<body>
+    <% if (userid && username) { %>
+    <%- include('partials/nav-Auth') %>
+    <% } else { %>
+    <%- include('partials/nav-unAuth') %>
+    <% } %>
+
+
+    <main>
+        <div class="ui centered container" id="post-section">
+
+            <div class="row" id="post-info">
+                <div class="ui horizontal list" id="left-info">
+                    <div class="item">
+                        <img class="ui mini circular image" src="/icon.png">
+                        <div class="content">
+                            <h3 class="ui header">Jack Hammer</h3>
+                            <%= post.dataValues.post_date.toString().split(' ').slice(0, 4).join(' ') %><span
+                                id="sub-icon"><i class="fas fa-globe-asia"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div id="right-info">
+                    <span>
+                        <% for(let index = 1; index < parseInt(post.dataValues.star); index++) { %>
+                        <i class="fas fa-star choose"></i>
+                        <% } %>
+                    </span>
+                    <span>At <strong>District here</strong></span>
+                    <% if (userid.toString() === post.dataValues.user_id) { %>
+                    <div class="ui simple dropdown item">
+                        <i class="fas fa-sort-down"></i>
+                        <div class="menu">
+                            <div class="item"><a href="#">delete</a></div>
+                        </div>
+                    </div>
+                    <% } %>
+
+                </div>
+
+            </div>
+
+            <div class="row" id="post-content">
+                <div id="inner-content">
+                    <h2 class="ui header"><%= post.dataValues.title %></h2>
+                    <p>
+                        <%= post.dataValues.content %>
+                    </p>
+                    <div class="ui small images">
+                        <img class="ui image" src="/food.jpg" alt="food">
+                        <img class="ui image" src="/food.jpg" alt="food">
+                        <img class="ui image" src="/food.jpg" alt="food">
+                        <img class="ui image" src="/food.jpg" alt="food">
+                    </div>
+
+                    <div id="tag-container">
+                        <h5 class="ui header">Pop Lounge</h5>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="vote-section">
+                    <h2 class="ui header">
+                        <i class="fas fa-arrow-up -vote -total"></i><span id="up-vote-total"><%= vote.up %></span>
+                        <i class="fas fa-arrow-down -vote -total"></i><span id="down-vote-total"><%= vote.down %></span>
+                    </h2>
+                </div>
+            </div>
+
+            <div class="row" id="comment-compose">
+                <form action="/" class="ui form" method="POST">
+                    <div class="fields">
+                        <textarea rows="1" placeholder="Write a comment" spellcheck="false" id="comment"
+                            required></textarea>
+                        <button class="ui primary button">Submit</button>
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="row">
+                <div class="comment-section">
+                    <div class="ui comments">
+                        <% for(const cm of comment) { %>
+                        <div class="comment">
+                            <a class="avatar">
+                                <img src="/icon.png">
+                            </a>
+                            <div class="content">
+                                <a class="author">User name here</a>
+                                <div class="metadata">
+                                    <div class="date" style="color: black;">
+                                        <%= cm.dataValues.comment_date.toString().split(' ').slice(0, 4).join(' ') %>
+                                    </div>
+                                    <!-- <div class="rating">
+                                        <i class="fas fa-arrow-up"></i>
+                                    </div> -->
+                                </div>
+                                <div class="text">
+                                    <%= cm.dataValues.content %>
+                                </div>
+                            </div>
+                        </div>
+                        <% } %>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+
+    <script>
+        const imagesContainer = document.getElementsByClassName('ui small images')[0];
+        const postImages = imagesContainer.getElementsByClassName('ui image');
+        const voteTotal = document.getElementsByClassName('-vote -total');
+        const upVoteTotal = document.getElementById('up-vote-total');
+        const downVoteTotal = document.getElementById('down-vote-total');
+
+        function processVoteLogic(clicked, other, target, otherTarget) {
+            if (clicked.classList.contains('color-voted')) {
+                target.innerHTML = parseInt(target.innerHTML) - 1;
+                clicked.classList.remove('color-voted');
+            }
+            else {
+                clicked.classList.add('color-voted');
+                target.innerHTML = parseInt(target.innerHTML) + 1;
+            }
+            if (other.classList.contains('color-voted')) {
+                otherTarget.innerHTML = parseInt(otherTarget.innerHTML) - 1;
+            }
+            other.classList.remove('color-voted');
+        }
+
+        for (let el of voteTotal) {
+            el.addEventListener('click', (event) => {
+                if (event.target === voteTotal[0]) {
+                    processVoteLogic(voteTotal[0], voteTotal[1], upVoteTotal, downVoteTotal);
+                } else {
+                    processVoteLogic(voteTotal[1], voteTotal[0], downVoteTotal, upVoteTotal);
+                }
+
+            })
+        }
+
+        for (let el of postImages) {
+            el.addEventListener('click', () => {
+                let okay = true;
+                for (const other of postImages) {
+                    if (other !== el && other.classList.contains('enlarge'))
+                        okay = false;
+                }
+                if (okay)
+                    el.classList.toggle('enlarge');
+            })
+        }
+
+    </script>
+    <script src="/nav-script.js"></script>
+
+    <%- include('partials/footer') %>
+
+</body>
+
+</html>

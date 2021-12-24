@@ -4,8 +4,8 @@
 <head>
     <%- include('partials/metadata') %>
 
-        <link rel="stylesheet" href="/register.css">
-        <title>Restaurant register</title>
+    <link rel="stylesheet" href="/register.css">
+    <title>Restaurant register</title>
 
 </head>
 
@@ -104,7 +104,7 @@
                 <input style="visibility:hidden" type="text" name="type" value="owner">
 
                 <div class="field">
-                    <button class="fluid ui orange button" type="submit">Create account</button>
+                    <button class="fluid ui orange button" type="submit" id="submit-btn">Create account</button>
                 </div>
 
                 <div class="field">
@@ -122,6 +122,12 @@
         $('#select-district')
             .dropdown()
             ;
+
+        const form = document.getElementsByClassName('ui form')[0];
+        form.addEventListener('submit', () => {
+            document.getElementById('submit-btn').classList.add('loading');
+        })
+
     </script>
 
 </body>

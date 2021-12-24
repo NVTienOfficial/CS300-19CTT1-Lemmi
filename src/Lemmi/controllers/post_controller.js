@@ -36,18 +36,20 @@ router.get("", async (req, res) => {
     }
 });
 
-router.get("/detail/:id", async (req, res) => {
+router.get("/:id", async (req, res) => {
     try {
         const post = await sPost.getPostByID(req.params.id);
         const vote = await sVote.getPostVote(req.params.id);
         const comment = await sComment.getPostComments(req.params.id);
-        return res.status(201).json({
-            status: "OK",
-            message: "Success",
-            data: [post, vote, comment],
-        });
+        const userid = req.session.id;
+        const username = req.session.username;
+        req.session.redirectTo = `/post/${req.params.id}`;
+
+        res.render('postdetail', {userid, username, post, vote, comment});
+        
     }
     catch (err) {
+        
         return res.status(err.statusCode).json(err);
     }
 });

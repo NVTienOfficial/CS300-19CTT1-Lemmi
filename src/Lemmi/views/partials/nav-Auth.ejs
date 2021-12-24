@@ -23,12 +23,8 @@
                 <li><a href="#footer" class="ui medium header">About us</a></li>
                 <li>
                     <a class="ui medium header" id="user-link">
-                        <% if (username) { %>
-                            <%= username %>
-                                <% } else {%>
-                                    ExampleAccount
-                                    <% } %>
-                                        <span><i class="fas fa-caret-down -icon"></span></i>
+                        <%= username %>
+                        <span><i class="fas fa-caret-down -icon"></span></i>
                     </a>
                 </li>
                 <li>
@@ -40,7 +36,7 @@
                             <a href="/account/changepassword" class="item">
                                 Change password
                             </a>
-                            <a href="#" class="item">
+                            <a href="/logout" class="item">
                                 Log out
                             </a>
                         </div>
@@ -60,7 +56,7 @@
             <a href="/account/changepassword" class="item">
                 Change password
             </a>
-            <a href="#" class="item">
+            <a href="/logout" class="item">
                 Log out
             </a>
         </div>
