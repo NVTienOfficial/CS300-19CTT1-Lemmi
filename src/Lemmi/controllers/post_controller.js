@@ -43,6 +43,7 @@ router.get("/:id", async (req, res) => {
         const comment = await sComment.getPostComments(req.params.id);
         const userid = req.session.id;
         const username = req.session.username;
+        
         req.session.redirectTo = `/post/${req.params.id}`;
 
         res.render('postdetail', {userid, username, post, vote, comment});

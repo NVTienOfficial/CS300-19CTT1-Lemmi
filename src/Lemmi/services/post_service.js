@@ -15,7 +15,7 @@ const rTag = new TagRepo();
 
 class PostService {
     async createPost(post) {
-        const {title, content, star, report, user_id, post_date} = post;
+        const {title, content, star, report, user_id, post_date, district_id} = post;
 
         if (!title || !content || !star || star < 0) {
             throw new Error(400, "Bad request");
