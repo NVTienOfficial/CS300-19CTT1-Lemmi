@@ -135,7 +135,7 @@
                                     <i class="dropdown icon"></i>
                                     <div class="menu">
                                         <!-- <div class="item ">Tag 1</div>
-                                                                                            <div class="item">Tag 2</div> -->
+                                        <div class="item">Tag 2</div> -->
                                         <% for (const d of district) { %>
                                         <div class="item"><a href="/filter/tag/<%= d %>">
                                                 <%= d %>
@@ -165,31 +165,31 @@
                 </div>
 
                 <!-- loop -->
-                <% for (let i = 1; i < 4; ++i){ %>
-                <% let sectionName = 'Highest rated' %>
-                <% let post_to_create = vote.splice(0, 8) %>
-                <% let sectionIcon = 'fas fa-hamburger' %>
-                <% let sectionId = 'highest' %>
-                <% if (i === 2) { %>
-                <% sectionName = 'Most comment' %>
-                <% post_to_create = comment.splice(0, 8) %>
-                <% sectionIcon = 'fas fa-hotdog' %>
-                <% sectionId = 'most' %>
-                <% } else if (i === 3) { %>
-                <% sectionName = 'Newest' %>
-                <% post_to_create = newest.splice(0, 8) %>
-                <% sectionIcon = 'fas fa-egg' %>
-                <% sectionId = 'newest' %>
+                <% for (let i=1; i < 4; ++i){ %>
+                <% let sectionName='Highest rated' %>
+                <% let post_to_create=vote %>
+                <% let sectionIcon='fas fa-hamburger' %>
+                <% let sectionId='highest' %>
+                <% if (i===2) { %>
+                <% sectionName='Most comment' %>
+                <% post_to_create=comment %>
+                <% sectionIcon='fas fa-hotdog' %>
+                <% sectionId='most' %>
+                <% } else if (i===3) { %>
+                <% sectionName='Newest' %>
+                <% post_to_create=newest %>
+                <% sectionIcon='fas fa-egg' %>
+                <% sectionId='newest' %>
                 <% } %>
 
                 <div class="row">
-                    <h2 id="<%= sectionId %>" class="ui header"><%= sectionName %><i
-                            class="<%= sectionIcon %> -icon"></i>
+                    <h2 id="<%= sectionId %>" class="ui header">
+                        <%= sectionName %><i class="<%= sectionIcon %> -icon"></i>
                     </h2>
                 </div>
-                <% for(const el of post_to_create) { %>
+                <% for(const el of  post_to_create) { %>
                 <div class="column">
-                    <a href="/post/<%= el.dataValues.post_id %> ">
+                    <a href="/post/<%= el.post_id %> ">
                         <div class="card border-bordered">
                             <div class="ui medium image">
                                 <img src="/food.jpg">
@@ -198,17 +198,17 @@
                                 <div class="header">
                                     <h3 class="ui header text-centered">
 
-                                        <%= el.dataValues.title %>
+                                        <%= el.name %>
                                     </h3>
                                 </div>
                                 <div class="meta">
                                     <h4 class="ui header text-centered">
-                                        District here
+                                        <%= el.district_name %>
                                     </h4>
                                 </div>
                                 <div class="description">
                                     <h4 class="ui header text-centered">
-                                        <% for (let i=0; i < el.dataValues.star; ++i){ %>
+                                        <% for (let i=0; i < el.star; ++i){  %>
                                         <i class="fas fa-star color-orange"></i>
                                         <% } %>
                                     </h4>
@@ -216,13 +216,13 @@
                                 <div class="-vote">
                                     <h5 class="ui header text-centered">
                                         <i class="fas fa-long-arrow-alt-up color-orange"></i><span>
-                                            <%= el.dataValues.upvote %>
+                                            <%= el.upvote %>
                                         </span>
                                         <i class="fas fa-long-arrow-alt-down color-orange"></i><span>
-                                            <%= el.dataValues.downvote %>
+                                            <%= el.downvote %>
                                         </span>
                                         <i class="fas fa-comment color-orange"></i><span>
-                                            <%= el.dataValues.n_comment %>
+                                            <%= el.n_comment %>
                                         </span>
                                     </h5>
                                 </div>
@@ -239,6 +239,13 @@
 
             </div>
 
+
+        </div>
+
+        <div class="left-aligned-return">
+            <a href="#filter-row" class="circular huge ui icon button">
+                <i class="fas fa-chevron-up"></i>
+            </a>
         </div>
 
     </main>

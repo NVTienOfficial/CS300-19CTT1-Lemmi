@@ -24,21 +24,21 @@
                     <div class="item">
                         <img class="ui mini circular image" src="/icon.png">
                         <div class="content">
-                            <h3 class="ui header">Jack Hammer</h3>
-                            <%= post.dataValues.post_date.toString().split(' ').slice(0, 4).join(' ') %><span
-                                id="sub-icon"><i class="fas fa-globe-asia"></i>
+                            <h3 class="ui header"><%= post.user_name %></h3>
+                            <%= post.post_date.toString().split(' ').slice(0, 4).join(' ') %><span id="sub-icon"><i
+                                    class="fas fa-globe-asia"></i>
                             </span>
                         </div>
                     </div>
                 </div>
                 <div id="right-info">
                     <span>
-                        <% for(let index = 1; index < parseInt(post.dataValues.star); index++) { %>
+                        <% for(let index = 1; index < parseInt(post.star); index++) { %>
                         <i class="fas fa-star choose"></i>
                         <% } %>
                     </span>
-                    <span>At <strong>District here</strong></span>
-                    <% if (userid.toString() === post.dataValues.user_id) { %>
+                    <span>At <strong><%= post.district_name %></strong></span>
+                    <% if (userid === post.user_id) { %>
                     <div class="ui simple dropdown item">
                         <i class="fas fa-sort-down"></i>
                         <div class="menu">
@@ -53,9 +53,9 @@
 
             <div class="row" id="post-content">
                 <div id="inner-content">
-                    <h2 class="ui header"><%= post.dataValues.title %></h2>
+                    <h2 class="ui header"><%= post.title %></h2>
                     <p>
-                        <%= post.dataValues.content %>
+                        <%= post.content %>
                     </p>
                     <div class="ui small images">
                         <img class="ui image" src="/food.jpg" alt="food">
@@ -81,16 +81,29 @@
                 </div>
             </div>
 
+            <% if (userid && username) { %>
             <div class="row" id="comment-compose">
-                <form action="/" class="ui form" method="POST">
+                <form action="/comment/create" class="ui form" method="POST">
                     <div class="fields">
-                        <textarea rows="1" placeholder="Write a comment" spellcheck="false" id="comment"
-                            required></textarea>
+                        <input type="hidden" id="post-id" name="post_id" value="<%= postid %>">
+                        <input type="hidden" id="user-id" name="user_id" value="<%= userid %>">
+                        <input type="hidden" name="comment_date" value="<%= undefined %>">
+                        <input type="hidden" name="report" value="<%= undefined %>">
+                        <textarea rows="1" placeholder="Write a comment" spellcheck="false" id="comment" required
+                            name="content"></textarea>
                         <button class="ui primary button">Submit</button>
                     </div>
 
                 </form>
             </div>
+            <% } else {%>
+            <div class="row">
+                <h3 class="ui header text-centered">
+                    Please login to comment this post
+                </h3>
+            </div>
+            <% } %>
+
 
             <div class="row">
                 <div class="comment-section">
@@ -101,17 +114,17 @@
                                 <img src="/icon.png">
                             </a>
                             <div class="content">
-                                <a class="author">User name here</a>
+                                <a class="author"><%= cm.user_name %></a>
                                 <div class="metadata">
                                     <div class="date" style="color: black;">
-                                        <%= cm.dataValues.comment_date.toString().split(' ').slice(0, 4).join(' ') %>
+                                        <%= cm.comment_date.toString().split(' ').slice(0, 4).join(' ') %>
                                     </div>
                                     <!-- <div class="rating">
                                         <i class="fas fa-arrow-up"></i>
                                     </div> -->
                                 </div>
                                 <div class="text">
-                                    <%= cm.dataValues.content %>
+                                    <%= cm.content %>
                                 </div>
                             </div>
                         </div>
@@ -131,15 +144,53 @@
         const voteTotal = document.getElementsByClassName('-vote -total');
         const upVoteTotal = document.getElementById('up-vote-total');
         const downVoteTotal = document.getElementById('down-vote-total');
+        const userid = document.getElementById('user-id').value || undefined;
+        const postid = document.getElementById('post-id').value;
 
         function processVoteLogic(clicked, other, target, otherTarget) {
             if (clicked.classList.contains('color-voted')) {
                 target.innerHTML = parseInt(target.innerHTML) - 1;
+                try {
+                    fetch('http://localhost:8080/vote', {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            user_id: userid,
+                            post_id: postid
+                        })
+                    })
+                } catch (err) {
+                    console.log(err)
+                }
                 clicked.classList.remove('color-voted');
             }
             else {
                 clicked.classList.add('color-voted');
                 target.innerHTML = parseInt(target.innerHTML) + 1;
+                let type;
+                if (clicked.classList.contains('fa-arrow-up'))
+                    type = "True";
+                else
+                    type = "False";
+
+                try {
+                    fetch('http://localhost:8080/vote', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+
+                        },
+                        body: JSON.stringify({
+                            user_id: userid,
+                            post_id: postid,
+                            type: type
+                        })
+                    })
+                } catch (err) {
+                    console.log(err);
+                }
             }
             if (other.classList.contains('color-voted')) {
                 otherTarget.innerHTML = parseInt(otherTarget.innerHTML) - 1;
@@ -147,16 +198,26 @@
             other.classList.remove('color-voted');
         }
 
+
+
         for (let el of voteTotal) {
+
             el.addEventListener('click', (event) => {
-                if (event.target === voteTotal[0]) {
-                    processVoteLogic(voteTotal[0], voteTotal[1], upVoteTotal, downVoteTotal);
-                } else {
-                    processVoteLogic(voteTotal[1], voteTotal[0], downVoteTotal, upVoteTotal);
+
+                if (userid) {
+                    if (event.target === voteTotal[0]) {
+                        processVoteLogic(voteTotal[0], voteTotal[1], upVoteTotal, downVoteTotal);
+                    } else {
+                        processVoteLogic(voteTotal[1], voteTotal[0], downVoteTotal, upVoteTotal);
+                    }
+                }
+                else {
+                    window.location = "http://localhost:8080/login";
                 }
 
             })
         }
+
 
         for (let el of postImages) {
             el.addEventListener('click', () => {

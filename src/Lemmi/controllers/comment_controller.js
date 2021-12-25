@@ -34,12 +34,9 @@ router.get("", async (req, res) => {
 
 router.post("/create", async (req, res) => {
     try {
+        console.log(req.body)
         const comment = await sComment.makeComment(req.body);
-        return res.status(200).json({
-            status: "OK",
-            message: "success",
-            data: comment,
-        })
+        return res.redirect(req.session.redirectTo || '/');
     }
     catch (err) {
         return res.status(err.statusCode).json(err);

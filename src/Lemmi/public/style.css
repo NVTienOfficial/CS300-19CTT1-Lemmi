@@ -1,207 +1,213 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
 .d-flex-row {
-  display: flex;
-  flex-direction: row;
+    display: flex;
+    flex-direction: row;
 }
 
 .d-flex-col {
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 
 .color-orange {
-  color: #ff8617 !important;
+    color: #ff8617 !important;
 }
 
 .border-bordered {
-  border: 1px solid black;
+    border: 1px solid black;
 }
 
 .text-centered {
-  text-align: center;
+    text-align: center;
 }
 
 body {
-  background: #fa8072 !important;
-  font-family: "Montserrat", sans-serif;
-  background-size: cover;
-  background-repeat: no-repeat;
+    background: #fa8072 !important;
+    font-family: "Montserrat", sans-serif;
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 header {
-  z-index: 200;
-  position: fixed;
+    z-index: 200;
+    position: fixed;
 }
 header .navbar-nav {
-  width: 100vw;
-  height: 50px;
-  padding: 0px 50px 0px 50px;
-  background-color: #ffffff;
-  align-items: center;
-  justify-content: space-between;
-  color: black !important;
+    width: 100vw;
+    height: 50px;
+    padding: 0px 50px 0px 50px;
+    background-color: #ffffff;
+    align-items: center;
+    justify-content: space-between;
+    color: black !important;
 }
 @media only screen and (max-width: 768px) {
-  header .navbar-nav {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 0;
-  }
+    header .navbar-nav {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0;
+    }
 }
 header .navbar-nav a {
-  cursor: pointer;
+    cursor: pointer;
 }
 header .navbar-nav .nav-item-container.-active {
-  display: flex;
+    display: flex;
 }
 @media only screen and (max-width: 768px) {
-  header .navbar-nav .nav-item-container {
-    display: none;
-  }
+    header .navbar-nav .nav-item-container {
+        display: none;
+    }
 }
 header .navbar-nav .nav-item-container ul {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  background-color: #ffffff;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #ffffff;
 }
 @media only screen and (max-width: 768px) {
-  header .navbar-nav .nav-item-container ul {
-    flex-direction: column;
-    width: 100vw;
-  }
+    header .navbar-nav .nav-item-container ul {
+        flex-direction: column;
+        width: 100vw;
+    }
 }
 header .navbar-nav .nav-item-container ul li {
-  list-style: none;
+    list-style: none;
 }
 @media only screen and (max-width: 768px) {
-  header .navbar-nav .nav-item-container ul li {
-    padding: 0.5rem 1rem;
-    text-align: center;
-  }
+    header .navbar-nav .nav-item-container ul li {
+        padding: 0.5rem 1rem;
+        text-align: center;
+    }
 }
 header .navbar-nav .nav-item-container ul li a {
-  text-decoration: none;
-  margin: 0 2.5rem 0 2.5rem;
-  display: block;
+    text-decoration: none;
+    margin: 0 2.5rem 0 2.5rem;
+    display: block;
 }
 header .navbar-nav .nav-item-container ul li a:hover {
-  color: #ff8617;
+    color: #ff8617;
 }
 header .navbar-nav .nav-item-container ul li #user-link span {
-  margin-left: 5px;
+    margin-left: 5px;
 }
 header .toggle-button {
-  position: absolute;
-  top: 0.75rem;
-  right: 1rem;
-  display: none;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 30px;
-  height: 21px;
+    position: absolute;
+    top: 0.75rem;
+    right: 1rem;
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
 }
 header .toggle-button .bar {
-  height: 3px;
-  width: 100%;
-  background-color: black;
-  border-radius: 10px;
+    height: 3px;
+    width: 100%;
+    background-color: black;
+    border-radius: 10px;
 }
 @media only screen and (max-width: 768px) {
-  header .toggle-button {
-    display: flex;
-  }
+    header .toggle-button {
+        display: flex;
+    }
 }
 header #log-menu-res {
-  display: none;
+    display: none;
 }
 header #log-menu-res.-active {
-  display: block;
+    display: block;
 }
 header #log-menu-nor {
-  display: none;
-  justify-content: end;
+    display: none;
+    justify-content: end;
 }
 header #log-menu-nor.-active {
-  display: flex;
+    display: flex;
 }
 
 #banner {
-  height: 480px;
-  width: 100vw;
-  margin-bottom: 30px;
+    height: 480px;
+    width: 100vw;
+    margin-bottom: 30px;
 }
 
 main {
-  z-index: 100;
+    z-index: 100;
 }
 @media only screen and (max-width: 768px) {
-  main .row {
-    margin-bottom: 20px !important;
-  }
+    main .row {
+        margin-bottom: 20px !important;
+    }
 }
 main .card .content {
-  margin-top: 12px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 main .header {
-  color: #103667 !important;
+    color: #103667 !important;
 }
 main .-icon {
-  margin-left: 5px;
+    margin-left: 5px;
 }
 main .card {
-  background: #ffffff;
-  border-radius: 3px;
-  height: 100%;
-  width: 100%;
-  transition: all 0.25s ease-out;
+    background: #ffffff;
+    border-radius: 3px;
+    height: 100%;
+    width: 100%;
+    transition: all 0.25s ease-out;
 }
 @media only screen and (max-width: 768px) {
-  main .card .ui.medium.image {
-    width: fit-content;
-  }
+    main .card .ui.medium.image {
+        width: fit-content;
+    }
 }
 main .card .header,
 main .card .meta,
 main .card .description,
 main .card .-vote {
-  margin: 2px 0px 10px 5px;
+    margin: 2px 0px 10px 5px;
 }
 main .card:hover {
-  box-shadow: 10px 7px 1px #395c9e;
-  transform: translate(0px, -3px);
+    box-shadow: 10px 7px 1px #395c9e;
+    transform: translate(0px, -3px);
 }
 main #filter-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 main #sort-menu {
-  font-size: 1.5rem !important;
+    font-size: 1.5rem !important;
 }
 @media only screen and (max-width: 768px) {
-  main #sort-menu {
-    font-size: 1.25rem !important;
-  }
+    main #sort-menu {
+        font-size: 1.25rem !important;
+    }
+}
+
+main .left-aligned-return {
+    position: fixed;
+    top: 90vh;
+    left: 90vw;
 }
 
 footer {
-  margin-top: 10vh;
-  padding: 30px 0px;
-  background: #2e4053;
+    margin-top: 10vh;
+    padding: 30px 0px;
+    background: #2e4053;
 }
 footer table {
-  display: flex;
-  justify-content: center;
-  font-size: 1.25rem;
-  color: #ff8617;
+    display: flex;
+    justify-content: center;
+    font-size: 1.25rem;
+    color: #ff8617;
 }
 footer table td {
-  padding: 5px 50px;
+    padding: 5px 50px;
 }
 
 /*# sourceMappingURL=style.css.map */

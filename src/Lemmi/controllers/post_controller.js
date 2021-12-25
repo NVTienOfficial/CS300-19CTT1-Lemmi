@@ -38,15 +38,15 @@ router.get("", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
     try {
+        const postid = req.params.id;
         const post = await sPost.getPostByID(req.params.id);
         const vote = await sVote.getPostVote(req.params.id);
         const comment = await sComment.getPostComments(req.params.id);
-        const userid = req.session.id;
-        const username = req.session.username;
-        
+        const userid = req.session.userid || undefined;
+        const username = req.session.username || undefined;
         req.session.redirectTo = `/post/${req.params.id}`;
 
-        res.render('postdetail', {userid, username, post, vote, comment});
+        res.render('postdetail', {userid, username, post, vote, comment, postid});
         
     }
     catch (err) {

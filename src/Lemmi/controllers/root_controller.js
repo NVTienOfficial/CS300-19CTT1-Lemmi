@@ -12,17 +12,19 @@ const sTag = new TagService();
 const sDistrict = new DistrictService();
 
 router.post("/login", async (req, res) => {
+    let result;
     try {
-        let result = await sAccount.login(req.body);
+        result = await sAccount.login(req.body);
         const username = req.body.username;
         req.session.token = result.token;
         req.session.username = username;
-        req.session.id = result.id;
+        req.session.userid = result.id;
         return res.redirect(req.session.redirectTo || '/');
     }
     catch (err) {
         return res.status(err.statusCode).json(err);
     }
+    
 });
 
 //Dat
@@ -31,7 +33,7 @@ router.get("/login", (req, res) => {
 });
 
 router.get("/logout", (req, res) => {
-    req.session.id = undefined;
+    req.session.userid = undefined;
     req.session.username = undefined;
     req.session.token = undefined;
     return res.redirect(req.session.redirectTo || '/');
@@ -102,7 +104,7 @@ router.get("/", async (req, res) => {
             district: district
         }
 
-        const userid = req.session.id || undefined;
+        const userid = req.session.userid || undefined;
         const username = req.session.username || undefined;
         res.render('home', { userid, username, ...posts});
 
