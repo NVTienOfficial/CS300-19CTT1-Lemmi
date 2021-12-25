@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const Tag = require("../models/tag");
 const PostTag = require("../models/post_tag");
 const Error = require("../config/error");
@@ -43,6 +44,27 @@ class TagRepo {
         }
     }
 
+    async getAllNameExcept(type) {
+        try {
+            const tags = await Tag.findAll({
+                attributes: ['name'],
+                where: {
+                    type: {
+                        [Op.ne]: type
+                    }
+                }
+            });
+            let name = [];
+            for (let i = 0; i < tags.length; i++) {
+                name.push(tags[i]['name'])
+            }
+            return name;
+        }
+        catch (err) {
+            throw new Error(404, err.message);
+        }
+    }
+
     async getAllType() {
         try {
             const tags = await Tag.findAll({
@@ -76,7 +98,7 @@ class TagRepo {
 
     async getTagByPost(id) {
         try {
-            const result = await Tag.findAll({
+            const tags = await Tag.findAll({
                 include: [{
                     model: PostTag,
                     require: true,
@@ -85,12 +107,12 @@ class TagRepo {
                     }
                 }],
             });
-            let tags = []
-            for (let i = 0; i < result.length; i++) {
-                let tag = result[i]['name'];
-                tags.push(tag);
+            let results = [];
+            for (let i = 0; i < tags.length; i++) {
+                let result = tags[i]['dataValues'];
+                results.push(result);
             }
-            return tags;
+            return results;
         }
         catch (err) {
             throw new Error(404, err.message);

@@ -60,33 +60,16 @@ class PostService {
             throw new Error(400, "Bad request");
 
         try {
-            if (!category && !district) {
-                const posts = await rPost.getPostByTag(tag);
-                return posts;
-            }
-            else if (!tag && !district) {
-                const posts = await rPost.getPostByCategory(category);
-                return posts;
-            }
-            else if (!tag && !category) {
+            if (!tag) {
                 const posts = await rPost.getPostByDistrict(district);
                 return posts; 
             }
-            else if (!tag) {
-                const posts = await rPost.getPostByCategoryDistrict(category, district);
-                return posts; 
-            }
-            else if (!category) {
-                const posts = await rPost.getPostByTagDistrict(tag, district);
-                return posts; 
-            }
             else if (!district) {
-                const posts = await rPost.getPostByTagCategory(tag, category);
+                const posts = await rPost.getPostByTag(tag);
                 return posts;
             }
             else {
-                console.log("here");
-                const posts = await rPost.getPostByTagCategoryDistrict(tag, category, district);
+                const posts = await rPost.getPostByTagDistrict(tag, district);
                 return posts;
             }
         }
@@ -101,8 +84,18 @@ class PostService {
         try {
             let posts = await rPost.getNewestPosts(n);
             for (let i = 0; i < posts.length; i++) {
-                posts[i]['dataValues']['comment'] = await rComment.getCommentByPost(posts[i]['post_id']); 
-                posts[i]['dataValues']['tag'] = await rTag.getTagByPost(posts[i]['post_id']);
+                posts[i]['comment'] = await rComment.getCommentByPost(posts[i]['post_id']);
+                posts[i]['tag'] = await rTag.getTagByPost(posts[i]['post_id']);
+                posts[i]['name'] = "";
+                posts[i]['image'] = undefined;
+                let tags = posts[i]['tag'];
+                if (tags != undefined) {
+                    for (let j = 0; j < tags.length; j++) {
+                        if (tags[j]['type'] == "Tên quán") {
+                            posts[i]['name'] = tags[j]['name']
+                        }
+                    }
+                }
             }
             return posts;
         }
@@ -117,8 +110,18 @@ class PostService {
         try {
             let posts = await rPost.getMostCommentPosts(n);
             for (let i = 0; i < posts.length; i++) {
-                posts[i]['dataValues']['comment'] = await rComment.getCommentByPost(posts[i]['post_id']); 
-                posts[i]['dataValues']['tag'] = await rTag.getTagByPost(posts[i]['post_id']);
+                posts[i]['comment'] = await rComment.getCommentByPost(posts[i]['post_id']); 
+                posts[i]['tag'] = await rTag.getTagByPost(posts[i]['post_id']);
+                posts[i]['name'] = "";
+                posts[i]['image'] = undefined;
+                let tags = posts[i]['tag'];
+                if (tags != undefined) {
+                    for (let j = 0; j < tags.length; j++) {
+                        if (tags[j]['type'] == "Tên quán") {
+                            posts[i]['name'] = tags[j]['name']
+                        }
+                    }
+                }
             }
             return posts;
         }
@@ -133,8 +136,18 @@ class PostService {
         try {
             let posts = await rPost.getMostVotePosts(n);
             for (let i = 0; i < posts.length; i++) {
-                posts[i]['dataValues']['comment'] = await rComment.getCommentByPost(posts[i]['post_id']); 
-                posts[i]['dataValues']['tag'] = await rTag.getTagByPost(posts[i]['post_id']);
+                posts[i]['comment'] = await rComment.getCommentByPost(posts[i]['post_id']); 
+                posts[i]['tag'] = await rTag.getTagByPost(posts[i]['post_id']);
+                posts[i]['name'] = "";
+                posts[i]['image'] = undefined;
+                let tags = posts[i]['tag'];
+                if (tags != undefined) {
+                    for (let j = 0; j < tags.length; j++) {
+                        if (tags[j]['type'] == "Tên quán") {
+                            posts[i]['name'] = tags[j]['name']
+                        }
+                    }
+                }
             }
             return posts;
         }

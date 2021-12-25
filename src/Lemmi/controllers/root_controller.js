@@ -61,15 +61,35 @@ router.get("/", async (req, res) => {
         **    n_comment:            -> number of comments
         **    comment: []           -> array of comment in posts
         **    tag: []               -> array of tag names
-        **    district:             -> district tag name            (not yet)
-        **    name:                 -> name of user
+        **    district_name:        -> district name
+        **    name:                 -> name of target restaurant
+        **    user_name:            -> name of user make post
+        **    district_id           -> district id
+        ** }
+        **
+        ** Structure of array comment:
+        ** {
+        **      comment_id
+        **      user_id
+        **      post_id
+        **      content
+        **      comment_date
+        **      report
+        **      user_name           -> name of user make comment
+        ** }
+        **
+        ** Structure of array tag:
+        ** {
+        **      tag_id
+        **      name                -> name of tag
+        **      type                -> category of tag
+        **      post_tag: []
         ** }
         */
         const newest_post = await sPost.getNewestPosts(40);
         const comment_post = await sPost.getMostCommentPosts(40);
         const vote_post = await sPost.getMostVotePost(40);
-        const tag = await sTag.getAllTagNames();
-        const category = await sTag.getAllTagCategory();
+        const tag = await sTag.getAllTagNamesExcept("Tên quán");
         const district = await sDistrict.getAllDistrictName();
         req.session.redirectTo = `/`;
 
@@ -79,7 +99,6 @@ router.get("/", async (req, res) => {
             comment: comment_post,
             vote: vote_post,
             tag: tag,
-            category: category,
             district: district
         }
 
@@ -98,7 +117,7 @@ router.get("/", async (req, res) => {
 router.get("/filter", async (req, res) => {
     try {
         // return array contain object which include post data
-        const posts = await sPost.filter(req.query.tag, req.query.category, req.query.district);
+        const posts = await sPost.filter(req.query.tag, req.query.district);
         res.status(200).json({
             data: posts
         })
