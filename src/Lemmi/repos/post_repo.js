@@ -305,12 +305,41 @@ class PostRepo {
 
     async findByID(id) {
         try {
-            let post = Post.findOne({
+            let post = await Post.findOne({
+                attributes: {
+                    include: [
+                        [sequelize.literal(`(
+                            SELECT COUNT(*)
+                            FROM vote
+                            WHERE vote.post_id = post.post_id AND vote.type = true
+                        )`), 'upvote'],
+                        [sequelize.literal(`(
+                            SELECT COUNT(*)
+                            FROM vote
+                            WHERE vote.post_id = post.post_id AND vote.type = false
+                        )`), 'downvote'],
+                        [sequelize.literal(`(
+                            SELECT COUNT(*)
+                            FROM comment
+                            WHERE comment.post_id = post.post_id
+                        )`), 'n_comment'],
+                        [sequelize.literal(`(
+                            SELECT name
+                            FROM "user"
+                            WHERE "user".user_id = post.user_id
+                        )`), 'user_name'],
+                        [sequelize.literal(`(
+                            SELECT district.name
+                            FROM district
+                            WHERE district.district_id = post.district_id
+                        )`), 'district_name'],
+                    ]
+                },
                 where: {
                     post_id: id
                 }
             })
-            return post;
+            return post['dataValues'];
         }
         catch (err) {
             throw new Error(500, err.message);

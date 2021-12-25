@@ -21,6 +21,9 @@ class VoteService {
             throw new Error(400, "Bad request")
 
         try {
+            if (type == "true")
+                vote.type = true
+            else vote.type = false
             const newVote = await rVote.createOne(vote);
             return newVote;
         }

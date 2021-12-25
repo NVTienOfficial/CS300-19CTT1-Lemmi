@@ -104,18 +104,18 @@ class AccountService {
     }
 
     async updatePassword(account) {
-        const { username, old_pwd, new_pwd, confirm_pwd } = account;
+        const { username, oldpassword, newpassword, confirmpassword } = account;
 
-        if (!username || !password)
+        if (!username || !oldpassword || !newpassword || !confirmpassword)  
             throw new Error(400, "Bad request");
 
-        if (new_pwd != confirm_pwd)
+        if (newpassword != confirmpassword)
             throw new Error(400, "Bad request");
 
         try {
             const account = await rAccount.findByUsername(username);
-            if (account.password == old_pwd)
-                await rAccount.updatePasswordByUsername(username, new_pwd);
+            if (account.password == oldpassword)
+                await rAccount.updatePasswordByUsername(username, newpassword);
         }
         catch (err) {
             if (err == null)
