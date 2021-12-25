@@ -99,7 +99,12 @@ class PostRepo {
                             SELECT name
                             FROM "user"
                             WHERE "user".user_id = post.user_id
-                        )`), 'name'],
+                        )`), 'user_name'],
+                        [sequelize.literal(`(
+                            SELECT district.name
+                            FROM district
+                            WHERE district.district_id = post.district_id
+                        )`), 'district_name'],
                     ]
                 },
                 order: [
@@ -107,7 +112,12 @@ class PostRepo {
                 ],
                 limit: n,
             });
-            return posts;
+            let result = [];
+            for (let i = 0; i < posts.length; i++) {
+                let hold = posts[i]['dataValues'];
+                result.push(hold);
+            }
+            return result;
         }
         catch (err) {
             throw new Error(405, err.message);
@@ -138,14 +148,24 @@ class PostRepo {
                             SELECT name
                             FROM "user"
                             WHERE "user".user_id = post.user_id
-                        )`), 'name'],
+                        )`), 'user_name'],
+                        [sequelize.literal(`(
+                            SELECT district.name
+                            FROM district
+                            WHERE district.district_id = post.district_id
+                        )`), 'district_name'],
                     ]
                 },
                 order: [
                     [sequelize.literal('n_comment'), 'DESC']
                 ]
             });
-            return posts;
+            let result = [];
+            for (let i = 0; i < posts.length; i++) {
+                let hold = posts[i]['dataValues'];
+                result.push(hold);
+            }
+            return result;
         }
         catch (err) {
             throw new Error(405, err.message);
@@ -176,7 +196,12 @@ class PostRepo {
                             SELECT name
                             FROM "user"
                             WHERE "user".user_id = post.user_id
-                        )`), 'name'],
+                        )`), 'user_name'],
+                        [sequelize.literal(`(
+                            SELECT district.name
+                            FROM district
+                            WHERE district.district_id = post.district_id
+                        )`), 'district_name'],
                     ]
                 },
                 order: [
@@ -185,7 +210,12 @@ class PostRepo {
                 ],
                 limit: n,
             });
-            return posts;
+            let result = [];
+            for (let i = 0; i < posts.length; i++) {
+                let hold = posts[i]['dataValues'];
+                result.push(hold);
+            }
+            return result;
         }
         catch (err) {
             throw new Error(405, err.message);
@@ -203,28 +233,6 @@ class PostRepo {
                         require: true,
                         where: {
                             name: tag
-                        }
-                    }]
-                }]
-            });
-            return posts;
-        }
-        catch (err) {
-            throw new Error(500, err.message);
-        }
-    }
-
-    async getPostByCategory(category) {
-        try {
-            let posts = await Post.findAll({
-                include: [{
-                    model: PostTag,
-                    require: true,
-                    include: [{
-                        model: Tag,
-                        require: true,
-                        where: {
-                            type: category
                         }
                     }]
                 }]
@@ -254,62 +262,6 @@ class PostRepo {
         }
     }
 
-    async getPostByCategoryDistrict(category, district) {
-        try {
-            let posts = await Post.findAll({
-                include: [
-                    {
-                        model: PostTag,
-                        require: true,
-                        include: [{
-                            model: Tag,
-                            require: true,
-                            where: {
-                                type: category
-                            }
-                        }]
-                    },
-                    {
-                        model: District,
-                        require: true,
-                        where: {
-                            name: district
-                        }
-                    }
-                ]
-            });
-            return posts;
-        }
-        catch (err) {
-            throw new Error(500, err.message);
-        }
-    }
-
-    async getPostByTagCategory(tag, category) {
-        try {
-            let posts = await Post.findAll({
-                include: [
-                    {
-                        model: PostTag,
-                        require: true,
-                        include: [{
-                            model: Tag,
-                            require: true,
-                            where: {
-                                name: tag,
-                                type: category
-                            }
-                        }]
-                    },
-                ]
-            });
-            return posts;
-        }
-        catch (err) {
-            throw new Error(500, err.message);
-        }
-    }
-
     async getPostByTagDistrict(tag, district) {
         try {
             let posts = await Post.findAll({
@@ -322,38 +274,6 @@ class PostRepo {
                             require: true,
                             where: {
                                 name: tag
-                            }
-                        }]
-                    },
-                    {
-                        model: District,
-                        require: true,
-                        where: {
-                            name: district
-                        }
-                    }
-                ]
-            });
-            return posts;
-        }
-        catch (err) {
-            throw new Error(500, err.message);
-        }
-    }
-
-    async getPostByTagCategoryDistrict(tag, category, district) {
-        try {
-            let posts = await Post.findAll({
-                include: [
-                    {
-                        model: PostTag,
-                        require: true,
-                        include: [{
-                            model: Tag,
-                            require: true,
-                            where: {
-                                name: tag,
-                                type: category
                             }
                         }]
                     },

@@ -26,11 +26,28 @@ class CommentRepo {
     async getCommentByPost(id) {
         try {
             const comments = await Comment.findAll({
+                attributes: {
+                    include: [
+                        [sequelize.literal(`(
+                            SELECT name
+                            FROM "user"
+                            WHERE "user".user_id = comment.user_id
+                        )`), 'user_name']
+                    ]
+                },
                 where: {
                     post_id: id
-                }
+                },
+                order: [
+                    ['comment_date', 'DESC']
+                ]
             });
-            return comments;
+            let results = [];
+            for (let i = 0; i < comments.length; i++) {
+                let hold = comments[i]['dataValues'];
+                results.push(hold);
+            }
+            return results;
         }
         catch (err) {
             throw new Error(500, err.message);

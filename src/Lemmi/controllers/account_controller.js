@@ -94,7 +94,7 @@ router.get('/forgot', (req, res) => {
 
 
 //Put -> Post
-router.put("/pwd", async (req, res) => {
+router.post("/pwd", async (req, res) => {
     try {
         await sAccount.updatePassword(req.body);
         return res.status(200).json({
