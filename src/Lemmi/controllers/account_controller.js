@@ -97,7 +97,7 @@ router.get('/forgot', (req, res) => {
 router.put("/pwd", async (req, res) => {
     try {
         await sAccount.updatePassword(req.body);
-        return res.redirect(res.session.redirectTo || '/');
+        return res.redirect(req.session.redirectTo || '/');
     }
     catch (err) {
         return res.status(err.statusCode).json(err);
