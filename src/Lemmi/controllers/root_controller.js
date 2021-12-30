@@ -33,9 +33,9 @@ router.get("/login", (req, res) => {
 });
 
 router.get("/logout", (req, res) => {
-    req.session.userid = undefined;
-    req.session.username = undefined;
-    req.session.token = undefined;
+    delete req.session.userid
+    delete req.session.username
+    delete req.session.token
     return res.redirect(req.session.redirectTo || '/');
 });
 
@@ -88,11 +88,13 @@ router.get("/", async (req, res) => {
         **      post_tag: []
         ** }
         */
+        console.time('Query time');
         const newest_post = await sPost.getNewestPosts(40);
         const comment_post = await sPost.getMostCommentPosts(40);
         const vote_post = await sPost.getMostVotePost(40);
         const tag = await sTag.getAllTagNamesExcept("Tên quán");
         const district = await sDistrict.getAllDistrictName();
+        console.timeEnd('Query time');
         req.session.redirectTo = `/`;
 
         // Take this object to parse layout       ** NOTICE **
@@ -104,9 +106,11 @@ router.get("/", async (req, res) => {
             district: district
         }
 
+        const f_tag = req.session.f_tag || undefined;
+        const d_tag = req.session.d_tag || undefined;
         const userid = req.session.userid || undefined;
         const username = req.session.username || undefined;
-        res.render('home', { userid, username, ...posts});
+        res.render('home', { userid, username, ...posts, f_tag, d_tag});
 
     }
     catch (err) {
@@ -130,16 +134,21 @@ router.get("/filter", async (req, res) => {
 });
 
 
-router.get("/filter/:type/:name", (req, res) => {
-    res.send(req.params.type)
+router.get("/filter/tag/:t", (req, res) => {
+    req.session.f_tag = req.params.t;
+    return res.redirect(req.session.redirectTo);
 });
-
-
 
 router.get("/filter/district/:d", (req, res) => {
-    res.send(req.params.d)
+    req.session.d_tag = req.params.d;
+    return res.redirect(req.session.redirectTo);
 });
 
+router.get("/filter/clear", (req, res) => {
+    delete req.session.d_tag;
+    delete req.session.f_tag;
+    return res.redirect(req.session.redirectTo);
+});
 
 
 module.exports = router;
