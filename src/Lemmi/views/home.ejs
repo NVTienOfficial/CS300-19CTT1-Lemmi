@@ -4,7 +4,7 @@
 <head>
     <%- include('partials/metadata') %>
     <link rel="stylesheet" href="/style.css">
-    <title>Home</title>
+    <title>Lemmi</title>
 </head>
 
 <body>
@@ -115,15 +115,21 @@
                         <div>
                             <div class="ui compact menu">
                                 <div class="ui search selection dropdown">
-                                    <div class="default text">Tags</div>
+                                    <div class="default text" style="color: black;">
+                                        <% if (f_tag) { %>
+                                        <%= f_tag %>
+                                        <% } else { %>
+                                        Tag
+                                        <% } %>
+                                    </div>
                                     <i class="dropdown icon"></i>
                                     <div class="menu">
                                         <!-- <div class="item ">Tag 1</div>
                                                             <div class="item">Tag 2</div> -->
                                         <% for (const t of tag) { %>
-                                        <div class="item"><a href="/filter/tag/<%= t %>">
-                                                <%= t %>
-                                            </a></div>
+                                        <a class="item" href="/filter/tag/<%= t %>">
+                                            <%= t %>
+                                        </a>
                                         <% } %>
                                     </div>
                                 </div>
@@ -131,15 +137,21 @@
 
                             <div class="ui compact menu">
                                 <div class="ui search selection dropdown">
-                                    <div class="default text">District</div>
+                                    <div class="default text" style="color: black;">
+                                        <% if (d_tag) { %>
+                                        <%= d_tag %>
+                                        <% } else { %>
+                                        District
+                                        <% } %>
+                                    </div>
                                     <i class="dropdown icon"></i>
                                     <div class="menu">
                                         <!-- <div class="item ">Tag 1</div>
                                         <div class="item">Tag 2</div> -->
                                         <% for (const d of district) { %>
-                                        <div class="item"><a href="/filter/tag/<%= d %>">
-                                                <%= d %>
-                                            </a></div>
+                                        <a class="item" href="/filter/district/<%= d %>">
+                                            <%= d %>
+                                        </a>
                                         <% } %>
                                     </div>
                                 </div>
@@ -166,6 +178,7 @@
 
                 <!-- loop -->
                 <% for (let i=1; i < 4; ++i){ %>
+
                 <% let sectionName='Highest rated' %>
                 <% let post_to_create=vote %>
                 <% let sectionIcon='fas fa-hamburger' %>
@@ -180,6 +193,14 @@
                 <% post_to_create=newest %>
                 <% sectionIcon='fas fa-egg' %>
                 <% sectionId='newest' %>
+                <% } %>
+
+                <% if (f_tag) { %>
+                <% post_to_create = post_to_create.filter((el) => f_tag in el.tag) %>
+                <% } %>
+
+                <% if (d_tag) { %>
+                <% post_to_create = post_to_create.filter((el) => d_tag === el.district_name) %>
                 <% } %>
 
                 <div class="row">
@@ -235,8 +256,6 @@
                 <% } %>
 
                 <!-- end loop here -->
-
-
             </div>
 
 

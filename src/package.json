@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/NVTienOfficial/CS300-19CTT1-Lemmi#readme",
   "dependencies": {
+    "cloudinary": "^1.27.1",
     "dotenv": "^10.0.0",
     "ejs-mate": "^3.0.0",
     "express": "^4.17.1",

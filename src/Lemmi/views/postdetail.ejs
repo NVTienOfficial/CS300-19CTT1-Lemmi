@@ -75,8 +75,15 @@
             <div class="row">
                 <div class="vote-section">
                     <h2 class="ui header">
+                        <% if (userid && username) { %>
                         <i class="fas fa-arrow-up -vote -total"></i><span id="up-vote-total"><%= vote.up %></span>
                         <i class="fas fa-arrow-down -vote -total"></i><span id="down-vote-total"><%= vote.down %></span>
+                        <% } else {%>
+                        <a href="/login" style="color:#103667;"><i class="fas fa-arrow-up -vote -total"></i><span
+                                id="up-vote-total"><%= vote.up %></span></a>
+                        <a href="/login" style="color:#103667;"><i class="fas fa-arrow-down -vote -total"></i><span
+                                id="down-vote-total"><%= vote.down %></span></a>
+                        <% } %>
                     </h2>
                 </div>
             </div>
@@ -137,14 +144,15 @@
         </div>
     </main>
 
+    <script src="/nav-script.js"></script>
+    <script src="/postdetail-script.js"></script>
 
+    <% if (userid && username) { %>
     <script>
-        const imagesContainer = document.getElementsByClassName('ui small images')[0];
-        const postImages = imagesContainer.getElementsByClassName('ui image');
         const voteTotal = document.getElementsByClassName('-vote -total');
         const upVoteTotal = document.getElementById('up-vote-total');
         const downVoteTotal = document.getElementById('down-vote-total');
-        const userid = document.getElementById('user-id').value || undefined;
+        const userid = document.getElementById('user-id').value;
         const postid = document.getElementById('post-id').value;
 
         function processVoteLogic(clicked, other, target, otherTarget) {
@@ -198,12 +206,8 @@
             other.classList.remove('color-voted');
         }
 
-
-
         for (let el of voteTotal) {
-
             el.addEventListener('click', (event) => {
-
                 if (userid) {
                     if (event.target === voteTotal[0]) {
                         processVoteLogic(voteTotal[0], voteTotal[1], upVoteTotal, downVoteTotal);
@@ -211,28 +215,15 @@
                         processVoteLogic(voteTotal[1], voteTotal[0], downVoteTotal, upVoteTotal);
                     }
                 }
-                else {
-                    window.location = "http://localhost:8080/login";
-                }
-
-            })
-        }
-
-
-        for (let el of postImages) {
-            el.addEventListener('click', () => {
-                let okay = true;
-                for (const other of postImages) {
-                    if (other !== el && other.classList.contains('enlarge'))
-                        okay = false;
-                }
-                if (okay)
-                    el.classList.toggle('enlarge');
             })
         }
 
     </script>
-    <script src="/nav-script.js"></script>
+    <% } %>
+
+
+
+
 
     <%- include('partials/footer') %>
 
