@@ -44,6 +44,33 @@ class TagRepo {
         }
     }
 
+    async getTagByPostID(id) {
+        try {
+            const tags = await PostTag.findAll({
+                attributes: {
+                    include: [
+                        [sequelize.literal(`(
+                            SELECT name
+                            FROM tag
+                            WHERE tag.tag_id = post_tag.tag_id AND type != 'Tên quán'
+                        )`), 'name']
+                    ]
+                },
+                where: {
+                    post_id: id,
+                }
+            });
+            let result = [];
+            for (let i = 0; i < tags.length; i++) {
+                result.push(tags[i]["dataValues"]["name"]);
+            }
+            return result;
+        }
+        catch (err) {
+            throw new Error(404, err.message);
+        }
+    }
+
     async getAllNameExcept(type) {
         try {
             const tags = await Tag.findAll({

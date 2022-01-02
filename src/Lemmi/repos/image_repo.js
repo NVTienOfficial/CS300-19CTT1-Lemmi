@@ -1,16 +1,21 @@
 const Image = require("../models/image");
+const PostImage = require("../models/post_image");
 const Error = require("../config/error");
 
 class ImageRepo {
-    async createOne(id, src, user_id) {
+    async createOne(id, src, user_id, post_id) {
         if (!id || !src || !user_id || src === "")
             throw new Error(400, "Bad request");
 
-        try {;
+        try {
             const newImg = await Image.create({
                 image_id: id,
                 src: src,
                 user_id: user_id,
+            });
+            const ImgPost = await PostImage.create({
+                post_id: post_id,
+                image_id: id
             });
             return newImg;
         }

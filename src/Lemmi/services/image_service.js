@@ -23,6 +23,23 @@ class ImageService {
         }
     }
 
+    async createImages(image, user_id, post_id) {
+        try {
+            let images = []
+            for (let i = 0; i < image.length; i++) {
+                const id = await this.generateNewID();
+                const createdImage = await rImage.createOne(id, image[i], user_id, post_id);
+                images.push(createdImage);
+            }
+            return images;
+        }
+        catch (err) {
+            if (err == null)
+                throw new Error(500, err);
+            throw new Error(err.statusCode, err.message);
+        }
+    }
+
     async getAllImages() {
         try {
             const images = await rImage.getAll();

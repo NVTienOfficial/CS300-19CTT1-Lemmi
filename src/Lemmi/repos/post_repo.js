@@ -8,7 +8,7 @@ class PostRepo {
     async createOne(post) {
         try {
             const newPost = await Post.create(post);
-            return newPost;
+            return newPost["dataValues"];
         }
         catch (err) {
             throw new Error(500, err.message);
