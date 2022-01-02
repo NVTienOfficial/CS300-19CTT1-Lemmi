@@ -4,18 +4,18 @@ const VoteRepo = require("../repos/vote_repo");
 const CommentRepo = require("../repos/comment_repo");
 const DistrictRepo = require("../repos/district_repo");
 const TagRepo = require("../repos/tag_repo");
+const ImageService = require("../services/image_service");
 const Error = require("../config/error");
 
 const rPost = new PostRepo();
 const rUser = new UserRepo();
-const rVote = new VoteRepo();
 const rComment = new CommentRepo();
-const rDistrict = new DistrictRepo();
 const rTag = new TagRepo();
+const sImage = new ImageService();
 
 class PostService {
     async createPost(post) {
-        const {title, content, star, report, user_id, post_date, district_id} = post;
+        const {title, content, star, report, user_id, post_date, district_id, image} = post;
 
         if (!title || !content || !star || star < 0) {
             throw new Error(400, "Bad request");
@@ -32,8 +32,12 @@ class PostService {
 
         try {
             let id = await this.generateNewID();
-            post["post_id"] = id;
-            const newPost = await rPost.createOne(post);
+            let postData = post;
+            postData["post_id"] = id;
+            delete postData["image"];
+            const newPost = await rPost.createOne(postData);
+            const images = await sImage.createImages(image, user_id, id);
+            newPost["image"] = image;
             return newPost;
         }
         catch (err) {

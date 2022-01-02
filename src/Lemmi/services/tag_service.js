@@ -45,6 +45,18 @@ class TagService {
         }
     }
 
+    async getTagNameByPost(id) {
+        try {
+            const names = await rTag.getTagByPostID(id);
+            return names;
+        }
+        catch (err) {
+            if (err == null)
+                throw new Error(500, err);
+            throw new Error(err.statusCode, err.message);
+        }
+    }
+
     async getAllTagNamesExcept(name) {
         try {
             const names = await rTag.getAllNameExcept(name);

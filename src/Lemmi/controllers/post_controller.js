@@ -3,10 +3,12 @@ const router = require("express").Router();
 const PostService = require("../services/post_service");
 const VoteService = require("../services/vote_service");
 const CommentService = require("../services/comment_service");
+const TagService = require("../services/tag_service");
 
 const sPost = new PostService();
 const sVote = new VoteService();
 const sComment = new CommentService();
+const sTag = new TagService();
 
 router.post("/create", async (req, res) => {
     try {
@@ -41,13 +43,20 @@ router.get("/:id", async (req, res) => {
         const postid = req.params.id;
         const post = await sPost.getPostByID(req.params.id);
         const vote = await sVote.getPostVote(req.params.id);
+        const tag = await sTag.getTagNameByPost(post["post_id"]);
         const comment = await sComment.getPostComments(req.params.id);
         const userid = req.session.userid || undefined;
         const username = req.session.username || undefined;
         req.session.redirectTo = `/post/${req.params.id}`;
 
-        res.render('postdetail', {userid, username, post, vote, comment, postid});
-        
+        return res.status(200).json({
+            post: post,
+            vote: vote,
+            tag: tag,
+            comment: comment
+        })
+
+        res.render('postdetail', {userid, username, post, vote, comment, postid});        
     }
     catch (err) {
         
