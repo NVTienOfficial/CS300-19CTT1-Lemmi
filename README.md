@@ -19,6 +19,7 @@ Project folder structure:
             |-- config
             |-- public
             |-- views
+                |-- partials
         |-- package-lock.json
         |-- package.json
     |-- .gitignore
