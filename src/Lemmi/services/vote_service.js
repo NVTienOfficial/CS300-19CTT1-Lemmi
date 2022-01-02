@@ -34,6 +34,18 @@ class VoteService {
         }
     }
 
+    async getUserIDVotePost(post_id) {
+        try {
+            const user_id = await rVote.getUserIDByPostID(post_id);
+            return user_id;
+        }
+        catch (err) {
+            if (err == null)
+                throw new Error(500, err);
+            throw new Error(err.statusCode, err.message);
+        }
+    }
+
     async reVote(vote) {
         const { user_id, post_id } = vote;
 

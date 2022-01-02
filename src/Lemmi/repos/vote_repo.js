@@ -13,6 +13,25 @@ class VoteRepo {
         }
     }
 
+    async getUserIDByPostID(id) {
+        try {
+            const user_id = await Vote.findAll({
+                attributes: ['user_id'],
+                where: {
+                    post_id: id
+                }
+            })
+            let result = [];
+            for (let i = 0; i < user_id.length; i++) {
+                result.push(user_id[i]["dataValues"]["user_id"]);
+            }
+            return result;
+        }
+        catch (err) {
+            throw new Error(500, err.message);
+        }
+    }
+
     async deleteOne(user_id, post_id) {
         try {
             await Vote.destroy({

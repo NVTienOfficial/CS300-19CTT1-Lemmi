@@ -44,17 +44,19 @@ router.get("/:id", async (req, res) => {
         const post = await sPost.getPostByID(req.params.id);
         const vote = await sVote.getPostVote(req.params.id);
         const tag = await sTag.getTagNameByPost(post["post_id"]);
+        const user_vote = await sVote.getUserIDVotePost(postid);
         const comment = await sComment.getPostComments(req.params.id);
         const userid = req.session.userid || undefined;
         const username = req.session.username || undefined;
         req.session.redirectTo = `/post/${req.params.id}`;
 
-        return res.status(200).json({
-            post: post,
-            vote: vote,
-            tag: tag,
-            comment: comment
-        })
+        // return res.status(200).json({
+        //     post: post,
+        //     vote: vote,
+        //     tag: tag,
+        //     user_vote: user_vote,
+        //     comment: comment
+        // })
 
         res.render('postdetail', {userid, username, post, vote, comment, postid});        
     }
