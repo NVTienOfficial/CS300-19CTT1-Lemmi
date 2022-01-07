@@ -17,6 +17,31 @@
 
 
     <main>
+
+        <!-- delete confirmation -->
+        <div class="ui basic modal delete-post">
+            <div class="ui icon header">
+                <i class="trash alternate icon"></i>
+                <h1 class="ui header text-centered color-orange">Deleting your post</h2>
+            </div>
+            <div class="content">
+                <h3 class="ui header text-centered color-orange">The post after deletion can not be recovered, are you
+                    sure?</h4>
+            </div>
+            <div class="actions">
+                <form action="/post/<%= post.post_id %>?_method=DELETE" method="POST">
+                    <div class="ui red basic cancel inverted button">
+                        <i class="remove icon"></i>
+                        No
+                    </div>
+                    <button type="submit" class="ui green ok inverted button">
+                        <i class="checkmark icon"></i>
+                        Yes
+                    </button>
+                </form>
+            </div>
+        </div>
+
         <div class="ui centered container" id="post-section">
 
             <div class="row" id="post-info">
@@ -24,7 +49,9 @@
                     <div class="item">
                         <img class="ui mini circular image" src="/icon.png">
                         <div class="content">
-                            <h3 class="ui header"><%= post.user_name %></h3>
+                            <h3 class="ui header">
+                                <%= post.user_name %>
+                            </h3>
                             <%= post.post_date.toString().split(' ').slice(0, 4).join(' ') %><span id="sub-icon"><i
                                     class="fas fa-globe-asia"></i>
                             </span>
@@ -42,7 +69,9 @@
                     <div class="ui simple dropdown item">
                         <i class="fas fa-sort-down"></i>
                         <div class="menu">
-                            <div class="item"><a href="#">delete</a></div>
+                            <div class="item" id="post-delete">
+                                Delete
+                            </div>
                         </div>
                     </div>
                     <% } %>
@@ -65,7 +94,12 @@
                     </div>
 
                     <div id="tag-container">
-                        <h5 class="ui header">Pop Lounge</h5>
+                        <% for(tag of posttag) { %>
+
+                        <h5 class="ui header"><%= tag %></h5>
+
+                        <% } %>
+
                     </div>
 
                 </div>
@@ -75,13 +109,21 @@
             <div class="row">
                 <div class="vote-section">
                     <h2 class="ui header">
+                        <% var is_voted = ""; %>
+                        <% if (user_vote.indexOf(userid) !== -1) { %>
+                        <% is_voted = "color-voted"; %>
+                        <% } %>
                         <% if (userid && username) { %>
-                        <i class="fas fa-arrow-up -vote -total"></i><span id="up-vote-total"><%= vote.up %></span>
-                        <i class="fas fa-arrow-down -vote -total"></i><span id="down-vote-total"><%= vote.down %></span>
+                        <i class="<%= "fas fa-arrow-up -vote -total " + is_voted %>"></i><span
+                            id="up-vote-total"><%= vote.up %></span>
+                        <i class="<%= "fas fa-arrow-down -vote -total " + is_voted %>"></i><span
+                            id="down-vote-total"><%= vote.down %></span>
                         <% } else {%>
-                        <a href="/login" style="color:#103667;"><i class="fas fa-arrow-up -vote -total"></i><span
+                        <a href="/login" style="color:#103667;"><i
+                                class="<%= "fas fa-arrow-up -vote -total " + is_voted %>"></i><span
                                 id="up-vote-total"><%= vote.up %></span></a>
-                        <a href="/login" style="color:#103667;"><i class="fas fa-arrow-down -vote -total"></i><span
+                        <a href="/login" style="color:#103667;"><i
+                                class="<%= "fas fa-arrow-down -vote -total " + is_voted %>"></i><span
                                 id="down-vote-total"><%= vote.down %></span></a>
                         <% } %>
                     </h2>
@@ -113,119 +155,15 @@
 
 
             <div class="row">
-                <div class="comment-section">
-                    <div class="ui comments">
-                        <% for(const cm of comment) { %>
-                        <div class="comment">
-                            <a class="avatar">
-                                <img src="/icon.png">
-                            </a>
-                            <div class="content">
-                                <a class="author"><%= cm.user_name %></a>
-                                <div class="metadata">
-                                    <div class="date" style="color: black;">
-                                        <%= cm.comment_date.toString().split(' ').slice(0, 4).join(' ') %>
-                                    </div>
-                                    <!-- <div class="rating">
-                                        <i class="fas fa-arrow-up"></i>
-                                    </div> -->
-                                </div>
-                                <div class="text">
-                                    <%= cm.content %>
-                                </div>
-                            </div>
-                        </div>
-                        <% } %>
-
-                    </div>
-                </div>
+                <%- include(`partials/commentsection`) %>
             </div>
 
         </div>
     </main>
 
     <script src="/nav-script.js"></script>
-    <script src="/postdetail-script.js"></script>
 
-    <% if (userid && username) { %>
-    <script>
-        const voteTotal = document.getElementsByClassName('-vote -total');
-        const upVoteTotal = document.getElementById('up-vote-total');
-        const downVoteTotal = document.getElementById('down-vote-total');
-        const userid = document.getElementById('user-id').value;
-        const postid = document.getElementById('post-id').value;
-
-        function processVoteLogic(clicked, other, target, otherTarget) {
-            if (clicked.classList.contains('color-voted')) {
-                target.innerHTML = parseInt(target.innerHTML) - 1;
-                try {
-                    fetch('http://localhost:8080/vote', {
-                        method: 'DELETE',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            user_id: userid,
-                            post_id: postid
-                        })
-                    })
-                } catch (err) {
-                    console.log(err)
-                }
-                clicked.classList.remove('color-voted');
-            }
-            else {
-                clicked.classList.add('color-voted');
-                target.innerHTML = parseInt(target.innerHTML) + 1;
-                let type;
-                if (clicked.classList.contains('fa-arrow-up'))
-                    type = "True";
-                else
-                    type = "False";
-
-                try {
-                    fetch('http://localhost:8080/vote', {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json'
-
-                        },
-                        body: JSON.stringify({
-                            user_id: userid,
-                            post_id: postid,
-                            type: type
-                        })
-                    })
-                } catch (err) {
-                    console.log(err);
-                }
-            }
-            if (other.classList.contains('color-voted')) {
-                otherTarget.innerHTML = parseInt(otherTarget.innerHTML) - 1;
-            }
-            other.classList.remove('color-voted');
-        }
-
-        for (let el of voteTotal) {
-            el.addEventListener('click', (event) => {
-                if (userid) {
-                    if (event.target === voteTotal[0]) {
-                        processVoteLogic(voteTotal[0], voteTotal[1], upVoteTotal, downVoteTotal);
-                    } else {
-                        processVoteLogic(voteTotal[1], voteTotal[0], downVoteTotal, upVoteTotal);
-                    }
-                }
-            })
-        }
-
-    </script>
-    <% } %>
-
-
-
-
-
-    <%- include('partials/footer') %>
+    <%- include(`partials/footer`) %>
 
 </body>
 

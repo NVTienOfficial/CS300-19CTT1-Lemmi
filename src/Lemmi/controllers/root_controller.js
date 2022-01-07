@@ -36,6 +36,7 @@ router.get("/logout", (req, res) => {
     delete req.session.userid
     delete req.session.username
     delete req.session.token
+    delete req.session.mypost;
     return res.redirect(req.session.redirectTo || '/');
 });
 
@@ -108,9 +109,10 @@ router.get("/", async (req, res) => {
 
         const f_tag = req.session.f_tag || undefined;
         const d_tag = req.session.d_tag || undefined;
+        const mypost = req.session.mypost || undefined;
         const userid = req.session.userid || undefined;
         const username = req.session.username || undefined;
-        res.render('home', { userid, username, ...posts, f_tag, d_tag});
+        res.render('home', { userid, username, ...posts, f_tag, d_tag, mypost});
 
     }
     catch (err) {
@@ -136,19 +138,29 @@ router.get("/filter", async (req, res) => {
 
 router.get("/filter/tag/:t", (req, res) => {
     req.session.f_tag = req.params.t;
-    return res.redirect(req.session.redirectTo);
+    return res.redirect('/');
 });
 
 router.get("/filter/district/:d", (req, res) => {
     req.session.d_tag = req.params.d;
-    return res.redirect(req.session.redirectTo);
+    return res.redirect('/');
+});
+
+router.get("/filter/mypost", (req, res) => {
+    delete req.session.d_tag;
+    delete req.session.f_tag;
+    req.session.mypost = true;
+    return res.redirect('/');
 });
 
 router.get("/filter/clear", (req, res) => {
     delete req.session.d_tag;
     delete req.session.f_tag;
-    return res.redirect(req.session.redirectTo);
+    delete req.session.mypost;
+    return res.redirect('/');
 });
+
+
 
 
 module.exports = router;

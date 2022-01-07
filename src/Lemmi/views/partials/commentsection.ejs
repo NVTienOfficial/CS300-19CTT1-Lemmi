@@ -1,0 +1,28 @@
+<div class="comment-section">
+    <div class="ui comments">
+        <% for(const cm of comment) { %>
+        <div class="comment">
+            <a class="avatar">
+                <img src="/icon.png">
+            </a>
+            <div class="content">
+                <a class="author"><%= cm.user_name %></a>
+                <div class="metadata">
+                    <div class="date" style="color: black;">
+                        <%= cm.comment_date.toString().split(' ').slice(0, 4).join(' ') %>
+                    </div>
+                    <!-- <div class="rating">
+                                        <i class="fas fa-arrow-up"></i>
+                                    </div> -->
+                </div>
+                <div class="text">
+                    <%= cm.content %>
+                </div>
+            </div>
+        </div>
+        <% } %>
+
+    </div>
+</div>
+
+<script src="/postdetail-script.js"></script>
