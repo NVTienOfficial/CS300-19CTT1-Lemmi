@@ -6,8 +6,6 @@ const methodOverride = require('method-override');
 const engine = require('ejs-mate');
 const morgan = require('morgan');
 const session = require('express-session');
-const cloudinary = require('cloudinary').v2;
-
 
 var app = Express();
 
@@ -30,6 +28,7 @@ app.use(session({
 app.use(methodOverride('_method'));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '/views'));
+
 
 
 app.use(Express.json());
