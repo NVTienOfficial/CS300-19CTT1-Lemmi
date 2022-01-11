@@ -246,6 +246,7 @@ class PostRepo {
 
     async getPostByDistrict(district) {
         try {
+            console.log(district);
             let posts = await Post.findAll({
                 include: [{
                     model: District,

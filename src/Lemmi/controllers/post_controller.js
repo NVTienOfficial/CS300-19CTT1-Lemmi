@@ -19,12 +19,32 @@ const sTag = new TagService();
 
 router.post("/create", upload.array('postimage'), async (req, res) => {
     try {
-        // let post = await sPost.createPost(req.body);
-        // return res.status(201).json({
-        //     status: "OK",
-        //     message: "Success",
-        //     data: post,
-        // });
+        // [Object: null prototype] {
+        //     title: 'testPost',
+        //     district: 'Quận 5',
+        //     tags: [ 'Món Việt', 'Sang trọng', 'Yên tĩnh' ],
+        //     description: 'abcxyz'
+        //     }
+        // files: [
+        //     {
+        //         fieldname: 'postimage',
+        //         originalname: 'dog_hurt.jpg',
+        //         encoding: '7bit',
+        //         mimetype: 'image/jpeg',
+        //         path: 'https://res.cloudinary.com/lemmiimage/image/upload/v1641871491/isabigwxqliaar422gbf.jpg',
+        //         size: 48774,
+        //         filename: 'isabigwxqliaar422gbf'
+        //     },
+        //     {
+        //         fieldname: 'postimage',
+        //         originalname: 'Kiến_Thức_kì_quái.png',
+        //         encoding: '7bit',
+        //         mimetype: 'image/png',
+        //         path: 'https://res.cloudinary.com/lemmiimage/image/upload/v1641871491/xlnyrg7oswrljicwr0js.png',
+        //         size: 281971,
+        //         filename: 'xlnyrg7oswrljicwr0js'
+        //     }
+        // ]
         console.log(req.body);
         console.log("files:", req.files);
     }
@@ -32,6 +52,11 @@ router.post("/create", upload.array('postimage'), async (req, res) => {
         return res.status(err.statusCode).json(err);
     }
 });
+
+router.put("/:id", async(req, res) => {
+    // Edit post
+    
+})
 
 router.get("", async (req, res) => {
     try {

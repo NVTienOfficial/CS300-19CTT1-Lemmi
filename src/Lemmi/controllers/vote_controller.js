@@ -4,7 +4,7 @@ const VoteService = require("../services/vote_service");
 
 const sVote = new VoteService();
 
-router.post("", async (req, res) => {
+router.put("", async (req, res) => {
     try {
         const vote = await sVote.makeVote(req.body);
         return res.status(201).json({

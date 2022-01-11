@@ -89,6 +89,15 @@ router.get("/", async (req, res) => {
         **      post_tag: []
         ** }
         */
+
+        const userid = req.session.userid || undefined;
+        const f_tag = req.session.f_tag || undefined;
+        const d_tag = req.session.d_tag || undefined;
+        const mypost = req.session.mypost || undefined;
+
+        // const filter_posts = await sPost.filter(f_tag, d_tag, userid);
+        // const filter_userPosts = await sPost.filterUser(f_tag, d_tag, userid);
+
         console.time('Query time');
         const newest_post = await sPost.getNewestPosts(40);
         const comment_post = await sPost.getMostCommentPosts(40);
@@ -107,10 +116,10 @@ router.get("/", async (req, res) => {
             district: district
         }
 
-        const f_tag = req.session.f_tag || undefined;
-        const d_tag = req.session.d_tag || undefined;
-        const mypost = req.session.mypost || undefined;
-        const userid = req.session.userid || undefined;
+        // const f_tag = req.session.f_tag || undefined;
+        // const d_tag = req.session.d_tag || undefined;
+        // const mypost = req.session.mypost || undefined;
+        // const userid = req.session.userid || undefined;
         const username = req.session.username || undefined;
         res.render('home', { userid, username, ...posts, f_tag, d_tag, mypost});
 
@@ -125,7 +134,7 @@ router.get("/", async (req, res) => {
 router.get("/filter", async (req, res) => {
     try {
         // return array contain object which include post data
-        const posts = await sPost.filter(req.query.tag, req.query.district);
+        // const posts = await sPost.filter(req.query.tag, req.query.district);
         res.status(200).json({
             data: posts
         })
