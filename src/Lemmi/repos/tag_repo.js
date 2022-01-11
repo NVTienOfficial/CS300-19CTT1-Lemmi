@@ -18,10 +18,38 @@ class TagRepo {
         }
     }
 
+    async createPostTag(post_id, tag_id) {
+        try {
+            const newPostTag = await PostTag.create({
+                tag_id: tag_id,
+                post_id: post_id
+            });
+            return newPostTag['dataValues'];
+        }
+        catch (err) {
+            throw new Error(500, err.message);
+        }
+    }
+
     async getAll() {
         try {
             const tags = await Tag.findAll();
             return tags;
+        }
+        catch (err) {
+            throw new Error(404, err.message);
+        }
+    }
+
+    async getIDByName(name) {
+        try {
+            const tag = await Tag.findOne({
+                attributes: ['tag_id'],
+                where: {
+                    name: name
+                }
+            });
+            return tag['tag_id'];
         }
         catch (err) {
             throw new Error(404, err.message);
@@ -38,6 +66,29 @@ class TagRepo {
                 name.push(tags[i]['name'])
             }
             return name;
+        }
+        catch (err) {
+            throw new Error(404, err.message);
+        }
+    }
+
+    async getTagPlaceByPostID(post_id) {
+        try {
+            const tags = await PostTag.findOne({
+                attributes: {
+                    include: [
+                        [sequelize.literal(`(
+                            SELECT name
+                            FROM tag
+                            WHERE tag.tag_id = post_tag.tag_id AND type = 'Tên quán'
+                        )`), 'name']
+                    ]
+                },
+                where: {
+                    post_id: post_id,
+                }
+            });
+            return tags['name'];
         }
         catch (err) {
             throw new Error(404, err.message);

@@ -3,12 +3,65 @@ const District = require("../models/district");
 const Post = require("../models/post");
 const Tag = require("../models/tag");
 const PostTag = require("../models/post_tag");
+const PostImage = require("../models/post_image");
 
 class PostRepo {
     async createOne(post) {
         try {
             const newPost = await Post.create(post);
             return newPost["dataValues"];
+        }
+        catch (err) {
+            throw new Error(500, err.message);
+        }
+    }
+
+    async updateTitle(title, post_id) {
+        try {
+            await Post.update({title: title}, {
+                where: {
+                    post_id: post_id
+                }
+            });
+        }
+        catch (err) {
+            throw new Error(500, err.message);
+        }
+    }
+
+    async updateContent(content, post_id) {
+        try {
+            await Post.update({content: content}, {
+                where: {
+                    post_id: post_id
+                }
+            });
+        }
+        catch (err) {
+            throw new Error(500, err.message);
+        }
+    }
+
+    async updateStar(star, post_id) {
+        try {
+            await Post.update({star: star}, {
+                where: {
+                    post_id: post_id
+                }
+            });
+        }
+        catch (err) {
+            throw new Error(500, err.message);
+        }
+    }
+
+    async updateDistrict(district_id, post_id) {
+        try {
+            await Post.update({district_id: district_id}, {
+                where: {
+                    post_id: post_id
+                }
+            });
         }
         catch (err) {
             throw new Error(500, err.message);
@@ -244,9 +297,33 @@ class PostRepo {
         }
     }
 
+    async getUserPostByTag(tag, user_id) {
+        try {
+            let posts = await Post.findAll({
+                include: [{
+                    model: PostTag,
+                    require: true,
+                    include: [{
+                        model: Tag,
+                        require: true,
+                        where: {
+                            name: tag
+                        }
+                    }]
+                }],
+                where: {
+                    user_id: user_id
+                }
+            });
+            return posts;
+        }
+        catch (err) {
+            throw new Error(500, err.message);
+        }
+    }
+
     async getPostByDistrict(district) {
         try {
-            console.log(district);
             let posts = await Post.findAll({
                 include: [{
                     model: District,
@@ -255,6 +332,27 @@ class PostRepo {
                         name: district
                     }
                 }]
+            });
+            return posts;
+        }
+        catch (err) {
+            throw new Error(500, err.message);
+        }
+    }
+
+    async getUserPostByDistrict(district, user_id) {
+        try {
+            let posts = await Post.findAll({
+                include: [{
+                    model: District,
+                    require: true,
+                    where: {
+                        name: district
+                    }
+                }],
+                where: {
+                    user_id: user_id
+                }
             });
             return posts;
         }
@@ -286,6 +384,40 @@ class PostRepo {
                         }
                     }
                 ]
+            });
+            return posts;
+        }
+        catch (err) {
+            throw new Error(500, err.message);
+        }
+    }
+
+    async getUserPostByTagDistrict(tag, district, user_id) {
+        try {
+            let posts = await Post.findAll({
+                include: [
+                    {
+                        model: PostTag,
+                        require: true,
+                        include: [{
+                            model: Tag,
+                            require: true,
+                            where: {
+                                name: tag
+                            }
+                        }]
+                    },
+                    {
+                        model: District,
+                        require: true,
+                        where: {
+                            name: district
+                        }
+                    }
+                ],
+                where: {
+                    user_id: user_id
+                }
             });
             return posts;
         }

@@ -5,24 +5,31 @@ const CommentRepo = require("../repos/comment_repo");
 const DistrictRepo = require("../repos/district_repo");
 const TagRepo = require("../repos/tag_repo");
 const ImageService = require("../services/image_service");
+const TagService = require("../services/tag_service");
 const Error = require("../config/error");
 
 const rPost = new PostRepo();
 const rUser = new UserRepo();
 const rComment = new CommentRepo();
 const rTag = new TagRepo();
+const sTag = new TagService();
 const sImage = new ImageService();
+const rDistrict = new DistrictRepo();
 
 class PostService {
-    async createPost(post) {
-        const {title, content, star, report, user_id, post_date, district_id, image} = post;
+    async createPost(post, images) {
+        // post['star'] = 4;
+        // post['user_id'] = '0001d';
+        const {title, content, star, tags, report, user_id, post_date, district} = post;
+        delete post['tags'];
 
         if (!title || !content || !star || star < 0) {
             throw new Error(400, "Bad request");
         }
 
-        if (report & report < 0)
+        if (report & report < 0) {
             throw new Error(400, "Bad request");
+        }
 
         if (user_id && user_id != "") {
             let existUser = await rUser.isExistID(user_id);
@@ -32,12 +39,62 @@ class PostService {
 
         try {
             let id = await this.generateNewID();
-            let postData = post;
-            postData["post_id"] = id;
-            delete postData["image"];
-            const newPost = await rPost.createOne(postData);
-            const images = await sImage.createImages(image, user_id, id);
-            newPost["image"] = image;
+            post["post_id"] = id;
+            
+            const district_id = await rDistrict.getIDByName(district);
+            delete post['district'];
+            post['district_id'] = district_id;
+
+            const newPost = await rPost.createOne(post);
+
+            const post_tags = await sTag.createPostTags(id, tags);
+            newPost['post_tag'] = post_tags;
+
+            const img = await sImage.createImages(images, user_id, id);
+            newPost["image"] = img;
+            return newPost;
+        }
+        catch (err) {
+            if (err == null)
+                throw new Error(500, err);
+            throw new Error(err.statusCode, err.message);
+        }
+    }
+
+    async editPost(post, images) {
+        // post['star'] = 4;
+        // post['user_id'] = '0001d';
+        const {post_id, title, content, star, tags, user_id, district} = post;
+        delete post['tags'];
+
+        if (user_id && user_id != "") {
+            let existUser = await rUser.isExistID(user_id);
+            if (!existUser)
+                throw new Error(400, "Bad request");
+        }
+
+        try {
+            await sTag.updatePostTag(post_id, tags);
+
+            await sImage.updatePostImage(post_id, images);
+
+            if (!title) {
+                await rPost.updateTitle(title, post_id);
+            }
+
+            if (!content) {
+                await rPost.updateContent(content, post_id);
+            }
+
+            if (!star) {
+                await rPost.updateStar(content, post_id);
+            }
+
+            if (!district) {
+                const district_id = await rDistrict.getIDByName(district);
+                await rPost.updateDistrict(district_id, post_id);
+            }
+
             return newPost;
         }
         catch (err) {
@@ -85,26 +142,47 @@ class PostService {
     }
 
     async filterUser(tag, district, user_id) {
-        if (!user_id)
+        if (!user_id && !tag && !district)
             return undefined;
+
+        try {
+            if (!tag) {
+                const posts = await rPost.getUserPostByDistrict(district, user_id);
+                return posts;
+            }
+            else if (!district) {
+                const posts = await rPost.getUserPostByTag(tag, user_id);
+                return posts;
+            }
+            else {
+                const posts = await rPost.getUserPostByTagDistrict(tag, district, user_id);
+                return posts;
+            }
+        }
+        catch (err) {
+            if (err == null)
+                throw new Error(500, err);
+            throw new Error(err.statusCode, err.message);
+        }
     }
 
     async getNewestPosts(n) {
         try {
             let posts = await rPost.getNewestPosts(n);
             for (let i = 0; i < posts.length; i++) {
-                posts[i]['comment'] = await rComment.getCommentByPost(posts[i]['post_id']);
-                posts[i]['tag'] = await rTag.getTagByPost(posts[i]['post_id']);
-                posts[i]['name'] = "";
+                //posts[i]['comment'] = await rComment.getCommentByPost(posts[i]['post_id']);
+                //posts[i]['tag'] = await rTag.getTagByPost(posts[i]['post_id']);
+                posts[i]['name'] = await rTag.getTagPlaceByPostID(posts[i]['post_id']);
+                // posts[i]['name'] = "";
                 posts[i]['image'] = undefined;
-                let tags = posts[i]['tag'];
-                if (tags != undefined) {
-                    for (let j = 0; j < tags.length; j++) {
-                        if (tags[j]['type'] == "Tên quán") {
-                            posts[i]['name'] = tags[j]['name']
-                        }
-                    }
-                }
+                // let tags = posts[i]['tag'];
+                // if (tags != undefined) {
+                //     for (let j = 0; j < tags.length; j++) {
+                //         if (tags[j]['type'] == "Tên quán") {
+                //             posts[i]['name'] = tags[j]['name']
+                //         }
+                //     }
+                // }
             }
             return posts;
         }
@@ -119,18 +197,18 @@ class PostService {
         try {
             let posts = await rPost.getMostCommentPosts(n);
             for (let i = 0; i < posts.length; i++) {
-                posts[i]['comment'] = await rComment.getCommentByPost(posts[i]['post_id']); 
+                //posts[i]['comment'] = await rComment.getCommentByPost(posts[i]['post_id']); 
                 posts[i]['tag'] = await rTag.getTagByPost(posts[i]['post_id']);
-                posts[i]['name'] = "";
+                // posts[i]['name'] = "";
                 posts[i]['image'] = undefined;
-                let tags = posts[i]['tag'];
-                if (tags != undefined) {
-                    for (let j = 0; j < tags.length; j++) {
-                        if (tags[j]['type'] == "Tên quán") {
-                            posts[i]['name'] = tags[j]['name']
-                        }
-                    }
-                }
+                // let tags = posts[i]['tag'];
+                // if (tags != undefined) {
+                //     for (let j = 0; j < tags.length; j++) {
+                //         if (tags[j]['type'] == "Tên quán") {
+                //             posts[i]['name'] = tags[j]['name']
+                //         }
+                //     }
+                // }
             }
             return posts;
         }
@@ -145,18 +223,18 @@ class PostService {
         try {
             let posts = await rPost.getMostVotePosts(n);
             for (let i = 0; i < posts.length; i++) {
-                posts[i]['comment'] = await rComment.getCommentByPost(posts[i]['post_id']); 
+                //posts[i]['comment'] = await rComment.getCommentByPost(posts[i]['post_id']); 
                 posts[i]['tag'] = await rTag.getTagByPost(posts[i]['post_id']);
-                posts[i]['name'] = "";
+                // posts[i]['name'] = "";
                 posts[i]['image'] = undefined;
-                let tags = posts[i]['tag'];
-                if (tags != undefined) {
-                    for (let j = 0; j < tags.length; j++) {
-                        if (tags[j]['type'] == "Tên quán") {
-                            posts[i]['name'] = tags[j]['name']
-                        }
-                    }
-                }
+                // let tags = posts[i]['tag'];
+                // if (tags != undefined) {
+                //     for (let j = 0; j < tags.length; j++) {
+                //         if (tags[j]['type'] == "Tên quán") {
+                //             posts[i]['name'] = tags[j]['name']
+                //         }
+                //     }
+                // }
             }
             return posts;
         }

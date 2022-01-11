@@ -99,9 +99,9 @@ router.get("/", async (req, res) => {
         // const filter_userPosts = await sPost.filterUser(f_tag, d_tag, userid);
 
         console.time('Query time');
-        const newest_post = await sPost.getNewestPosts(40);
-        const comment_post = await sPost.getMostCommentPosts(40);
-        const vote_post = await sPost.getMostVotePost(40);
+        const newest_post = await sPost.getNewestPosts(20);
+        const comment_post = await sPost.getMostCommentPosts(20);
+        const vote_post = await sPost.getMostVotePost(20);
         const tag = await sTag.getAllTagNamesExcept("Tên quán");
         const district = await sDistrict.getAllDistrictName();
         console.timeEnd('Query time');
