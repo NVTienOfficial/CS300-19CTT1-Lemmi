@@ -59,14 +59,14 @@ class PostService {
         }
     }
 
-    async filter(tag, category, district) {
-        if (!tag && !category && !district)
-            throw new Error(400, "Bad request");
+    async filter(tag, district) {
+        if (!tag && !district)
+            return undefined;
 
         try {
             if (!tag) {
                 const posts = await rPost.getPostByDistrict(district);
-                return posts; 
+                return posts;
             }
             else if (!district) {
                 const posts = await rPost.getPostByTag(tag);
@@ -82,6 +82,11 @@ class PostService {
                 throw new Error(500, err);
             throw new Error(err.statusCode, err.message);
         }
+    }
+
+    async filterUser(tag, district, user_id) {
+        if (!user_id)
+            return undefined;
     }
 
     async getNewestPosts(n) {

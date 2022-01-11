@@ -38,9 +38,9 @@ async function processVoteLogic(clicked, other, target, otherTarget) {
                 target.innerHTML = parseInt(target.innerHTML) + 1;
                 let type;
                 if (clicked.classList.contains('fa-arrow-up'))
-                    type = "True";
+                    type = "true";
                 else
-                    type = "False";
+                    type = "false";
 
                 try {
                     const response = await fetch('http://localhost:8080/vote', {
