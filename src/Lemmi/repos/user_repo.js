@@ -3,7 +3,6 @@ const User = require("../models/user");
 class UserRepo {
     async createOne(user) {
         try {
-            console.log(user);
             const newUser = await User.create(user);
             return newUser;
         }

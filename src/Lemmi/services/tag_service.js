@@ -21,6 +21,39 @@ class TagService {
         }
     }
 
+    async createPostTags(post_id, tags) {
+        try {
+            let post_tag = [];
+            for (let i = 0; i < tags.length; i++) {
+                const tag_id = await rTag.getIDByName(tags[i]);
+                const pt = await rTag.createPostTag(post_id, tag_id);
+                post_tag.push(pt);
+            }
+            return post_tag;
+        }
+        catch (err) {
+            if (err == null)
+                throw new Error(500, err);
+            throw new Error(err.statusCode, err.message);
+        }
+    }
+
+    async updatePostTag(post_id, tags) {
+        if (tags?.length)
+            return;
+
+        try {
+            for (let i = 0; i < tags.length; i++) {
+            
+            }
+        }
+        catch (err) {
+            if (err == null)
+                throw new Error(500, err);
+            throw new Error(err.statusCode, err.message);
+        }
+    }
+
     async getAllTags() {
         try {
             const tags = await rTag.getAll();

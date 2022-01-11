@@ -4,6 +4,7 @@ const PostService = require("../services/post_service");
 const VoteService = require("../services/vote_service");
 const CommentService = require("../services/comment_service");
 const TagService = require("../services/tag_service");
+const ImageService = require("../services/image_service");
 const multer = require('multer');
 const { storage } = require('../config/cloudinary');
 
@@ -14,39 +15,40 @@ const sPost = new PostService();
 const sVote = new VoteService();
 const sComment = new CommentService();
 const sTag = new TagService();
+const sImage = new ImageService();
 
 
 
 router.post("/create", upload.array('postimage'), async (req, res) => {
     try {
         // [Object: null prototype] {
+        //     user_id: '0001d',
         //     title: 'testPost',
         //     district: 'Quận 5',
         //     tags: [ 'Món Việt', 'Sang trọng', 'Yên tĩnh' ],
-        //     description: 'abcxyz'
+        //     content: 'abcxyz',
+        //     star: 4.5
         //     }
         // files: [
         //     {
-        //         fieldname: 'postimage',
-        //         originalname: 'dog_hurt.jpg',
-        //         encoding: '7bit',
-        //         mimetype: 'image/jpeg',
+        //         ...
         //         path: 'https://res.cloudinary.com/lemmiimage/image/upload/v1641871491/isabigwxqliaar422gbf.jpg',
-        //         size: 48774,
-        //         filename: 'isabigwxqliaar422gbf'
         //     },
         //     {
-        //         fieldname: 'postimage',
-        //         originalname: 'Kiến_Thức_kì_quái.png',
-        //         encoding: '7bit',
-        //         mimetype: 'image/png',
+        //         ...
         //         path: 'https://res.cloudinary.com/lemmiimage/image/upload/v1641871491/xlnyrg7oswrljicwr0js.png',
-        //         size: 281971,
-        //         filename: 'xlnyrg7oswrljicwr0js'
         //     }
         // ]
-        console.log(req.body);
-        console.log("files:", req.files);
+
+        // console.log(req.body);
+        // console.log("files:", req.files);
+        const images = [];
+        for (let i = 0; i < req.files.length; i++) {
+            images.push(req.files[i]['path']);
+        }
+        const post = await sPost.createPost(req.body, images);
+
+        console.log(post);
     }
     catch (err) {
         return res.status(err.statusCode).json(err);
@@ -55,7 +57,18 @@ router.post("/create", upload.array('postimage'), async (req, res) => {
 
 router.put("/:id", async(req, res) => {
     // Edit post
-    
+    try {
+        const images = [];
+        for (let i = 0; i < req.files.length; i++) {
+            images.push(req.files[i]['path']);
+        }
+        const post = await sPost.editPost(req.body, images);
+
+        console.log(post);
+    }
+    catch (err) {
+        return res.status(err.statusCode).json(err);
+    }
 })
 
 router.get("", async (req, res) => {
@@ -81,6 +94,9 @@ router.get("/:id", async (req, res) => {
         posttag = posttag.filter(el => el !== null);
         const user_vote = await sVote.getUserIDVotePost(postid);
         const comment = await sComment.getPostComments(req.params.id);
+        // array of image path
+        const image_path = await sImage.getAllImagesByPostID(postid);
+        ///////////////
         const userid = req.session.userid || undefined;
         const username = req.session.username || undefined;
         req.session.redirectTo = `/post/${req.params.id}`;
@@ -112,6 +128,7 @@ router.get("/user", async (req, res) => {
 router.delete("/:id", async (req, res) => {
     try {
         await sPost.deletePostByID(req.params.id);
+        //return res.status(200).json({});
         return res.redirect('/');
     }
     catch (err) {

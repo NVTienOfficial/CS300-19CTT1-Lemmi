@@ -64,6 +64,18 @@ class ImageService {
         }
     }
 
+    async getAllImagesByPostID(post_id) {
+        try {
+            const images = await rImage.getAllByPostID(post_id);
+            return images;
+        }
+        catch (err) {
+            if (err == null)
+                throw new Error(500, err);
+            throw new Error(err.statusCode, err.message);
+        }
+    }
+
     async deleteImageByID(id) {
         try {
             await rImage.deleteByID(id);

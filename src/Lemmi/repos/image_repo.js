@@ -1,6 +1,7 @@
 const Image = require("../models/image");
 const PostImage = require("../models/post_image");
 const Error = require("../config/error");
+const sequelize = require("../config/database");
 
 class ImageRepo {
     async createOne(id, src, user_id, post_id) {
@@ -17,7 +18,7 @@ class ImageRepo {
                 post_id: post_id,
                 image_id: id
             });
-            return newImg;
+            return newImg['dataValues'];
         }
         catch (err) {
             throw new Error(500, err.message);
@@ -42,6 +43,33 @@ class ImageRepo {
                 }
             })
             return images;
+        }
+        catch (err) {
+            throw new Error(404, err.message);
+        }
+    }
+
+    async getAllByPostID(post_id) {
+        try {
+            const images = await PostImage.findAll({
+                attributes: {
+                    include: [
+                        [sequelize.literal(`(
+                            SELECT image.src
+                            FROM image
+                            WHERE post_image.image_id = image_id
+                        )`), 'path']
+                    ]
+                },
+                where: {
+                    post_id: post_id
+                }
+            });
+            let path = [];
+            for (let i = 0; i < images.length; i++) {
+                path.push(images[i]['dataValues']['path']);
+            }
+            return path;
         }
         catch (err) {
             throw new Error(404, err.message);
