@@ -93,6 +93,7 @@ class TagRepo {
 
     async getTagPlaceByPostID(post_id) {
         try {
+            console.log(post_id);
             const tag = await Tag.findOne({
                 include: [
                     {
@@ -104,9 +105,14 @@ class TagRepo {
                     }
                 ],
                 where: {
-                    type: 'Tên quán'
+                    type: {
+                        [Op.eq]: 'Tên quán'
+                    }
                 }
             });
+            console.log(tag);
+            if (!tag)
+                return undefined;
             return tag['name'];
         }
         catch (err) {
@@ -114,20 +120,22 @@ class TagRepo {
         }
     }
 
-    async getTagByPostID(id) {
+    async getTagByPostID(post_id) {
         try {
-            const tags = await PostTag.findAll({
-                attributes: {
-                    include: [
-                        [sequelize.literal(`(
-                            SELECT name
-                            FROM tag
-                            WHERE tag.tag_id = post_tag.tag_id AND type != 'Tên quán'
-                        )`), 'name']
-                    ]
-                },
+            const tags = await Tag.findAll({
+                include: [
+                    {
+                        model: PostTag,
+                        require: true,
+                        where: {
+                            post_id: post_id
+                        }
+                    }
+                ],
                 where: {
-                    post_id: id,
+                    type: {
+                        [Op.ne]: 'Tên quán'
+                    }
                 }
             });
             let result = [];

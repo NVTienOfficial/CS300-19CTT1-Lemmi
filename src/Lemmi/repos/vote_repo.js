@@ -14,31 +14,41 @@ class VoteRepo {
 
     async getUserIDByPostID(id) {
         try {
-            const user_id_up = await Vote.findAll({
+            // const user_id_up = await Vote.findAll({
+            //     attributes: ['user_id'],
+            //     where: {
+            //         post_id: id,
+            //         type: true,
+            //     }
+            // });
+            // const user_id_down = await Vote.findAll({
+            //     attributes: ['user_id'],
+            //     where: {
+            //         post_id: id,
+            //         type: false,
+            //     }
+            // });
+            // let up = [];
+            // for (let i = 0; i < user_id_up.length; i++) {
+            //     up.push(user_id_up[i]["dataValues"]["user_id"]);
+            // }
+            // let down = [];
+            // for (let i = 0; i < user_id_down.length; i++) {
+            //     down.push(user_id_down[i]["dataValues"]["user_id"]);
+            // }
+            // let user_vote = {
+            //     up: up,
+            //     down: down
+            // }
+            const vote = await Vote.findAll({
                 attributes: ['user_id'],
                 where: {
-                    post_id: id,
-                    type: true,
+                    post_id: id
                 }
-            });
-            const user_id_down = await Vote.findAll({
-                attributes: ['user_id'],
-                where: {
-                    post_id: id,
-                    type: false,
-                }
-            });
-            let up = [];
-            for (let i = 0; i < user_id_up.length; i++) {
-                up.push(user_id_up[i]["dataValues"]["user_id"]);
-            }
-            let down = [];
-            for (let i = 0; i < user_id_down.length; i++) {
-                down.push(user_id_down[i]["dataValues"]["user_id"]);
-            }
-            let user_vote = {
-                up: up,
-                down: down
+            })
+            let user_vote = [];
+            for (let i = 0; i < vote.length; i++) {
+                user_vote.push(vote[i]['dataValues']['user_id']);
             }
             return user_vote;
         }
