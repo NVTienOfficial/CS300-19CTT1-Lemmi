@@ -78,9 +78,22 @@ class ImageRepo {
 
     async deleteByID(id) {
         try {
-            await District.destroy({
+            await Image.destroy({
                 where: {
                     image_id: id
+                }
+            });
+        }
+        catch (err) {
+            throw new Error(404, err.message);
+        }
+    }
+
+    async deletePostImages(post_id) {
+        try {
+            await PostImage.destroy({
+                where: {
+                    post_id: post_id
                 }
             });
         }

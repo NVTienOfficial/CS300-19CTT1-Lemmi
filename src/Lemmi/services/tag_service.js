@@ -44,7 +44,7 @@ class TagService {
 
         try {
             for (let i = 0; i < tags.length; i++) {
-            
+                await rTag.insertPostTag(post_id, tags[i]);
             }
         }
         catch (err) {
