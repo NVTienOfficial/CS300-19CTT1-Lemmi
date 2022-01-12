@@ -173,6 +173,7 @@ class PostService {
                 //posts[i]['comment'] = await rComment.getCommentByPost(posts[i]['post_id']);
                 //posts[i]['tag'] = await rTag.getTagByPost(posts[i]['post_id']);
                 posts[i]['name'] = await rTag.getTagPlaceByPostID(posts[i]['post_id']);
+                // console.log(posts[i]['name']);
                 // posts[i]['name'] = "";
                 posts[i]['image'] = undefined;
                 // let tags = posts[i]['tag'];
@@ -198,7 +199,7 @@ class PostService {
             let posts = await rPost.getMostCommentPosts(n);
             for (let i = 0; i < posts.length; i++) {
                 //posts[i]['comment'] = await rComment.getCommentByPost(posts[i]['post_id']); 
-                posts[i]['tag'] = await rTag.getTagByPost(posts[i]['post_id']);
+                posts[i]['name'] = await rTag.getTagPlaceByPostID(posts[i]['post_id']);
                 // posts[i]['name'] = "";
                 posts[i]['image'] = undefined;
                 // let tags = posts[i]['tag'];
@@ -224,7 +225,7 @@ class PostService {
             let posts = await rPost.getMostVotePosts(n);
             for (let i = 0; i < posts.length; i++) {
                 //posts[i]['comment'] = await rComment.getCommentByPost(posts[i]['post_id']); 
-                posts[i]['tag'] = await rTag.getTagByPost(posts[i]['post_id']);
+                posts[i]['name'] = await rTag.getTagPlaceByPostID(posts[i]['post_id']);
                 // posts[i]['name'] = "";
                 posts[i]['image'] = undefined;
                 // let tags = posts[i]['tag'];
