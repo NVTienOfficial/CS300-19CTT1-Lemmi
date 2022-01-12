@@ -171,20 +171,21 @@ class PostService {
             let posts = await rPost.getNewestPosts(n);
             for (let i = 0; i < posts.length; i++) {
                 //posts[i]['comment'] = await rComment.getCommentByPost(posts[i]['post_id']);
-                //posts[i]['tag'] = await rTag.getTagByPost(posts[i]['post_id']);
-                posts[i]['name'] = await rTag.getTagPlaceByPostID(posts[i]['post_id']);
+                posts[i]['tag'] = await rTag.getTagByPost(posts[i]['post_id']);
+                //posts[i]['name'] = await rTag.getTagPlaceByPostID(posts[i]['post_id']);
                 // console.log(posts[i]['name']);
-                // posts[i]['name'] = "";
+                posts[i]['name'] = "";
                 posts[i]['image'] = undefined;
-                // let tags = posts[i]['tag'];
-                // if (tags != undefined) {
-                //     for (let j = 0; j < tags.length; j++) {
-                //         if (tags[j]['type'] == "Tên quán") {
-                //             posts[i]['name'] = tags[j]['name']
-                //         }
-                //     }
-                // }
+                let tags = posts[i]['tag'];
+                if (tags != undefined) {
+                    for (let j = 0; j < tags.length; j++) {
+                        if (tags[j]['type'] == "Tên quán") {
+                            posts[i]['name'] = tags[j]['name']
+                        }
+                    }
+                }
             }
+            // console.log(posts);
             return posts;
         }
         catch (err) {
@@ -198,18 +199,19 @@ class PostService {
         try {
             let posts = await rPost.getMostCommentPosts(n);
             for (let i = 0; i < posts.length; i++) {
-                //posts[i]['comment'] = await rComment.getCommentByPost(posts[i]['post_id']); 
-                posts[i]['name'] = await rTag.getTagPlaceByPostID(posts[i]['post_id']);
+                //posts[i]['comment'] = await rComment.getCommentByPost(posts[i]['post_id']);
+                posts[i]['tag'] = await rTag.getTagByPost(posts[i]['post_id']);
+                //posts[i]['name'] = await rTag.getTagPlaceByPostID(posts[i]['post_id']);
                 // posts[i]['name'] = "";
                 posts[i]['image'] = undefined;
-                // let tags = posts[i]['tag'];
-                // if (tags != undefined) {
-                //     for (let j = 0; j < tags.length; j++) {
-                //         if (tags[j]['type'] == "Tên quán") {
-                //             posts[i]['name'] = tags[j]['name']
-                //         }
-                //     }
-                // }
+                let tags = posts[i]['tag'];
+                if (tags != undefined) {
+                    for (let j = 0; j < tags.length; j++) {
+                        if (tags[j]['type'] == "Tên quán") {
+                            posts[i]['name'] = tags[j]['name']
+                        }
+                    }
+                }
             }
             return posts;
         }
@@ -224,18 +226,19 @@ class PostService {
         try {
             let posts = await rPost.getMostVotePosts(n);
             for (let i = 0; i < posts.length; i++) {
-                //posts[i]['comment'] = await rComment.getCommentByPost(posts[i]['post_id']); 
-                posts[i]['name'] = await rTag.getTagPlaceByPostID(posts[i]['post_id']);
+                //posts[i]['comment'] = await rComment.getCommentByPost(posts[i]['post_id']);
+                posts[i]['tag'] = await rTag.getTagByPost(posts[i]['post_id']);
+                //posts[i]['name'] = await rTag.getTagPlaceByPostID(posts[i]['post_id']);
                 // posts[i]['name'] = "";
                 posts[i]['image'] = undefined;
-                // let tags = posts[i]['tag'];
-                // if (tags != undefined) {
-                //     for (let j = 0; j < tags.length; j++) {
-                //         if (tags[j]['type'] == "Tên quán") {
-                //             posts[i]['name'] = tags[j]['name']
-                //         }
-                //     }
-                // }
+                let tags = posts[i]['tag'];
+                if (tags != undefined) {
+                    for (let j = 0; j < tags.length; j++) {
+                        if (tags[j]['type'] == "Tên quán") {
+                            posts[i]['name'] = tags[j]['name']
+                        }
+                    }
+                }
             }
             return posts;
         }

@@ -90,11 +90,20 @@ router.get("/:id", async (req, res) => {
     try {
         const postid = req.params.id;
         const post = await sPost.getPostByID(req.params.id);
-        //const vote = await sVote.getPostVote(req.params.id);        // bỏ
-        let posttag = await sTag.getTagNameByPost(post["post_id"]);
+        post['star'] = parseFloat(post['star']);
+        console.log(post);
+        const vote = await sVote.getPostVote(req.params.id);        // bỏ
+        let posttag = await sTag.getTagNameByPost(req.params.id);
+        //console.log(posttag);
         posttag = posttag.filter(el => el !== null);
         const user_vote = await sVote.getUserIDVotePost(postid);   // up and down
+        // user_vote = {
+        //      up: ['00001', '0001d'],
+        //      down: ['00002', '0003c']   
+        // }
+        console.log(user_vote);
         const comment = await sComment.getPostComments(req.params.id);
+        console.log(comment);
         // array of image path
         const image_path = await sImage.getAllImagesByPostID(postid);
         ///////////////
