@@ -31,6 +31,25 @@ class TagRepo {
         }
     }
 
+    async insertPostTag(post_id, tag_name) {
+        try {
+            const tag_id = await Tag.findOne({
+                attributes: ['tag_id'],
+                where: {
+                    name: tag_name
+                }
+            })['tag_id'];
+            const newPostTag = await PostTag.create({
+                post_id: post_id,
+                tag_id: tag_id
+            });
+            return newPostTag['dataValues'];
+        }
+        catch (err) {
+            throw new Error(500, err.message);
+        }
+    }
+
     async getAll() {
         try {
             const tags = await Tag.findAll();

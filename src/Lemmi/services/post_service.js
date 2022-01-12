@@ -76,7 +76,7 @@ class PostService {
         try {
             await sTag.updatePostTag(post_id, tags);
 
-            await sImage.updatePostImage(post_id, images);
+            await sImage.updatePostImage(user_id, post_id, images);
 
             if (!title) {
                 await rPost.updateTitle(title, post_id);

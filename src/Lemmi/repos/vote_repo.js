@@ -1,6 +1,5 @@
 const sequelize = require("../config/database");
 const Vote = require("../models/vote");
-const Sequelize = require("sequelize");
 
 class VoteRepo {
     async createOne(vote) {
@@ -15,17 +14,33 @@ class VoteRepo {
 
     async getUserIDByPostID(id) {
         try {
-            const user_id = await Vote.findAll({
+            const user_id_up = await Vote.findAll({
                 attributes: ['user_id'],
                 where: {
-                    post_id: id
+                    post_id: id,
+                    type: true,
                 }
-            })
-            let result = [];
-            for (let i = 0; i < user_id.length; i++) {
-                result.push(user_id[i]["dataValues"]["user_id"]);
+            });
+            const user_id_down = await Vote.findAll({
+                attributes: ['user_id'],
+                where: {
+                    post_id: id,
+                    type: false,
+                }
+            });
+            let up = [];
+            for (let i = 0; i < user_id_up.length; i++) {
+                up.push(user_id_up[i]["dataValues"]["user_id"]);
             }
-            return result;
+            let down = [];
+            for (let i = 0; i < user_id_down.length; i++) {
+                down.push(user_id_down[i]["dataValues"]["user_id"]);
+            }
+            let user_vote = {
+                up: up,
+                down: down
+            }
+            return user_vote;
         }
         catch (err) {
             throw new Error(500, err.message);

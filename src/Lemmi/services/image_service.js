@@ -40,6 +40,19 @@ class ImageService {
         }
     }
 
+    async updatePostImage(user_id, post_id, images) {
+        try {
+            await rImage.deletePostImages(post_id);
+            const post_images = await this.createImages(images, user_id, post_id);
+            return post_images;
+        }
+        catch (err) {
+            if (err == null)
+                throw new Error(500, err);
+            throw new Error(err.statusCode, err.message);
+        }
+    }
+
     async getAllImages() {
         try {
             const images = await rImage.getAll();

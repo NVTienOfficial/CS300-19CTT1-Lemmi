@@ -62,6 +62,7 @@ router.put("/:id", async(req, res) => {
         for (let i = 0; i < req.files.length; i++) {
             images.push(req.files[i]['path']);
         }
+        // ["vchsd",  "jhbsjcd"]
         const post = await sPost.editPost(req.body, images);
 
         console.log(post);
@@ -89,10 +90,10 @@ router.get("/:id", async (req, res) => {
     try {
         const postid = req.params.id;
         const post = await sPost.getPostByID(req.params.id);
-        const vote = await sVote.getPostVote(req.params.id);
+        //const vote = await sVote.getPostVote(req.params.id);        // bỏ
         let posttag = await sTag.getTagNameByPost(post["post_id"]);
         posttag = posttag.filter(el => el !== null);
-        const user_vote = await sVote.getUserIDVotePost(postid);
+        const user_vote = await sVote.getUserIDVotePost(postid);   // up and down
         const comment = await sComment.getPostComments(req.params.id);
         // array of image path
         const image_path = await sImage.getAllImagesByPostID(postid);
