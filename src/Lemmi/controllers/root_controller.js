@@ -102,14 +102,12 @@ router.get("/", async (req, res) => {
         // const filter_userPosts = await sPost.filterUser(f_tag, d_tag, userid);
 
         console.time('Query time');
-        console.log("start");
         const newest_post = await sPost.getNewestPosts(20);
-        // console.log(newest_post);
         const comment_post = await sPost.getMostCommentPosts(20);
         const vote_post = await sPost.getMostVotePost(20);
-        console.log("end");
         const tag = await sTag.getAllTagNamesExcept("Tên quán");
         const district = await sDistrict.getAllDistrictName();
+        console.log("end");
         console.timeEnd('Query time');
         req.session.redirectTo = `/`;
 
