@@ -90,7 +90,7 @@ router.get("/:id", async (req, res) => {
     try {
         const postid = req.params.id;
         const post = await sPost.getPostByID(req.params.id);
-
+        console.log(post);
     
         // const vote = await sVote.getPostVote(req.params.id);        // bỏ
         let posttag = await sTag.getTagNameByPost(req.params.id);
