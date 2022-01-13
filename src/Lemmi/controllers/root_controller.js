@@ -95,13 +95,19 @@ router.get("/", async (req, res) => {
         const d_tag = req.session.d_tag || undefined;
         const mypost = req.session.mypost || undefined;
 
-        // const filter_posts = await sPost.filter(f_tag, d_tag, userid);
+        if (f_tag || d_tag) {
+        const filter_posts = await sPost.filter(f_tag, d_tag);
+        console.log(filter_posts);
+        }
         // const filter_userPosts = await sPost.filterUser(f_tag, d_tag, userid);
 
         console.time('Query time');
+        console.log("start");
         const newest_post = await sPost.getNewestPosts(20);
+        // console.log(newest_post);
         const comment_post = await sPost.getMostCommentPosts(20);
         const vote_post = await sPost.getMostVotePost(20);
+        console.log("end");
         const tag = await sTag.getAllTagNamesExcept("Tên quán");
         const district = await sDistrict.getAllDistrictName();
         console.timeEnd('Query time');

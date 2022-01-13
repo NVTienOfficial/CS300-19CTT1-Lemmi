@@ -60,7 +60,7 @@
                 </div>
                 <div id="right-info">
                     <span>
-                        <% for(let index = 1; index < parseInt(post.star); index++) { %>
+                        <% for(let index = 0; index < parseInt(post.star); index++) { %>
                         <i class="fas fa-star choose"></i>
                         <% } %>
                     </span>
@@ -87,10 +87,16 @@
                         <%= post.content %>
                     </p>
                     <div class="ui small images">
-                        <img class="ui image" src="/food.jpg" alt="food">
-                        <img class="ui image" src="/food.jpg" alt="food">
-                        <img class="ui image" src="/food.jpg" alt="food">
-                        <img class="ui image" src="/food.jpg" alt="food">
+                        <% if (image_path && image_path.length > 0) { %>
+                        <% for(const url of image_path) { %>
+                        <img class="ui image" src="<%= url %>" alt="food image">
+                        <% } %>
+
+                        <% } else { %>
+                        <img class="ui image" src="/food.jpg" alt="food image">
+                        <img class="ui image" src="/food.jpg" alt="food image">
+                        <img class="ui image" src="/food.jpg" alt="food image">
+                        <% } %>
                     </div>
 
                     <div id="tag-container">
@@ -109,22 +115,24 @@
             <div class="row">
                 <div class="vote-section">
                     <h2 class="ui header">
-                        <% var is_voted = ""; %>
-                        <% if (user_vote.indexOf(userid) !== -1) { %>
-                        <% is_voted = "color-voted"; %>
+                        <% var is_upvoted = ""; var is_downvoted = ""; %>
+                        <% if (user_vote['up'].indexOf(userid) !== -1) { %>
+                        <% is_upvoted = "color-voted"; %>
+                        <% } else if (user_vote['down'].indexOf(userid) !== -1) { %>
+                        <% is_downvoted = "color-voted"; %>
                         <% } %>
                         <% if (userid && username) { %>
-                        <i class="<%= "fas fa-arrow-up -vote -total " + is_voted %>"></i><span
-                            id="up-vote-total"><%= vote.up %></span>
-                        <i class="<%= "fas fa-arrow-down -vote -total " + is_voted %>"></i><span
-                            id="down-vote-total"><%= vote.down %></span>
+                        <i class="<%= "fas fa-arrow-up -vote -total " + is_upvoted %>"></i><span
+                            id="up-vote-total"><%= user_vote['up'].length %></span>
+                        <i class="<%= "fas fa-arrow-down -vote -total " + is_downvoted %>"></i><span
+                            id="down-vote-total"><%= user_vote['down'].length %></span>
                         <% } else {%>
                         <a href="/login" style="color:#103667;"><i
-                                class="<%= "fas fa-arrow-up -vote -total " + is_voted %>"></i><span
-                                id="up-vote-total"><%= vote.up %></span></a>
+                                class="<%= "fas fa-arrow-up -vote -total " %>"></i><span
+                                id="up-vote-total"><%= user_vote['up'].length %></span></a>
                         <a href="/login" style="color:#103667;"><i
-                                class="<%= "fas fa-arrow-down -vote -total " + is_voted %>"></i><span
-                                id="down-vote-total"><%= vote.down %></span></a>
+                                class="<%= "fas fa-arrow-down -vote -total " %>"></i><span
+                                id="down-vote-total"><%= user_vote['down'].length %></span></a>
                         <% } %>
                     </h2>
                 </div>
@@ -136,8 +144,6 @@
                     <div class="fields">
                         <input type="hidden" id="post-id" name="post_id" value="<%= postid %>">
                         <input type="hidden" id="user-id" name="user_id" value="<%= userid %>">
-                        <!-- <input type="hidden" name="comment_date" value="<%= undefined %>">
-                        <input type="hidden" name="report" value="<%= undefined %>"> -->
                         <textarea rows="1" placeholder="Write a comment" spellcheck="false" id="comment" required
                             name="content"></textarea>
                         <button class="ui primary button">Submit</button>
@@ -145,14 +151,13 @@
 
                 </form>
             </div>
-            <% } else {%>
+            <% } else { %>
             <div class="row">
                 <h3 class="ui header text-centered">
                     Please login to comment this post
                 </h3>
             </div>
             <% } %>
-
 
             <div class="row">
                 <%- include(`partials/commentsection`) %>

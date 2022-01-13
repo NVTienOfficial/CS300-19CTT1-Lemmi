@@ -13,29 +13,34 @@ for (let el of postImages) {
     })
 }
 
+async function deleteVote (){
+    try {
+        const response = await fetch('http://localhost:8080/vote', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json' 
+                },
+            body: JSON.stringify({
+                user_id: userid,
+                post_id: postid
+            })
+        })
+            console.log(response);
+        } catch (err) {
+            console.log(err)
+        }
+}
+
 async function processVoteLogic(clicked, other, target, otherTarget) {
             if (clicked.classList.contains('color-voted')) {
                 target.innerHTML = parseInt(target.innerHTML) - 1;
-                try {
-                    const response = await fetch('http://localhost:8080/vote', {
-                        method: 'DELETE',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            user_id: userid,
-                            post_id: postid
-                        })
-                    })
-                    console.log(response);
-                } catch (err) {
-                    console.log(err)
-                }
+                deleteVote()
                 clicked.classList.remove('color-voted');
             }
             else {
                 clicked.classList.add('color-voted');
                 target.innerHTML = parseInt(target.innerHTML) + 1;
+                deleteVote()
                 let type;
                 if (clicked.classList.contains('fa-arrow-up'))
                     type = "true";
