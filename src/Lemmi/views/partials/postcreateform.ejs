@@ -10,6 +10,7 @@
                     <div class="required field">
                         <label>Title</label>
                         <input type="text" name="title" placeholder="Title" id="title" required>
+                        <input type="hidden" name="user_id" value=<%= userid %>>
                     </div>
 
                     <div class="required field">
@@ -35,6 +36,24 @@
                             <option value="<%= t %>"><%= t %></option>
 
                             <% } %>
+                        </select>
+                    </div>
+
+                    <div class="required field">
+                        <label>Star rating</label>
+                        <select name="star" class="ui dropdown" id="select-star" required>
+                            <!-- <option value="">Choose</option> -->
+                            <!-- <option value="t1">Tag 1</option>
+                                                <option value="t2">Tag 2</option>
+                                                <option value="t3">Tag 3</option> -->
+                            <% for (let i = 1; i <= 5; ++i) { %>
+
+                            <option value="<%= i %>">
+                                <%= i %>
+                            </option>
+
+                            <% } %>
+
                         </select>
                     </div>
 

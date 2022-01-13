@@ -7,9 +7,6 @@ const finalSubmit = document.getElementById('confirm-submit-form');
 
 finalSubmit.style.display = 'none';
 
-$('.ui.dropdown')
-  .dropdown()
-;
 
 closeFormButton.addEventListener('click', () => {
     $('.ui.modal').modal('hide');
@@ -40,6 +37,9 @@ createPostButton.addEventListener('click', () => {
         .dropdown();
 
     $('#multi-select-category')
+        .dropdown();
+
+    $('#select-star')
         .dropdown();
     
 })

@@ -20,7 +20,7 @@
         <h2 class="ui header">Filter<i class="fas fa-filter -icon"></i>
             <div>
                 <div class="ui compact menu">
-                    <div class="ui search selection dropdown">
+                    <div class="ui search selection dropdown" id="filter-dropdown-f">
                         <div class="default text" style="color: black;">
                             <% if (f_tag) { %>
                             <%= f_tag %>
@@ -42,7 +42,7 @@
                 </div>
 
                 <div class="ui compact menu">
-                    <div class="ui search selection dropdown">
+                    <div class="ui search selection dropdown" id="filter-dropdown-d">
                         <div class="default text" style="color: black;">
                             <% if (d_tag) { %>
                             <%= d_tag %>
@@ -64,11 +64,17 @@
 
                 </div>
 
+                <script>
+                    $('#filter-dropdown-d').dropdown();
+                    $('#filter-dropdown-f').dropdown();
+                </script>
+
                 <% if (userid && username) { %>
                 <a href="/filter/mypost" class="ui teal button">My posts</a>
                 <% } %>
 
                 <a href="/filter/clear" class="ui button">Clear <i class="fas fa-eraser -icon"></i></a>
+            </div>
         </h2>
 
         <div class="ui text menu" id="sort-menu">
@@ -110,21 +116,24 @@
     <% } %>
 
     <% if (d_tag) { %>
-    <% post_to_create = post_to_create.filter((el) => d_tag === el.district_name) %>
+    <% post_to_create = post_to_create.filter((el) => el.district_name === d_tag) %>
     <% } %>
 
     <% if (mypost) { %>
     <% post_to_create = post_to_create.filter((el) => el.user_id === userid) %>
     <% } %>
 
+
+
     <div class="row">
         <h2 id="<%= sectionId %>" class="ui header">
-            <%= sectionName %><i class="<%= sectionIcon %> -icon"></i>
+            <%= sectionName %>
+            <i class="<%= sectionIcon %> -icon"></i>
         </h2>
     </div>
-    <% for(const el of  post_to_create) { %>
+    <% for(const el of post_to_create) { %>
     <div class="column">
-        <a href="/post/<%= el.post_id %> ">
+        <a href="/post/<%= el.post_id %>">
             <div class="card border-bordered">
                 <div class="ui medium image">
                     <img src="/food.jpg">
@@ -132,7 +141,6 @@
                 <div class="content">
                     <div class="header">
                         <h3 class="ui header text-centered">
-
                             <%= el.name %>
                         </h3>
                     </div>
@@ -143,7 +151,7 @@
                     </div>
                     <div class="description">
                         <h4 class="ui header text-centered">
-                            <% for (let i=0; i < el.star; ++i){  %>
+                            <% for (let i = 0; i < parseInt(el.star); ++i) { %>
                             <i class="fas fa-star color-orange"></i>
                             <% } %>
                         </h4>
@@ -170,4 +178,4 @@
     <% } %>
 
     <!-- end loop here -->
-</div>
+</div>v

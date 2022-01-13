@@ -95,7 +95,10 @@ router.get("/", async (req, res) => {
         const d_tag = req.session.d_tag || undefined;
         const mypost = req.session.mypost || undefined;
 
-        // const filter_posts = await sPost.filter(f_tag, d_tag, userid);
+        if (f_tag || d_tag) {
+        const filter_posts = await sPost.filter(f_tag, d_tag);
+        console.log(filter_posts);
+        }
         // const filter_userPosts = await sPost.filterUser(f_tag, d_tag, userid);
 
         console.time('Query time');
