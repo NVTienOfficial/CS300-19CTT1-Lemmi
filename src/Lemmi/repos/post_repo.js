@@ -4,6 +4,7 @@ const Post = require("../models/post");
 const Tag = require("../models/tag");
 const PostTag = require("../models/post_tag");
 const PostImage = require("../models/post_image");
+const { QueryTypes } = require('sequelize');
 
 class PostRepo {
     async createOne(post) {
@@ -275,47 +276,91 @@ class PostRepo {
         }
     }
 
-    async getPostByTag(tag) {
+    async getPostDetail() {
         try {
             let posts = await Post.findAll({
-                include: [{
-                    model: PostTag,
-                    require: true,
-                    include: [{
-                        model: Tag,
-                        require: true,
-                        where: {
-                            name: tag
-                        }
-                    }]
-                }]
+                attributes: {
+                    include: [
+                        [sequelize.literal(`(
+                            SELECT COUNT(*)
+                            FROM vote
+                            WHERE vote.post_id = post.post_id AND vote.type = true
+                        )`), 'upvote'],
+                        [sequelize.literal(`(
+                            SELECT COUNT(*)
+                            FROM vote
+                            WHERE vote.post_id = post.post_id AND vote.type = false
+                        )`), 'downvote'],
+                        [sequelize.literal(`(
+                            SELECT COUNT(*)
+                            FROM comment
+                            WHERE comment.post_id = post.post_id
+                        )`), 'n_comment'],
+                        [sequelize.literal(`(
+                            SELECT name
+                            FROM "user"
+                            WHERE "user".user_id = post.user_id
+                        )`), 'user_name'],
+                        [sequelize.literal(`(
+                            SELECT district.name
+                            FROM district
+                            WHERE district.district_id = post.district_id
+                        )`), 'district_name'],
+                    ]
+                },
             });
-            return posts;
+            let result = [];
+            for (let i = 0; i < posts.length; i++) {
+                result.push(posts[i]['dataValues']);
+            }
+            return result;
         }
         catch (err) {
             throw new Error(500, err.message);
         }
     }
 
-    async getUserPostByTag(tag, user_id) {
+    async getUserPostDetail(user_id) {
         try {
             let posts = await Post.findAll({
-                include: [{
-                    model: PostTag,
-                    require: true,
-                    include: [{
-                        model: Tag,
-                        require: true,
-                        where: {
-                            name: tag
-                        }
-                    }]
-                }],
+                attributes: {
+                    include: [
+                        [sequelize.literal(`(
+                            SELECT COUNT(*)
+                            FROM vote
+                            WHERE vote.post_id = post.post_id AND vote.type = true
+                        )`), 'upvote'],
+                        [sequelize.literal(`(
+                            SELECT COUNT(*)
+                            FROM vote
+                            WHERE vote.post_id = post.post_id AND vote.type = false
+                        )`), 'downvote'],
+                        [sequelize.literal(`(
+                            SELECT COUNT(*)
+                            FROM comment
+                            WHERE comment.post_id = post.post_id
+                        )`), 'n_comment'],
+                        [sequelize.literal(`(
+                            SELECT name
+                            FROM "user"
+                            WHERE "user".user_id = post.user_id
+                        )`), 'user_name'],
+                        [sequelize.literal(`(
+                            SELECT district.name
+                            FROM district
+                            WHERE district.district_id = post.district_id
+                        )`), 'district_name'],
+                    ]
+                },
                 where: {
                     user_id: user_id
                 }
             });
-            return posts;
+            let result = [];
+            for (let i = 0; i < posts.length; i++) {
+                result.push(posts[i]['dataValues']);
+            }
+            return result;
         }
         catch (err) {
             throw new Error(500, err.message);
@@ -325,101 +370,92 @@ class PostRepo {
     async getPostByDistrict(district) {
         try {
             let posts = await Post.findAll({
-                include: [{
-                    model: District,
-                    require: true,
-                    where: {
-                        name: district
-                    }
-                }]
-            });
-            return posts;
-        }
-        catch (err) {
-            throw new Error(500, err.message);
-        }
-    }
-
-    async getUserPostByDistrict(district, user_id) {
-        try {
-            let posts = await Post.findAll({
-                include: [{
-                    model: District,
-                    require: true,
-                    where: {
-                        name: district
-                    }
-                }],
+                attributes: {
+                    include: [
+                        [sequelize.literal(`(
+                            SELECT COUNT(*)
+                            FROM vote
+                            WHERE vote.post_id = post.post_id AND vote.type = true
+                        )`), 'upvote'],
+                        [sequelize.literal(`(
+                            SELECT COUNT(*)
+                            FROM vote
+                            WHERE vote.post_id = post.post_id AND vote.type = false
+                        )`), 'downvote'],
+                        [sequelize.literal(`(
+                            SELECT COUNT(*)
+                            FROM comment
+                            WHERE comment.post_id = post.post_id
+                        )`), 'n_comment'],
+                        [sequelize.literal(`(
+                            SELECT name
+                            FROM "user"
+                            WHERE "user".user_id = post.user_id
+                        )`), 'user_name'],
+                        [sequelize.literal(`(
+                            SELECT district.name
+                            FROM district
+                            WHERE district.district_id = post.district_id
+                        )`), 'district_name'],
+                    ]
+                },
                 where: {
-                    user_id: user_id
+                    district_id: district
                 }
             });
-            return posts;
+            let result = [];
+            for (let i = 0; i < posts.length; i++) {
+                result.push(posts[i]['dataValues']);
+            }
+            return result;
         }
         catch (err) {
             throw new Error(500, err.message);
         }
     }
 
-    async getPostByTagDistrict(tag, district) {
+    async getUserPostByDistrict(district_id, user_id) {
         try {
             let posts = await Post.findAll({
-                include: [
-                    {
-                        model: PostTag,
-                        require: true,
-                        include: [{
-                            model: Tag,
-                            require: true,
-                            where: {
-                                name: tag
-                            }
-                        }]
-                    },
-                    {
-                        model: District,
-                        require: true,
-                        where: {
-                            name: district
-                        }
-                    }
-                ]
-            });
-            return posts;
-        }
-        catch (err) {
-            throw new Error(500, err.message);
-        }
-    }
-
-    async getUserPostByTagDistrict(tag, district, user_id) {
-        try {
-            let posts = await Post.findAll({
-                include: [
-                    {
-                        model: PostTag,
-                        require: true,
-                        include: [{
-                            model: Tag,
-                            require: true,
-                            where: {
-                                name: tag
-                            }
-                        }]
-                    },
-                    {
-                        model: District,
-                        require: true,
-                        where: {
-                            name: district
-                        }
-                    }
-                ],
+                attributes: {
+                    include: [
+                        [sequelize.literal(`(
+                            SELECT COUNT(*)
+                            FROM vote
+                            WHERE vote.post_id = post.post_id AND vote.type = true
+                        )`), 'upvote'],
+                        [sequelize.literal(`(
+                            SELECT COUNT(*)
+                            FROM vote
+                            WHERE vote.post_id = post.post_id AND vote.type = false
+                        )`), 'downvote'],
+                        [sequelize.literal(`(
+                            SELECT COUNT(*)
+                            FROM comment
+                            WHERE comment.post_id = post.post_id
+                        )`), 'n_comment'],
+                        [sequelize.literal(`(
+                            SELECT name
+                            FROM "user"
+                            WHERE "user".user_id = post.user_id
+                        )`), 'user_name'],
+                        [sequelize.literal(`(
+                            SELECT district.name
+                            FROM district
+                            WHERE district.district_id = post.district_id
+                        )`), 'district_name'],
+                    ]
+                },
                 where: {
-                    user_id: user_id
+                    user_id: user_id,
+                    district_id: district_id
                 }
             });
-            return posts;
+            let result = [];
+            for (let i = 0; i < posts.length; i++) {
+                result.push(posts[i]['dataValues']);
+            }
+            return result;
         }
         catch (err) {
             throw new Error(500, err.message);

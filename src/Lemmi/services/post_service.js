@@ -121,18 +121,49 @@ class PostService {
             return undefined;
 
         try {
+            let posts;
             if (!tag) {
-                const posts = await rPost.getPostByDistrict(district);
-                return posts;
+                const district_id = await rDistrict.getIDByName(district);
+                posts = await rPost.getPostByDistrict(district_id);
             }
             else if (!district) {
-                const posts = await rPost.getPostByTag(tag);
-                return posts;
+                const post_id = await rTag.getPostIDByTag(tag);
+                posts = await rPost.getPostDetail();
+                for (let i = 0; i < posts.length; i++) {
+                    if (post_id.indexOf(posts[i]['post_id']) == -1) {
+                        posts.splice(i, 1);
+                        i--;
+                    }
+                }
             }
             else {
-                const posts = await rPost.getPostByTagDistrict(tag, district);
-                return posts;
+                const post_id = await rTag.getPostIDByTag(tag);
+                const district_id = await rDistrict.getIDByName(district);
+                posts = await rPost.getPostByDistrict(district_id);
+                for (let i = 0; i < posts.length; i++) {
+                    if (post_id.indexOf(posts[i]['post_id']) == -1) {
+                        posts.splice(i, 1);
+                        i--;
+                    }
+                }
             }
+            for (let i = 0; i < posts.length; i++) {
+                //posts[i]['comment'] = await rComment.getCommentByPost(posts[i]['post_id']);
+                posts[i]['tag'] = await rTag.getTagByPost(posts[i]['post_id']);
+                //posts[i]['name'] = await rTag.getTagPlaceByPostID(posts[i]['post_id']);
+                // console.log(posts[i]['name']);
+                posts[i]['name'] = "";
+                posts[i]['image'] = undefined;
+                let tags = posts[i]['tag'];
+                if (tags != undefined) {
+                    for (let j = 0; j < tags.length; j++) {
+                        if (tags[j]['type'] == "Tên quán") {
+                            posts[i]['name'] = tags[j]['name']
+                        }
+                    }
+                }
+            }
+            return posts;
         }
         catch (err) {
             if (err == null)
@@ -142,22 +173,55 @@ class PostService {
     }
 
     async filterUser(tag, district, user_id) {
-        if (!user_id && !tag && !district)
-            return undefined;
+        if (!user_id) 
+            throw undefined;
 
         try {
+            let posts;
             if (!tag) {
-                const posts = await rPost.getUserPostByDistrict(district, user_id);
-                return posts;
+                const district_id = await rDistrict.getIDByName(district);
+                posts = await rPost.getUserPostByDistrict(district_id, user_id);
             }
             else if (!district) {
-                const posts = await rPost.getUserPostByTag(tag, user_id);
-                return posts;
+                const post_id = await rTag.getPostIDByTag(tag);
+                posts = await rPost.getUserPostDetail(user_id);
+                for (let i = 0; i < posts.length; i++) {
+                    if (post_id.indexOf(posts[i]['post_id']) == -1) {
+                        posts.splice(i, 1);
+                        i--;
+                    }
+                }
             }
             else {
-                const posts = await rPost.getUserPostByTagDistrict(tag, district, user_id);
-                return posts;
+                const post_id = await rTag.getPostIDByTag(tag);
+                const district_id = await rDistrict.getIDByName(district);
+                posts = await rPost.getUserPostByDistrict(district_id, user_id);
+                for (let i = 0; i < posts.length; i++) {
+                    if (post_id.indexOf(posts[i]['post_id']) == -1) {
+                        posts.splice(i, 1);
+                        i--;
+                    }
+                }
             }
+            for (let i = 0; i < posts.length; i++) {
+                //posts[i]['comment'] = await rComment.getCommentByPost(posts[i]['post_id']);
+                posts[i]['tag'] = await rTag.getTagByPost(posts[i]['post_id']);
+                console.log(posts[i]['tag']);
+                //posts[i]['name'] = await rTag.getTagPlaceByPostID(posts[i]['post_id']);
+                // console.log(posts[i]['name']);
+                posts[i]['name'] = "";
+                posts[i]['image'] = undefined;
+                let tags = posts[i]['tag'];
+                if (tags != undefined) {
+                    for (let j = 0; j < tags.length; j++) {
+                        if (tags[j]['type'] == "Tên quán") {
+                            console.log("here");
+                            posts[i]['name'] = tags[j]['name']
+                        }
+                    }
+                }
+            }
+            return posts;
         }
         catch (err) {
             if (err == null)
