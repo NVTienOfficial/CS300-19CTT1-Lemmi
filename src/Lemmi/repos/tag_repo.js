@@ -149,6 +149,30 @@ class TagRepo {
         }
     }
 
+    async getPostIDByTag(tag) {
+        try {
+            const tags = await PostTag.findAll({
+                include: [
+                    {
+                        model: Tag,
+                        required: true,
+                        where: {
+                            name: tag
+                        }
+                    }
+                ]
+            });
+            let post_id = [];
+            for (let i = 0; i < tags.length; i++) {
+                post_id.push(tags[i]["dataValues"]["post_id"]);
+            }
+            return post_id;
+        }
+        catch (err) {
+            throw new Error(404, err.message);
+        }   
+    }
+
     async getAllNameExcept(type) {
         try {
             const tags = await Tag.findAll({

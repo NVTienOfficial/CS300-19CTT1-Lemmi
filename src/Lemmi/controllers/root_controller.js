@@ -138,8 +138,8 @@ router.get("/", async (req, res) => {
 router.get("/filter", async (req, res) => {
     try {
         // return array contain object which include post data
-        // const posts = await sPost.filter(req.query.tag, req.query.district);
-        res.status(200).json({
+        const posts = await sPost.filter(req.query.tag, req.query.district);
+        return res.status(200).json({
             data: posts
         })
     }
@@ -148,6 +148,18 @@ router.get("/filter", async (req, res) => {
     }
 });
 
+router.get("/filter/mp", async (req, res) => {
+    try {
+        // return array contain object which include post data
+        const posts = await sPost.filterUser(req.query.tag, req.query.district, req.query.userid);
+        return res.status(200).json({
+            data: posts
+        })
+    }
+    catch (err) {
+        return res.status(err.statusCode).json(err);
+    }
+});
 
 router.get("/filter/tag/:t", (req, res) => {
     req.session.f_tag = req.params.t;
