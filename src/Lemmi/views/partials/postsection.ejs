@@ -77,6 +77,7 @@
             </div>
         </h2>
 
+        <% if (newest) { %>
         <div class="ui text menu" id="sort-menu">
             <div class="ui header item">Sort by</div>
             <a href="#newest" class="item">
@@ -89,93 +90,16 @@
                 Highest rated
             </a>
         </div>
+        <% } %>
+
 
     </div>
 
-    <!-- loop -->
-    <% for (let i=1; i < 4; ++i){ %>
-
-    <% let sectionName='Highest rated' %>
-    <% let post_to_create=vote %>
-    <% let sectionIcon='fas fa-hamburger' %>
-    <% let sectionId='highest' %>
-    <% if (i===2) { %>
-    <% sectionName='Most comment' %>
-    <% post_to_create=comment %>
-    <% sectionIcon='fas fa-hotdog' %>
-    <% sectionId='most' %>
-    <% } else if (i===3) { %>
-    <% sectionName='Newest' %>
-    <% post_to_create=newest %>
-    <% sectionIcon='fas fa-egg' %>
-    <% sectionId='newest' %>
-    <% } %>
-
-    <% if (f_tag) { %>
-    <% post_to_create = post_to_create.filter((el) => f_tag in el.tag) %>
-    <% } %>
-
-    <% if (d_tag) { %>
-    <% post_to_create = post_to_create.filter((el) => el.district_name === d_tag) %>
-    <% } %>
-
-    <% if (mypost) { %>
-    <% post_to_create = post_to_create.filter((el) => el.user_id === userid) %>
+    <% if (newest) { %>
+    <%- include('post-normal') %>
+    <% } else { %>
+    <%- include('post-filtered') %>
     <% } %>
 
 
-
-    <div class="row">
-        <h2 id="<%= sectionId %>" class="ui header">
-            <%= sectionName %>
-            <i class="<%= sectionIcon %> -icon"></i>
-        </h2>
-    </div>
-    <% for(const el of post_to_create) { %>
-    <div class="column">
-        <a href="/post/<%= el.post_id %>">
-            <div class="card border-bordered">
-                <div class="ui medium image">
-                    <img src="/food.jpg">
-                </div>
-                <div class="content">
-                    <div class="header">
-                        <h3 class="ui header text-centered">
-                            <%= el.name %>
-                        </h3>
-                    </div>
-                    <div class="meta">
-                        <h4 class="ui header text-centered">
-                            <%= el.district_name %>
-                        </h4>
-                    </div>
-                    <div class="description">
-                        <h4 class="ui header text-centered">
-                            <% for (let i = 0; i < parseInt(el.star); ++i) { %>
-                            <i class="fas fa-star color-orange"></i>
-                            <% } %>
-                        </h4>
-                    </div>
-                    <div class="-vote">
-                        <h5 class="ui header text-centered">
-                            <i class="fas fa-long-arrow-alt-up color-orange"></i><span>
-                                <%= el.upvote %>
-                            </span>
-                            <i class="fas fa-long-arrow-alt-down color-orange"></i><span>
-                                <%= el.downvote %>
-                            </span>
-                            <i class="fas fa-comment color-orange"></i><span>
-                                <%= el.n_comment %>
-                            </span>
-                        </h5>
-                    </div>
-                </div>
-            </div>
-        </a>
-    </div>
-    <% } %>
-
-    <% } %>
-
-    <!-- end loop here -->
 </div>v

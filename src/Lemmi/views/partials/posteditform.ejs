@@ -2,14 +2,16 @@
     <div class="ui coupled modal">
         <div class="ui first modal">
             <div class="header">
-                Create a review post
+                Edit this post
             </div>
             <div class="content">
 
-                <form class="ui form" action="/post/create" method="POST" enctype="multipart/form-data">
+                <form class="ui form" action="/post/edit/<%= post.post_id %>" method="POST"
+                    enctype="multipart/form-data">
                     <div class="required field">
                         <label>Title</label>
-                        <input type="text" name="title" placeholder="Title" id="title" required>
+                        <input type="text" name="title" placeholder="Title" id="title" value="<%= post.title %>"
+                            required>
                         <input type="hidden" name="user_id" value="<%= userid %>">
                     </div>
 
@@ -21,18 +23,23 @@
                             <option value="q2">Quận 2</option>
                             <option value="q3">Quận 3</option> -->
                             <% for (const d of district) { %>
+                            <% if (d === post.district_name) { %>
+                            <option value="<%= d %>" selected><%= d %></option>
+                            <% } else { %>
                             <option value="<%= d %>"><%= d %></option>
+                            <% } %>
                             <% } %>
                         </select>
                     </div>
                     <div class="required field">
-                        <label>Tags</label>
-                        <select name="tags" class="ui search dropdown" multiple="" id="multi-select-tags" required>
+                        <label>Tags (will replace current tags)</label>
+                        <select name="tags" class="ui search dropdown" multiple="" id="multi-select-tags">
                             <option value="">Tags</option>
                             <!-- <option value="t1">Tag 1</option>
                             <option value="t2">Tag 2</option>
                             <option value="t3">Tag 3</option> -->
                             <% for (const t of tag) { %>
+
                             <option value="<%= t %>"><%= t %></option>
 
                             <% } %>
@@ -47,10 +54,15 @@
                                                 <option value="t2">Tag 2</option>
                                                 <option value="t3">Tag 3</option> -->
                             <% for (let i = 1; i <= 5; i += 0.5) { %>
-
+                            <% if (i === parseFloat(post.star)) { %>
+                            <option value="<%= i %>" selected>
+                                <%= i %>
+                            </option>
+                            <% } else { %>
                             <option value="<%= i %>">
                                 <%= i %>
                             </option>
+                            <% } %>
 
                             <% } %>
 
@@ -58,13 +70,14 @@
                     </div>
 
                     <div class="required field">
-                        <label>Images</label>
-                        <input type="file" accept=".jpg, .jpeg, .png" name="postimage" id="images" required multiple>
+                        <label>Images (will replace current images)</label>
+                        <input type="file" accept=".jpg, .jpeg, .png" name="postimage" id="images" multiple>
                     </div>
 
                     <div class="required field">
                         <label>Description</label>
-                        <textarea spellcheck="false" name="content" id="description" required></textarea>
+                        <textarea spellcheck="false" name="content" id="description"
+                            required><%= post.content %></textarea>
                     </div>
 
                     <div class="ui second modal">
@@ -72,7 +85,7 @@
                             Confirmation
                         </div>
                         <div class="content">
-                            <h2 class="ui header">Are you sure to post this review?</h2>
+                            <h2 class="ui header">Are you sure to edit this post?</h2>
                         </div>
                         <div class="actions">
                             <div class="ui inverted green red button" id="return-form">Return</div>
@@ -82,9 +95,9 @@
 
                     <div class="actions">
                         <div class="ui inverted red button" id="close-form">Close</div>
-                        <div class="ui inverted green button" id="submit-form">Post</div>
-                        <button type="submit" class="ui inverted primary button" id="confirm-submit-form">OK, Let's post
-                            this</button>
+                        <div class="ui inverted green button" id="submit-form">Edit</div>
+                        <button type="submit" class="ui inverted primary button" id="confirm-submit-form">OK, Let's fix
+                            this post</button>
                     </div>
 
 

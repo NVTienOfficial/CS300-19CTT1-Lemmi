@@ -47,8 +47,8 @@ class PostService {
 
             const newPost = await rPost.createOne(post);
 
-            const post_tags = await sTag.createPostTags(id, tags);
-            newPost['post_tag'] = post_tags;
+            // const post_tags = await sTag.createPostTags(id, tags);
+            newPost['post_tag'] = [...tags];
 
             const img = await sImage.createImages(images, user_id, id);
             newPost["image"] = img;
@@ -76,7 +76,8 @@ class PostService {
         try {
             await sTag.updatePostTag(post_id, tags);
 
-            await sImage.updatePostImage(user_id, post_id, images);
+            if (images && images.length > 0)
+                await sImage.updatePostImage(user_id, post_id, images);
 
             if (!title) {
                 await rPost.updateTitle(title, post_id);
