@@ -31,19 +31,74 @@ class TagRepo {
         }
     }
 
+    async getTagIDByPostID(post_id) {
+        try {
+            const tag_id = await PostTag.findAll({
+                include: [
+                    {
+                        model: Tag,
+                        required: true,
+                        where: {
+                            type: {
+                                [Op.ne]: 'Tên quán'
+                            }
+                        }
+                    }
+                ],
+                where: {
+                    post_id: post_id
+                }
+            });
+            let result = [];
+            for (let i = 0; i < tag_id.length; i++) {
+                result.push(tag_id[i]['dataValues']['tag_id']);
+            }
+            return result;
+        }
+        catch (err) {
+            throw new Error(500, err.message);
+        }
+    }
+
+    async deletePostTag(post_id, tag_id) {
+        try {
+            await PostTag.destroy({
+                where: {
+                    post_id: post_id,
+                    tag_id: tag_id
+                }
+            });
+        }
+        catch (err) {
+            throw new Error(500, err.message);
+        }
+    }
+
     async insertPostTag(post_id, tag_name) {
         try {
-            const tag_id = await Tag.findOne({
+            console.log(tag_name);
+            const tag = await Tag.findOne({
                 attributes: ['tag_id'],
                 where: {
                     name: tag_name
                 }
-            })['tag_id'];
-            const newPostTag = await PostTag.create({
-                post_id: post_id,
-                tag_id: tag_id
             });
-            return newPostTag['dataValues'];
+            const tag_id = tag['tag_id'];
+            console.log(tag_id);
+            const exist = await PostTag.findOne({
+                where: {
+                    post_id: post_id,
+                    tag_id: tag_id
+                }
+            });
+            console.log(exist);
+            if (!exist) {
+                console.log("create")
+                const newPostTag = await PostTag.create({
+                    post_id: post_id,
+                    tag_id: tag_id
+                });
+            }
         }
         catch (err) {
             throw new Error(500, err.message);
@@ -93,7 +148,6 @@ class TagRepo {
 
     async getTagPlaceByPostID(post_id) {
         try {
-            console.log(post_id);
             const tag = await Tag.findOne({
                 include: [
                     {
@@ -110,7 +164,6 @@ class TagRepo {
                     }
                 }
             });
-            console.log(tag);
             if (!tag)
                 return undefined;
             return tag['name'];

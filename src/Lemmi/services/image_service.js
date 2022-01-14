@@ -40,6 +40,29 @@ class ImageService {
         }
     }
 
+    async deleteAllPostImage(post_id) {
+        try {
+            await rImage.deletePostImages(post_id);
+        }
+        catch (err) {
+            if (err == null)
+                throw new Error(500, err);
+            throw new Error(err.statusCode, err.message);
+        }
+    }
+
+    async getAllPostImages(post_id) {
+        try {
+            const post_image = await rImage.getAllPostImagesByPostID(post_id);
+            return post_image;
+        }
+        catch (err) {
+            if (err == null)
+                throw new Error(500, err);
+            throw new Error(err.statusCode, err.message);
+        }
+    }
+
     async updatePostImage(user_id, post_id, images) {
         try {
             await rImage.deletePostImages(post_id);
