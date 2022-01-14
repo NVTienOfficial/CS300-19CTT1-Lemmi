@@ -22,14 +22,16 @@ router.post("/login", async (req, res) => {
         return res.redirect(req.session.redirectTo || '/');
     }
     catch (err) {
-        return res.status(err.statusCode).json(err);
+        const message = 'Wrong username or password';
+        res.render('login', {message});
     }
     
 });
 
 //Dat
 router.get("/login", (req, res) => {
-    res.render('login');
+    const message = undefined;
+    res.render('login', {message});
 });
 
 router.get("/logout", (req, res) => {
@@ -96,15 +98,19 @@ router.get("/", async (req, res) => {
         const mypost = req.session.mypost || undefined;
         
         req.session.redirectTo = `/`;
+
         const tag = await sTag.getAllTagNamesExcept("Tên quán");
         const district = await sDistrict.getAllDistrictName();
+        
         if ((f_tag || d_tag) && !mypost) {
             let newest = undefined;
             const filtered_posts = await sPost.filter(f_tag, d_tag);
+            
             res.render('home', { userid, username, newest, tag, district, filtered_posts, f_tag, d_tag, mypost});
             
         } else if (mypost && userid) {
             let newest = undefined;
+            
             const filtered_posts = await sPost.filterUser(f_tag, d_tag, userid);
             
             res.render('home', { userid, username, newest, tag, district, filtered_posts, f_tag, d_tag, mypost});

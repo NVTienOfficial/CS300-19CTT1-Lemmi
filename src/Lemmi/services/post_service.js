@@ -169,13 +169,10 @@ class PostService {
         if (!user_id) 
             throw undefined;
 
-        console.log(tag);
-        console.log(district);
-
         try {
             let posts;
             if (!tag && !district) {
-                console.log("here");
+                
                 posts = await rPost.getUserPostDetail(user_id);
             }
             else if (!tag) {
