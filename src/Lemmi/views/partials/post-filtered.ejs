@@ -1,0 +1,54 @@
+<div class="row">
+    <h2 class="ui header">
+        Filtered posts
+        <i class="fas fa-pizza-slice -icon"></i>
+    </h2>
+</div>
+
+<% for(const el of filtered_posts) { %>
+<div class="column">
+    <a href="/post/<%= el.post_id %>">
+        <div class="card border-bordered">
+            <div class="ui medium image">
+                <% if (el.image !== undefined) { %>
+                <img src="<%= el.image[0] %> ">
+                <% } else { %>
+                <img src="/food.jpg">
+                <% } %>
+            </div>
+            <div class="content">
+                <div class="header">
+                    <h3 class="ui header text-centered">
+                        <%= el.name %>
+                    </h3>
+                </div>
+                <div class="meta">
+                    <h4 class="ui header text-centered">
+                        <%= el.district_name %>
+                    </h4>
+                </div>
+                <div class="description">
+                    <h4 class="ui header text-centered">
+                        <% for (let i = 0; i < parseInt(el.star); ++i) { %>
+                        <i class="fas fa-star color-orange"></i>
+                        <% } %>
+                    </h4>
+                </div>
+                <div class="-vote">
+                    <h5 class="ui header text-centered">
+                        <i class="fas fa-long-arrow-alt-up color-orange"></i><span>
+                            <%= el.upvote %>
+                        </span>
+                        <i class="fas fa-long-arrow-alt-down color-orange"></i><span>
+                            <%= el.downvote %>
+                        </span>
+                        <i class="fas fa-comment color-orange"></i><span>
+                            <%= el.n_comment %>
+                        </span>
+                    </h5>
+                </div>
+            </div>
+        </div>
+    </a>
+</div>
+<% } %>

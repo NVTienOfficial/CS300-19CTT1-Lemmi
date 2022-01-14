@@ -89,43 +89,41 @@ router.get("/", async (req, res) => {
         **      post_tag: []
         ** }
         */
-
+        const username = req.session.username || undefined;
         const userid = req.session.userid || undefined;
         const f_tag = req.session.f_tag || undefined;
         const d_tag = req.session.d_tag || undefined;
         const mypost = req.session.mypost || undefined;
-
-        if (f_tag || d_tag) {
-        const filter_posts = await sPost.filter(f_tag, d_tag);
-        console.log(filter_posts);
-        }
-        // const filter_userPosts = await sPost.filterUser(f_tag, d_tag, userid);
-
-        console.time('Query time');
-        const newest_post = await sPost.getNewestPosts(20);
-        const comment_post = await sPost.getMostCommentPosts(20);
-        const vote_post = await sPost.getMostVotePost(20);
+        
+        req.session.redirectTo = `/`;
         const tag = await sTag.getAllTagNamesExcept("Tên quán");
         const district = await sDistrict.getAllDistrictName();
-        console.log("end");
-        console.timeEnd('Query time');
-        req.session.redirectTo = `/`;
+        if ((f_tag || d_tag) && !mypost) {
+            let newest = undefined;
+            const filtered_posts = await sPost.filter(f_tag, d_tag);
+            res.render('home', { userid, username, newest, tag, district, filtered_posts, f_tag, d_tag, mypost});
+            
+        } else if (mypost && userid) {
+            let newest = undefined;
+            const filtered_posts = await sPost.filterUser(f_tag, d_tag, userid);
+            
+            res.render('home', { userid, username, newest, tag, district, filtered_posts, f_tag, d_tag, mypost});
 
-        // Take this object to parse layout       ** NOTICE **
-        const posts = {
-            newest: newest_post,
-            comment: comment_post,
-            vote: vote_post,
-            tag: tag,
-            district: district
+        } else {
+            const newest_post = await sPost.getNewestPosts(20);
+            const comment_post = await sPost.getMostCommentPosts(20);
+            const vote_post = await sPost.getMostVotePost(20);
+            const posts = {
+                newest: newest_post,
+                comment: comment_post,
+                vote: vote_post,
+                tag: tag,
+                district: district
+            }
+            
+            res.render('home', { userid, username, ...posts, f_tag, d_tag, mypost});
         }
 
-        // const f_tag = req.session.f_tag || undefined;
-        // const d_tag = req.session.d_tag || undefined;
-        // const mypost = req.session.mypost || undefined;
-        // const userid = req.session.userid || undefined;
-        const username = req.session.username || undefined;
-        res.render('home', { userid, username, ...posts, f_tag, d_tag, mypost});
 
     }
     catch (err) {
@@ -172,8 +170,6 @@ router.get("/filter/district/:d", (req, res) => {
 });
 
 router.get("/filter/mypost", (req, res) => {
-    delete req.session.d_tag;
-    delete req.session.f_tag;
     req.session.mypost = true;
     return res.redirect('/');
 });

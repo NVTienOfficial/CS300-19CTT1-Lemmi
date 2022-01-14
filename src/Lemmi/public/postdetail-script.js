@@ -13,6 +13,10 @@ for (let el of postImages) {
     })
 }
 
+$('#post-manipulate')
+  .dropdown()
+;
+
 async function deleteVote (){
     try {
         const response = await fetch('http://localhost:8080/vote', {
@@ -92,9 +96,73 @@ if (userid !== null && userid !== undefined && userid.length){
 
 
 const deleteButton = document.getElementById('post-delete');
+const editButton = document.getElementById('post-edit');
 
 deleteButton.addEventListener('click', () => {
     $('.ui.basic.modal.delete-post')
   .modal('show')
 ;
+})
+
+const closeFormButton = document.getElementById('close-form');
+const submitFormButton = document.getElementById('submit-form');
+const returnFormButton = document.getElementById('return-form');
+const confirmedSubmit = document.getElementById('continue-form');
+const finalSubmit = document.getElementById('confirm-submit-form');
+
+finalSubmit.style.display = 'none';
+
+
+closeFormButton.addEventListener('click', () => {
+    $('.ui.modal').modal('hide');
+})
+
+editButton.addEventListener('click', () => {
+
+    submitFormButton.style.display = 'inline-block';
+    finalSubmit.style.display = 'none';
+
+    $('.coupled.modal')
+        .modal({
+        allowMultiple: false
+    });
+// attach events to buttons
+    $('.second.modal')
+        .modal('setting', 'closable', false)
+        .modal('attach events', '.first.modal #submit-form');
+
+    $('.ui.first.modal')
+        .modal('setting', 'closable', false)
+        .modal('show');
+
+    $('#select-district')
+        .dropdown();
+
+    $('#multi-select-tags')
+        .dropdown();
+
+    $('#multi-select-category')
+        .dropdown();
+
+    $('#select-star')
+        .dropdown();
+    
+})
+
+returnFormButton.addEventListener('click', () => {
+    
+    $('.second.modal')
+        .modal('toggle');
+    $('.ui.first.modal')
+        .modal('show');
+})
+
+confirmedSubmit.addEventListener('click', () => {
+
+    finalSubmit.style.display = 'inline-block';
+    submitFormButton.style.display = 'none';
+    $('.second.modal')
+        .modal('toggle');
+    $('.ui.first.modal')
+        .modal('show');
 })
