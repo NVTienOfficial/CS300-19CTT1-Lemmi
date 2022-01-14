@@ -38,11 +38,23 @@ class TagService {
         }
     }
 
-    async updatePostTag(post_id, tags) {
-        if (tags?.length)
-            return;
-
+    async deleteAllPostTag(post_id) {
         try {
+            const tag_id = await rTag.getTagIDByPostID(post_id);
+            for (let i = 0; i < tag_id.length; i++) {
+                await rTag.deletePostTag(post_id, tag_id[i]);
+            }
+        }
+        catch (err) {
+            if (err == null)
+                throw new Error(500, err);
+            throw new Error(err.statusCode, err.message);
+        }
+    }
+
+    async updatePostTag(post_id, tags) {
+        try {
+
             for (let i = 0; i < tags.length; i++) {
                 await rTag.insertPostTag(post_id, tags[i]);
             }

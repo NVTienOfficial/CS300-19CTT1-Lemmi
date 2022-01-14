@@ -61,10 +61,10 @@ class PostService {
         }
     }
 
-    async editPost(post, images) {
+    async editPost(post_id, post, images) {
         // post['star'] = 4;
         // post['user_id'] = '0001d';
-        const {post_id, title, content, star, tags, user_id, district} = post;
+        const {title, content, star, tags, user_id, district} = post;
         delete post['tags'];
 
         if (user_id && user_id != "") {
@@ -74,28 +74,20 @@ class PostService {
         }
 
         try {
-            await sTag.updatePostTag(post_id, tags);
-
-            if (images && images.length > 0)
-                await sImage.updatePostImage(user_id, post_id, images);
-
-            if (!title) {
-                await rPost.updateTitle(title, post_id);
+            if (tags && tags.length > 0) {
+                await sTag.deleteAllPostTag(post_id);
+                await sTag.createPostTags(post_id, tags);
             }
 
-            if (!content) {
-                await rPost.updateContent(content, post_id);
+            if (images && images.length > 0) {
+                await sImage.deleteAllPostImage(post_id);
+                await sImage.createImages(images, user_id, post_id);
             }
 
-            if (!star) {
-                await rPost.updateStar(content, post_id);
-            }
+            const district_id = await rDistrict.getIDByName(district);
+            await rPost.updatePost(post_id, title, content, user_id, district_id, star);
 
-            if (!district) {
-                const district_id = await rDistrict.getIDByName(district);
-                await rPost.updateDistrict(district_id, post_id);
-            }
-
+            const newPost = await rPost.getPostByID(post_id);
             return newPost;
         }
         catch (err) {
@@ -177,9 +169,16 @@ class PostService {
         if (!user_id) 
             throw undefined;
 
+        console.log(tag);
+        console.log(district);
+
         try {
             let posts;
-            if (!tag) {
+            if (!tag && !district) {
+                console.log("here");
+                posts = await rPost.getUserPostDetail(user_id);
+            }
+            else if (!tag) {
                 const district_id = await rDistrict.getIDByName(district);
                 posts = await rPost.getUserPostByDistrict(district_id, user_id);
             }
@@ -193,7 +192,7 @@ class PostService {
                     }
                 }
             }
-            else {
+            else if ( tag != undefined && district != undefined) {
                 const post_id = await rTag.getPostIDByTag(tag);
                 const district_id = await rDistrict.getIDByName(district);
                 posts = await rPost.getUserPostByDistrict(district_id, user_id);

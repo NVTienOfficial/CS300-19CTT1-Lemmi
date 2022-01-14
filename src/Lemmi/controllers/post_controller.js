@@ -57,15 +57,19 @@ router.post("/create", upload.array('postimage'), async (req, res) => {
     }
 });
 
-router.post("/edit/:id", upload.array('postimage'), (req, res) => {
+router.post("/edit/:id", upload.array('postimage'), async (req, res) => {
     // Edit post
     try {
-        // const images = [];
-        // for (let i = 0; i < req.files.length; i++) {
-        //     images.push(req.files[i]['path']);
-        // }
-        // // ["vchsd",  "jhbsjcd"]
-        // const post = await sPost.editPost(req.body, images);
+        const images = [];
+        for (let i = 0; i < req.files.length; i++) {
+            images.push(req.files[i]['path']);
+        }
+        // ["vchsd",  "jhbsjcd"]
+        const post = await sPost.editPost(req.params.id, req.body, images);
+
+        return res.status(200).json({
+            data: post
+        });
 
         console.log(req.body);
         console.log("Files:", req.files);

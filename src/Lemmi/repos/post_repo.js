@@ -17,6 +17,27 @@ class PostRepo {
         }
     }
 
+    async updatePost(post_id, title, content, user_id, district_id, star) {
+        try {
+            await Post.update(
+                {
+                    title: title,
+                    content: content,
+                    user_id: user_id,
+                    district_id: district_id,
+                    star: star
+                }, 
+                {
+                    where: {
+                        post_id: post_id
+                }
+            });
+        }
+        catch (err) {
+            throw new Error(500, err.message);
+        }
+    }
+
     async updateTitle(title, post_id) {
         try {
             await Post.update({title: title}, {
@@ -456,6 +477,49 @@ class PostRepo {
                 result.push(posts[i]['dataValues']);
             }
             return result;
+        }
+        catch (err) {
+            throw new Error(500, err.message);
+        }
+    }
+
+    async getPostByID(post_id) {
+        try {
+            let post = await Post.findOne({
+                attributes: {
+                    include: [
+                        [sequelize.literal(`(
+                            SELECT COUNT(*)
+                            FROM vote
+                            WHERE vote.post_id = post.post_id AND vote.type = true
+                        )`), 'upvote'],
+                        [sequelize.literal(`(
+                            SELECT COUNT(*)
+                            FROM vote
+                            WHERE vote.post_id = post.post_id AND vote.type = false
+                        )`), 'downvote'],
+                        [sequelize.literal(`(
+                            SELECT COUNT(*)
+                            FROM comment
+                            WHERE comment.post_id = post.post_id
+                        )`), 'n_comment'],
+                        [sequelize.literal(`(
+                            SELECT name
+                            FROM "user"
+                            WHERE "user".user_id = post.user_id
+                        )`), 'user_name'],
+                        [sequelize.literal(`(
+                            SELECT district.name
+                            FROM district
+                            WHERE district.district_id = post.district_id
+                        )`), 'district_name'],
+                    ]
+                },
+                where: {
+                    post_id: post_id,
+                }
+            });
+            return post['dataValues'];
         }
         catch (err) {
             throw new Error(500, err.message);

@@ -102,6 +102,33 @@ class ImageRepo {
         }
     }
 
+    async getAllPostImagesByPostID(post_id) {
+        try {
+            const post_images = await PostImage.findAll({
+                attributes: {
+                    include: [
+                        [sequelize.literal(`(
+                            SELECT image.user_id
+                            FROM image
+                            WHERE image.image_id = post_image.image_id
+                        )`), 'user_id']
+                    ]
+                },
+                where: {
+                    post_id: post_id
+                }
+            })
+            let result = [];
+            for (let i = 0; i < post_images.length; i++) {
+                result.push(post_images[i]['dataValues']);
+            }
+            return result;
+        }
+        catch (err) {
+            throw new Error(404, err.message);
+        }
+    }
+
     async count() {
         try {
             let n = await Image.count();
