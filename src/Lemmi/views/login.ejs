@@ -24,8 +24,9 @@
                 <div class="row">
                     <h1 class="color-orange" id="l-form-intro"><i>Lemmi</i></h1>
                 </div>
+
                 <div class="row border-bordered d-flex-col" id="l-form-group">
-                    <form class="ui form" action="/login" method="POST">
+                    <form class="ui form" action="/login" method="POST" id="login-form">
                         <div class="field">
                             <h1 class="ui header color-orange text-centered">Login</h1>
                         </div>
@@ -38,21 +39,12 @@
                         <div class="field">
                             <input type="password" name="password" placeholder="Password" required>
                         </div>
-                        <div class="field" id="l-form-auth-services">
-                            <a href="/" id="logByGoogle">
-                                <button class="ui google plus button">
-                                    <i class="fab fa-google-plus-square"></i>
-                                    Sign in with Google
-                                </button>
-                            </a>
-                            <a href="/" id="logByFacebook">
-                                <button class="ui facebook button">
-                                    <i class="fab fa-facebook-square"></i>
-                                    Sign in with Facebook
-                                </button>
-                            </a>
 
+                        <% if (message !== undefined) { %>
+                        <div class="field">
+                            <h4 class="text-centered"><%= message %></h4>
                         </div>
+                        <% } %>
 
                         <div class="field">
                             <button class="fluid ui button" type="submit" id="l-submit">Login</button>
@@ -65,6 +57,7 @@
                                 </a>
                             </div>
                         </div>
+
                         <a href="/account/create/user">
                             <div class="fluid ui black basic button">Register</div>
                         </a>
@@ -77,10 +70,16 @@
     </div>
 
     <script>
+
         const submitButton = document.getElementById('l-submit');
-        submitButton.addEventListener('click', () => {
+
+        submitButton.onclick = () => {
             submitButton.classList.add('loading');
-        })
+        }
+
+        document.getElementById('login-form').onsubmit = () => {
+            submitButton.classList.add('loading');
+        }
     </script>
 
 </body>

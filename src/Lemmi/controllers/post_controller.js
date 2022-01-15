@@ -67,14 +67,7 @@ router.post("/edit/:id", upload.array('postimage'), async (req, res) => {
         // ["vchsd",  "jhbsjcd"]
         const post = await sPost.editPost(req.params.id, req.body, images);
 
-        return res.status(200).json({
-            data: post
-        });
-
-        console.log(req.body);
-        console.log("Files:", req.files);
-
-        res.json("Here");
+        return res.redirect(req.session.redirectTo);
     }
     catch (err) {
         return res.status(err.statusCode).json(err);
