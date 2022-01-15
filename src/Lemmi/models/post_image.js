@@ -22,4 +22,9 @@ const PostImage = sequelize.define('post_image',
     }
 );
 
+Post.hasMany(PostImage, {foreignKey: 'post_id'});
+Image.hasMany(PostImage, {foreignKey: 'image_id'});
+PostImage.belongsTo(Image, {foreignKey: 'image_id'});
+PostImage.belongsTo(Post, {foreignKey: 'post_id'});
+
 module.exports = PostImage;
