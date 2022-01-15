@@ -160,6 +160,13 @@ main .card {
     width: 100%;
     transition: all 0.25s ease-out;
 }
+
+main a .card.border-bordered {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
 @media only screen and (max-width: 768px) {
     main .card .ui.medium.image {
         width: fit-content;
