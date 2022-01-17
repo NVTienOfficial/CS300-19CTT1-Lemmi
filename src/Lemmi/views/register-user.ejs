@@ -108,15 +108,18 @@
                         <label>District</label>
                         <select class="ui dropdown" name="district" id="select-district" required>
                             <option value="">Select district</option>
-                            <option value="q1">Quận 1</option>
-                            <option value="q2">Quận 2</option>
-                            <option value="q3">Quận 3</option>
+                            <!-- <option value="Quận 1">Quận 1</option>
+                            <option value="Quận 1">Quận 2</option>
+                            <option value="Quận 1">Quận 3</option> -->
+                            <% for(let q = 1; q < 12; ++q) { %>
+                            <option value="<%= `Quận ${q}` %>"><%= `Quận ${q}` %></option>
+                            <% } %>
+
                         </select>
                     </div>
                     <div class="field">
                         <label>Phone number</label>
-                        <input type="tel" name="phonenumber" placeholder="Phone number (0xxxxxxxxx)"
-                            pattern="[0]{1}[1-9]{9}" required>
+                        <input type="tel" name="phonenumber" placeholder="Phone number (xxxxxxxxx)" required>
                     </div>
                 </div>
 

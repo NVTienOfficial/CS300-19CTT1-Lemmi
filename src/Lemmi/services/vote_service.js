@@ -16,8 +16,8 @@ class VoteService {
 
         const existUser = await rUser.isExistID(user_id);
         const existPost = await rPost.isExistID(post_id);
-        const existVote = await rVote.isExistVote(user_id, post_id);
-        if (!existUser || !existPost || existVote)
+        // const existVote = await rVote.isExistVote(user_id, post_id);
+        if (!existUser || !existPost)
             throw new Error(400, "Bad request")
 
         try {

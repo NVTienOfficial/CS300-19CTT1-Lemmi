@@ -108,8 +108,7 @@ router.get("/:id", async (req, res) => {
         const tag = await sTag.getAllTagNamesExcept("Tên quán");
         const district = await sDistrict.getAllDistrictName();
         req.session.redirectTo = `/post/${req.params.id}`;
-        
-        console.log(post);
+    
 
         res.render('postdetail', {userid, username, tag, district, image_path, post, comment, postid, posttag, user_vote});        
     }

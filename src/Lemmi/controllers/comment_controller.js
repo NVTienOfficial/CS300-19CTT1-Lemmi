@@ -34,7 +34,7 @@ router.get("", async (req, res) => {
 
 router.post("/create", async (req, res) => {
     try {
-        console.log(req.body)
+        
         const comment = await sComment.makeComment(req.body);
         return res.redirect(req.session.redirectTo || '/');
     }
