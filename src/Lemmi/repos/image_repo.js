@@ -25,6 +25,30 @@ class ImageRepo {
         }
     }
 
+    async getImageByPostID(post_id) {
+        try {
+            const images = await Image.findAll({
+                include: [
+                    {
+                        model: PostImage,
+                        required: true,
+                        where: {
+                            post_id: post_id
+                        }
+                    }
+                ]
+            });
+            let path = [];
+            for (let i = 0; i < images.length; i++) {
+                path.push(images[i]['dataValues']['src']);
+            }
+            return path;
+        }
+        catch (err) {
+            throw new Error(404, err.message);
+        }
+    }
+
     async getAll() {
         try {
             const images = await Image.findAll();

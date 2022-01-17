@@ -6,6 +6,7 @@ const DistrictRepo = require("../repos/district_repo");
 const TagRepo = require("../repos/tag_repo");
 const ImageService = require("../services/image_service");
 const TagService = require("../services/tag_service");
+const ImageRepo = require("../repos/image_repo");
 const Error = require("../config/error");
 
 const rPost = new PostRepo();
@@ -14,6 +15,7 @@ const rComment = new CommentRepo();
 const rTag = new TagRepo();
 const sTag = new TagService();
 const sImage = new ImageService();
+const rImage = new ImageRepo();
 const rDistrict = new DistrictRepo();
 
 class PostService {
@@ -146,7 +148,7 @@ class PostService {
                 //posts[i]['name'] = await rTag.getTagPlaceByPostID(posts[i]['post_id']);
                 // console.log(posts[i]['name']);
                 posts[i]['name'] = "";
-                posts[i]['image'] = undefined;
+                posts[i]['image'] = await rImage.getImageByPostID(posts[i]['post_id']);
                 let tags = posts[i]['tag'];
                 if (tags != undefined) {
                     for (let j = 0; j < tags.length; j++) {
@@ -203,16 +205,15 @@ class PostService {
             for (let i = 0; i < posts.length; i++) {
                 //posts[i]['comment'] = await rComment.getCommentByPost(posts[i]['post_id']);
                 posts[i]['tag'] = await rTag.getTagByPost(posts[i]['post_id']);
-                console.log(posts[i]['tag']);
                 //posts[i]['name'] = await rTag.getTagPlaceByPostID(posts[i]['post_id']);
                 // console.log(posts[i]['name']);
                 posts[i]['name'] = "";
-                posts[i]['image'] = undefined;
+                posts[i]['image'] = await rImage.getImageByPostID(posts[i]['post_id']);
+                //console.log(posts[i]['image'])
                 let tags = posts[i]['tag'];
                 if (tags != undefined) {
                     for (let j = 0; j < tags.length; j++) {
                         if (tags[j]['type'] == "Tên quán") {
-                            console.log("here");
                             posts[i]['name'] = tags[j]['name']
                         }
                     }
@@ -236,7 +237,7 @@ class PostService {
                 //posts[i]['name'] = await rTag.getTagPlaceByPostID(posts[i]['post_id']);
                 // console.log(posts[i]['name']);
                 posts[i]['name'] = "";
-                posts[i]['image'] = undefined;
+                posts[i]['image'] = await rImage.getImageByPostID(posts[i]['post_id']);
                 let tags = posts[i]['tag'];
                 if (tags != undefined) {
                     for (let j = 0; j < tags.length; j++) {
@@ -264,7 +265,7 @@ class PostService {
                 posts[i]['tag'] = await rTag.getTagByPost(posts[i]['post_id']);
                 //posts[i]['name'] = await rTag.getTagPlaceByPostID(posts[i]['post_id']);
                 // posts[i]['name'] = "";
-                posts[i]['image'] = undefined;
+                posts[i]['image'] = await rImage.getImageByPostID(posts[i]['post_id']);
                 let tags = posts[i]['tag'];
                 if (tags != undefined) {
                     for (let j = 0; j < tags.length; j++) {
@@ -291,7 +292,7 @@ class PostService {
                 posts[i]['tag'] = await rTag.getTagByPost(posts[i]['post_id']);
                 //posts[i]['name'] = await rTag.getTagPlaceByPostID(posts[i]['post_id']);
                 // posts[i]['name'] = "";
-                posts[i]['image'] = undefined;
+                posts[i]['image'] = await rImage.getImageByPostID(posts[i]['post_id']);
                 let tags = posts[i]['tag'];
                 if (tags != undefined) {
                     for (let j = 0; j < tags.length; j++) {
