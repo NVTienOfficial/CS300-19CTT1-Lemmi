@@ -18,19 +18,19 @@ router.put("", async (req, res) => {
     }
 });
 
-router.put("", async (req, res) => {
-    try {
-        const vote = await sVote.updateVote(req.body);
-        return res.status(201).json({
-            status: "OK",
-            message: "Success",
-            data: vote,
-        });
-    }
-    catch (err) {
-        return res.status(err.statusCode).json(err);
-    }
-});
+// router.put("", async (req, res) => {
+//     try {
+//         const vote = await sVote.updateVote(req.body);
+//         return res.status(201).json({
+//             status: "OK",
+//             message: "Success",
+//             data: vote,
+//         });
+//     }
+//     catch (err) {
+//         return res.status(err.statusCode).json(err);
+//     }
+// });
 
 router.delete("", async (req, res) => {
     try {

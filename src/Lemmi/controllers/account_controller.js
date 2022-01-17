@@ -7,14 +7,10 @@ const sAccount = new AccountService();
 
 router.post("/create", async (req, res) => {
     try {
-        console.log("Register body: ", req.body);
-
         let account = await sAccount.signUp(req.body);
-        return res.status(200).json({
-            status: "OK",
-            message: "success",
-            account: account,
-        });
+        req.session.userid = account.account_id;
+        req.session.username = account.username;
+        return res.redirect('/');
     }
     catch (err) {
         return res.status(err.statusCode).json(err);
